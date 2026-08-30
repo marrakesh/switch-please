@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/marrakesh/switch-please/actions/workflows/ci.yml/badge.svg)](https://github.com/marrakesh/switch-please/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-support-FF5E5B?logo=kofi&logoColor=white)](https://ko-fi.com/marrakeshgtp)
 
 Перемикач розкладки для Windows у дусі Punto Switcher. Виправляє текст, набраний не в тій
 розкладці — гарячою клавішею або автоматично.
@@ -80,8 +81,11 @@
 ## Підтримати
 
 Програма безкоштовна і такою залишиться. Якщо вона зекономила вам достатньо перенабору:
-[Ko-fi](https://ko-fi.com/marrakeshgtp) або
-[Buy Me a Coffee](https://www.buymeacoffee.com/marrakesh).
+
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-support-FF5E5B?logo=kofi&logoColor=white)](https://ko-fi.com/marrakeshgtp)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy_Me_a_Coffee-support-FFDD00?logo=buymeacoffee&logoColor=black)](https://www.buymeacoffee.com/marrakesh)
+
+Ko-fi не бере комісії з разового донату, Buy Me a Coffee бере п'ять відсотків.
 
 ## Далі
 

@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/marrakesh/switch-please/actions/workflows/ci.yml/badge.svg)](https://github.com/marrakesh/switch-please/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-support-FF5E5B?logo=kofi&logoColor=white)](https://ko-fi.com/marrakeshgtp)
 
 Přepínač klávesnicového rozložení pro Windows v duchu Punto Switcheru. Opraví text napsaný
 ve špatném rozložení — klávesovou zkratkou nebo automaticky.
@@ -94,8 +95,11 @@ To podstatné je v nabídce v oznamovací oblasti, čísla v *Settings...*, vše
 ## Podpořit
 
 Program je zdarma a zůstane. Pokud vám ušetřil dost přepisování:
-[Ko-fi](https://ko-fi.com/marrakeshgtp) nebo
-[Buy Me a Coffee](https://www.buymeacoffee.com/marrakesh).
+
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-support-FF5E5B?logo=kofi&logoColor=white)](https://ko-fi.com/marrakeshgtp)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy_Me_a_Coffee-support-FFDD00?logo=buymeacoffee&logoColor=black)](https://www.buymeacoffee.com/marrakesh)
+
+Ko-fi si z jednorázového příspěvku nebere nic, Buy Me a Coffee pět procent.
 
 ## Dál
 

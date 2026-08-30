@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/marrakesh/switch-please/actions/workflows/ci.yml/badge.svg)](https://github.com/marrakesh/switch-please/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-support-FF5E5B?logo=kofi&logoColor=white)](https://ko-fi.com/marrakeshgtp)
 
 Ein Tastaturlayout-Umschalter für Windows, im Geiste von Punto Switcher. Korrigiert Text,
 den Sie im falschen Layout getippt haben — per Tastenkürzel oder automatisch.
@@ -81,8 +82,11 @@ Das Wesentliche steht im Tray-Menü, die Zahlen unter *Settings...*, alles zusam
 ## Unterstützen
 
 Das Programm ist kostenlos und bleibt es. Wenn es Ihnen genug Tipparbeit erspart hat:
-[Ko-fi](https://ko-fi.com/marrakeshgtp) oder
-[Buy Me a Coffee](https://www.buymeacoffee.com/marrakesh).
+
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-support-FF5E5B?logo=kofi&logoColor=white)](https://ko-fi.com/marrakeshgtp)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy_Me_a_Coffee-support-FFDD00?logo=buymeacoffee&logoColor=black)](https://www.buymeacoffee.com/marrakesh)
+
+Ko-fi behält bei einer einmaligen Spende nichts ein, Buy Me a Coffee fünf Prozent.
 
 ## Weiter
 
