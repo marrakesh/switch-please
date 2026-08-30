@@ -23,8 +23,8 @@ All three hotkeys are reassignable from the tray menu, and the dialog captures w
 actually press — an ordinary chord like `Ctrl+Shift+L` works just as well. Backspace clears
 a binding.
 
-Interface in English, Russian and Ukrainian, following the Windows display language and the
-light or dark setting unless you pick otherwise.
+Interface in English, Russian, Ukrainian, German and Czech, following the Windows display
+language and the light or dark setting unless you pick otherwise.
 
 ## Examples
 
@@ -175,7 +175,7 @@ Most of it is in the tray menu, and the numbers are in *Settings...*. Everything
 | `TypewriterMillisecondsPerCharacter` | Type corrections one character at a time. Zero, i.e. off. |
 | `CheckForUpdates` | Ask GitHub for a newer release at startup. Off. |
 | `ConvertWordHotkey`, `ConvertSelectionHotkey`, `UndoHotkey` | Key code, modifiers, and `Kind`: `0` chord, `1` double tap. |
-| `Language` | `auto`, or `en` / `ru` / `uk`. |
+| `Language` | `auto`, or `en` / `ru` / `uk` / `de` / `cs`. |
 
 ## Limitations
 

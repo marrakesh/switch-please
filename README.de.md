@@ -18,8 +18,8 @@ den Sie im falschen Layout getippt haben — per Tastenkürzel oder automatisch.
 | Automatisch | Standardmäßig aus, einzuschalten im Tray-Menü |
 
 Alle drei Tastenkürzel sind frei belegbar; der Dialog nimmt auf, was Sie tatsächlich
-drücken. Rücktaste löscht eine Belegung. Oberfläche auf Englisch, Russisch und Ukrainisch,
-Hell oder Dunkel nach der Windows-Einstellung.
+drücken. Rücktaste löscht eine Belegung. Oberfläche auf Deutsch, Englisch, Russisch,
+Ukrainisch und Tschechisch, hell oder dunkel nach der Windows-Einstellung.
 
 ## Beispiele
 

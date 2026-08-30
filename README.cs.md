@@ -48,8 +48,8 @@ Opačný směr funguje bez výhrad:
 | Automaticky | Ve výchozím stavu vypnuto, zapíná se v nabídce v oznamovací oblasti |
 
 Všechny tři zkratky lze přeřadit, dialog zachytí to, co skutečně stisknete. Backspace
-přiřazení zruší. Rozhraní anglicky, rusky a ukrajinsky, světlé nebo tmavé podle nastavení
-Windows.
+přiřazení zruší. Rozhraní česky, anglicky, rusky, ukrajinsky a německy, světlé nebo tmavé
+podle nastavení Windows.
 
 Pro češtinu neexistuje vestavěný jazykový model — ten je jen pro ruštinu, ukrajinštinu a
 angličtinu. Čeština se posuzuje podle **slovníku Windows**, a bez něj se přepínač zdrží
