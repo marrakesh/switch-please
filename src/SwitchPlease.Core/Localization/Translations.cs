@@ -435,6 +435,289 @@ public static class Translations
         StatusSlowest = "Найдовше натискання: {0} мс",
     };
 
+    public static UiStrings German { get; } = new()
+    {
+        LanguageName = "Deutsch",
+
+        MenuEnabled = "Aktiviert",
+        MenuAutoDetect = "Falsches Layout automatisch erkennen",
+        MenuConvertWord = "Letztes Wort korrigieren ({0})",
+        MenuConvertLine = "Auswahl oder ganze Zeile korrigieren ({0})",
+        MenuHotkeys = "Tastenkürzel...",
+        MenuSound = "Ton beim Korrigieren",
+        MenuStartup = "Mit Windows starten",
+        MenuDiagnostics = "Hook-Latenz messen",
+        MenuStatus = "Status und Latenz...",
+        MenuRefreshLayouts = "Layout-Liste aktualisieren",
+        MenuOpenSettings = "Einstellungsordner öffnen",
+        MenuLanguage = "Sprache",
+        MenuLanguageAuto = "Wie Windows",
+        MenuAbout = "Über...",
+        MenuExit = "Beenden",
+
+        TooltipActive = "Switch Please - {0} | {1} Wort, {2} Zeile",
+        TooltipDisabled = "Switch Please - deaktiviert",
+
+        StatusTitle = "Switch Please - Status",
+        StatusHook = "Tastatur-Hook: {0}",
+        StatusInstalled = "installiert",
+        StatusHookRecovered = "  Windows hat ihn {0}-mal entfernt; er wurde jedes Mal neu gesetzt.",
+        StatusNotInstalled = "NICHT installiert",
+        StatusProcessing = "Eingabeverarbeitung: {0}",
+        StatusAutoDetect = "Automatische Erkennung: {0}",
+        StatusOn = "ein",
+        StatusOff = "aus",
+        StatusLayouts = "Layouts:",
+        StatusActiveMarker = " <- aktiv",
+        StatusMaps = "Zeichentabellen des aktiven Layouts:",
+        StatusMapLine = "  {0} -> {1}: {2} Zeichen",
+        StatusDictionaries = "Windows-Wörterbücher: {0}",
+        StatusDictionariesNone = "keine (die Erkennung stützt sich allein auf Statistik)",
+        StatusLanguages = "Modellierte Sprachen: {0}",
+        StatusLatencyTitle = "Latenz des Hook-Callbacks:",
+        StatusLatencySamples = "  Messungen: {0}",
+        StatusLatencyAverage = "  Mittel:    {0:F1} us",
+        StatusLatencyMaximum = "  Maximum:   {0:F1} us",
+        StatusLatencyDropped = "  verworfene Ereignisse: {0}",
+        StatusLatencyLimit = "Die Windows-Grenze liegt bei 300000 us (LowLevelHooksTimeout).",
+        StatusLatencyDisabled = "Die Latenzmessung ist aus. Schalten Sie sie im Menü ein, tippen Sie\netwas, und öffnen Sie dieses Fenster erneut.",
+        StatusRecentEvents = "Letzte Ereignisse:",
+
+        HotkeysTitle = "Switch Please - Tastenkürzel",
+        HotkeysWord = "Wort korrigieren:",
+        HotkeysSelection = "Auswahl korrigieren:",
+        HotkeysPress = "Kombination drücken...",
+        HotkeysHint = "Klicken Sie in ein Feld und drücken Sie die gewünschte Kombination; "
+            + "die Rücktaste löscht eine. Zweimaliges Tippen auf Shift oder Strg geht auch "
+            + "und funktioniert auf jeder Tastatur. Nicht Alt: allein öffnet es die "
+            + "Menüleiste des Fensters, in dem Sie gerade sind.",
+        HotkeysDefaults = "Standardwerte",
+        HotkeysDuplicate = "Beide Befehle liegen auf derselben Kombination. Wählen Sie unterschiedliche.",
+
+        AboutTitle = "Über Switch Please",
+        AboutTagline = "Korrigiert Text, der im falschen Tastaturlayout getippt wurde.",
+        AboutVersion = "Version {0}",
+        AboutLicense = "MIT-Lizenz",
+        AboutSource = "Quellcode",
+        AboutDonate = "Das Projekt unterstützen",
+
+        ButtonOk = "OK",
+        ButtonCancel = "Abbrechen",
+        ButtonClose = "Schließen",
+
+        ErrorHookFailed = "Der Tastatur-Hook konnte nicht gesetzt werden.\n\n{0}",
+        ErrorStartup = "Die Autostart-Einstellung konnte nicht geändert werden.\n\n{0}",
+        ErrorOpenFolder = "Der Ordner konnte nicht geöffnet werden.\n\n{0}",
+        ErrorAlreadyRunning = "Switch Please läuft bereits - suchen Sie das Symbol im Infobereich.",
+        ErrorCrash = "Switch Please ist auf einen Fehler gestoßen:\n\n{0}\n\nEinzelheiten: {1}",
+
+        MenuUndo = "Letzte Korrektur rückgängig ({0})",
+        MenuExclude = "In {0} nie ausführen",
+        MenuInclude = "In {0} wieder ausführen",
+        MenuExcludeUnknown = "In dieser Anwendung nie ausführen",
+        MenuSettings = "Einstellungen...",
+        MenuCheckUpdates = "Nach Updates suchen...",
+
+        SettingsTitle = "Switch Please - Einstellungen",
+        SettingsSensitivity = "Vorsicht beim automatischen Korrigieren:",
+        SettingsSensitivityHint = "Höher heißt: die andere Lesart muss deutlich besser sein, bevor ein Wort umgeschrieben wird.",
+        SettingsDelay = "Pause vor dem Umschreiben, ms:",
+        SettingsDelayHint = "Die Taste, die das Wort beendet hat, ist noch zur Anwendung unterwegs.",
+        SettingsTapWindow = "Doppeltippen - längster Abstand, ms:",
+        SettingsTapHold = "Doppeltippen - längster Druck, ms:",
+        SettingsMinimumWord = "Kürzestes zu korrigierendes Wort:",
+        SettingsPasswordFields = "Passwortfelder unangetastet lassen",
+        SettingsLogText = "Getippten Text ins Protokoll schreiben",
+        SettingsLogTextHint = "Standardmäßig aus: eingeschaltet hält das Protokoll alles fest, was während der Diagnose getippt wird.",
+        SettingsUpdates = "Beim Start nach einer neueren Version sehen",
+        SettingsExcluded = "In diesen Anwendungen nie ausführen:",
+        SettingsExcludedHint = "Ein Programmname pro Zeile, z. B. keepass.exe",
+
+        UpdateTitle = "Switch Please - Updates",
+        UpdateAvailable = "Version {0} ist verfügbar. Sie verwenden {1}.\n\nDownloadseite öffnen?",
+        UpdateCurrent = "Sie verwenden die neueste Version ({0}).",
+        UpdateFailed = "Nach Updates konnte nicht gesucht werden.\n\n{0}",
+
+        BlockedTitle = "Korrekturen kommen nicht an",
+        BlockedBody = "Das aktive Fenster gehört zu einem Programm mit Administratorrechten. Windows nimmt darin keine Eingaben von Switch Please an.",
+
+        StatusCopy = "Kopieren",
+        HotkeysUndo = "Rückgängig:",
+
+        SettingsFullscreen = "Beiseitetreten, solange ein Spiel oder eine Präsentation läuft",
+        SettingsFullscreenHint = "In den meisten Spielen ist Shift der Sprint, und zweimal Tippen fühlt sich nach Laufen an. Ohne dies löst das Tastenkürzel beim Spielen aus.",
+
+        SettingsTypewriter = "Korrekturen Zeichen für Zeichen tippen",
+        SettingsTypewriterHint = "Ein Schreibmaschineneffekt. Standardmäßig aus: er verlängert genau den Vorgang, der fertig sein soll, bevor Sie darüber hinweg tippen.",
+
+        WelcomeTitle = "Switch Please",
+        WelcomeHeading = "Im falschen Layout getippt?",
+        WelcomeBody = "Das Symbol unten ist Switch Please. Nicht da? Sehen Sie unter dem Pfeil ^ nach.",
+        WelcomeActionWord = "korrigiert das letzte Wort",
+        WelcomeActionSelection = "korrigiert die Auswahl oder die ganze Zeile",
+
+        SettingsGroupCorrection = "Automatische Korrektur",
+        SettingsGroupHotkeys = "Doppeltippen",
+        SettingsGroupPrivacy = "Datenschutz und Sicherheit",
+        SettingsGroupApplications = "Anwendungen",
+
+        // German on a US layout: the QWERTZ y/z swap, which is the signature of the
+        // mistake here the way руддщ is in Russian.
+        WelcomeDemoTyped = "kurye Yeit",
+        WelcomeDemoFixed = "kurze Zeit",
+
+        MenuAutoDetectHere = "In {0} automatisch korrigieren",
+
+        StatusWorker = "Arbeitsthread: {0}",
+        StatusWorkerRunning = "läuft",
+        StatusWorkerStopped = "ANGEHALTEN",
+        StatusQueue = "Wartende Tastenanschläge: {0}, letzter vor {1:F1} s verarbeitet",
+        StatusCorrections = "Korrekturen in dieser Sitzung: {0}",
+        StatusSlowest = "Langsamster Tastenanschlag: {0} ms",
+    };
+
+    public static UiStrings Czech { get; } = new()
+    {
+        LanguageName = "Čeština",
+
+        MenuEnabled = "Zapnuto",
+        MenuAutoDetect = "Rozpoznávat špatné rozložení automaticky",
+        MenuConvertWord = "Opravit poslední slovo ({0})",
+        MenuConvertLine = "Opravit výběr nebo celý řádek ({0})",
+        MenuHotkeys = "Klávesové zkratky...",
+        MenuSound = "Zvuk při opravě",
+        MenuStartup = "Spouštět s Windows",
+        MenuDiagnostics = "Měřit latenci hooku",
+        MenuStatus = "Stav a latence...",
+        MenuRefreshLayouts = "Obnovit seznam rozložení",
+        MenuOpenSettings = "Otevřít složku s nastavením",
+        MenuLanguage = "Jazyk",
+        MenuLanguageAuto = "Stejně jako Windows",
+        MenuAbout = "O aplikaci...",
+        MenuExit = "Ukončit",
+
+        TooltipActive = "Switch Please - {0} | {1} slovo, {2} řádek",
+        TooltipDisabled = "Switch Please - vypnuto",
+
+        StatusTitle = "Switch Please - stav",
+        StatusHook = "Klávesnicový hook: {0}",
+        StatusInstalled = "nasazen",
+        StatusHookRecovered = "  Windows jej {0}x odebraly; pokaždé byl nasazen znovu.",
+        StatusNotInstalled = "NENÍ nasazen",
+        StatusProcessing = "Zpracování vstupu: {0}",
+        StatusAutoDetect = "Automatické rozpoznávání: {0}",
+        StatusOn = "zapnuto",
+        StatusOff = "vypnuto",
+        StatusLayouts = "Rozložení:",
+        StatusActiveMarker = " <- aktivní",
+        StatusMaps = "Znakové tabulky z aktivního rozložení:",
+        StatusMapLine = "  {0} -> {1}: {2} znaků",
+        StatusDictionaries = "Slovníky Windows: {0}",
+        StatusDictionariesNone = "žádné (rozpoznávání se opírá jen o statistiku)",
+        StatusLanguages = "Modelované jazyky: {0}",
+        StatusLatencyTitle = "Latence callbacku hooku:",
+        StatusLatencySamples = "  vzorků:   {0}",
+        StatusLatencyAverage = "  průměr:   {0:F1} us",
+        StatusLatencyMaximum = "  maximum:  {0:F1} us",
+        StatusLatencyDropped = "  zahozené události: {0}",
+        StatusLatencyLimit = "Limit Windows je 300000 us (LowLevelHooksTimeout).",
+        StatusLatencyDisabled = "Měření latence je vypnuté. Zapněte je v nabídce, něco napište\na pak toto okno otevřete znovu.",
+        StatusRecentEvents = "Poslední události:",
+
+        HotkeysTitle = "Switch Please - klávesové zkratky",
+        HotkeysWord = "Opravit slovo:",
+        HotkeysSelection = "Opravit výběr:",
+        HotkeysPress = "Stiskněte kombinaci...",
+        HotkeysHint = "Klikněte do pole a stiskněte kombinaci, kterou chcete; Backspace ji "
+            + "smaže. Funguje i dvojí stisknutí Shiftu nebo Ctrl, a to na každé klávesnici. "
+            + "Ne Alt: samotný otevírá nabídku okna, ve kterém právě jste.",
+        HotkeysDefaults = "Výchozí",
+        HotkeysDuplicate = "Oba příkazy mají stejnou kombinaci. Zvolte různé.",
+
+        AboutTitle = "O aplikaci Switch Please",
+        AboutTagline = "Opraví text napsaný ve špatném klávesnicovém rozložení.",
+        AboutVersion = "Verze {0}",
+        AboutLicense = "Licence MIT",
+        AboutSource = "Zdrojový kód",
+        AboutDonate = "Podpořit projekt",
+
+        ButtonOk = "OK",
+        ButtonCancel = "Zrušit",
+        ButtonClose = "Zavřít",
+
+        ErrorHookFailed = "Klávesnicový hook se nepodařilo nasadit.\n\n{0}",
+        ErrorStartup = "Nastavení spouštění se nepodařilo změnit.\n\n{0}",
+        ErrorOpenFolder = "Složku se nepodařilo otevřít.\n\n{0}",
+        ErrorAlreadyRunning = "Switch Please už běží - hledejte ikonu v oznamovací oblasti.",
+        ErrorCrash = "Switch Please narazil na chybu:\n\n{0}\n\nPodrobnosti: {1}",
+
+        MenuUndo = "Vrátit poslední opravu ({0})",
+        MenuExclude = "Nikdy nespouštět v {0}",
+        MenuInclude = "Znovu spouštět v {0}",
+        MenuExcludeUnknown = "Nikdy nespouštět v této aplikaci",
+        MenuSettings = "Nastavení...",
+        MenuCheckUpdates = "Zkontrolovat aktualizace...",
+
+        SettingsTitle = "Switch Please - nastavení",
+        SettingsSensitivity = "Opatrnost při automatické opravě:",
+        SettingsSensitivityHint = "Vyšší hodnota znamená, že druhé čtení musí být zřetelně lepší, než se slovo přepíše.",
+        SettingsDelay = "Pauza před přepsáním, ms:",
+        SettingsDelayHint = "Klávesa, která slovo ukončila, je ještě na cestě do aplikace.",
+        SettingsTapWindow = "Dvojí stisk - nejdelší mezera, ms:",
+        SettingsTapHold = "Dvojí stisk - nejdelší stisk, ms:",
+        SettingsMinimumWord = "Nejkratší slovo k opravě:",
+        SettingsPasswordFields = "Nezasahovat do polí s heslem",
+        SettingsLogText = "Zapisovat napsaný text do protokolu",
+        SettingsLogTextHint = "Ve výchozím stavu vypnuto: se zapnutím protokol zaznamená vše napsané, dokud běží diagnostika.",
+        SettingsUpdates = "Při spuštění hledat novější verzi",
+        SettingsExcluded = "Nikdy nespouštět v těchto aplikacích:",
+        SettingsExcludedHint = "Jeden název programu na řádek, např. keepass.exe",
+
+        UpdateTitle = "Switch Please - aktualizace",
+        UpdateAvailable = "Je k dispozici verze {0}. Používáte {1}.\n\nOtevřít stránku ke stažení?",
+        UpdateCurrent = "Používáte nejnovější verzi ({0}).",
+        UpdateFailed = "Aktualizace se nepodařilo zkontrolovat.\n\n{0}",
+
+        BlockedTitle = "Opravy neprocházejí",
+        BlockedBody = "Aktivní okno patří programu běžícímu jako správce. Windows do něj vstup od Switch Please nepřijmou.",
+
+        StatusCopy = "Kopírovat",
+        HotkeysUndo = "Zpět:",
+
+        SettingsFullscreen = "Ustoupit, dokud běží hra nebo prezentace",
+        SettingsFullscreenHint = "Ve většině her je Shift sprint a dvojí stisk je běžný pohyb. Bez tohoto se zkratka spouští během hraní.",
+
+        SettingsTypewriter = "Psát opravy znak po znaku",
+        SettingsTypewriterHint = "Efekt psacího stroje. Ve výchozím stavu vypnuto: prodlužuje právě tu operaci, která má skončit dřív, než na ni začnete psát.",
+
+        WelcomeTitle = "Switch Please",
+        WelcomeHeading = "Napsáno ve špatném rozložení?",
+        WelcomeBody = "Ikona níže je Switch Please. Není tam? Podívejte se pod šipku ^.",
+        WelcomeActionWord = "opraví poslední slovo",
+        WelcomeActionSelection = "opraví výběr nebo celý řádek",
+
+        SettingsGroupCorrection = "Automatická oprava",
+        SettingsGroupHotkeys = "Dvojí stisk",
+        SettingsGroupPrivacy = "Soukromí a bezpečnost",
+        SettingsGroupApplications = "Aplikace",
+
+        // Deliberately a y/z pair and not a word with diacritics. Czech diacritics live on
+        // the number row, so those arrive with a digit in them and the guards refuse the
+        // word outright -- demonstrating a correction that would never happen would be a
+        // lie in the one window a new user reads.
+        WelcomeDemoTyped = "ykusme yase",
+        WelcomeDemoFixed = "zkusme zase",
+
+        MenuAutoDetectHere = "Automaticky opravovat v {0}",
+
+        StatusWorker = "Pracovní vlákno: {0}",
+        StatusWorkerRunning = "běží",
+        StatusWorkerStopped = "ZASTAVENO",
+        StatusQueue = "Čekající stisky: {0}, poslední zpracován před {1:F1} s",
+        StatusCorrections = "Oprav v této relaci: {0}",
+        StatusSlowest = "Nejpomalejší stisk: {0} ms",
+    };
+
     /// <summary>
     /// Every shipped language, English first: it is the reference the tests compare the rest
     /// against, and the fallback when Windows is in a language that is not here.
@@ -447,6 +730,8 @@ public static class Translations
         new("en", 0x09, English),
         new("ru", 0x19, Russian),
         new("uk", 0x22, Ukrainian),
+        new("de", 0x07, German),
+        new("cs", 0x05, Czech),
     ];
 
     /// <summary>What the interface falls back to.</summary>

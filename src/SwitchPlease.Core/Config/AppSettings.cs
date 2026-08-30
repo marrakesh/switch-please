@@ -182,8 +182,9 @@ public sealed class AppSettings
     public bool RunAtStartup { get; set; }
 
     /// <summary>
-    /// Interface language: "auto" to follow Windows, otherwise a two-letter code such as
-    /// "en", "ru" or "uk". Kept as a string so adding a language does not touch this file.
+    /// Interface language: "auto" to follow Windows, otherwise one of the two-letter tags
+    /// in Translations.All. Kept as a string, and deliberately not enumerated here, so that
+    /// adding a language stays a change to one file.
     /// </summary>
     public string Language { get; set; } = "auto";
 

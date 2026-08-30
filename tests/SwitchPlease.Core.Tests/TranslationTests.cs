@@ -104,6 +104,8 @@ public partial class TranslationTests(ITestOutputHelper output)
         Assert.Equal("English", Translations.English.LanguageName);
         Assert.Equal("Русский", Translations.Russian.LanguageName);
         Assert.Equal("Українська", Translations.Ukrainian.LanguageName);
+        Assert.Equal("Deutsch", Translations.German.LanguageName);
+        Assert.Equal("Čeština", Translations.Czech.LanguageName);
     }
 
     [Fact]
