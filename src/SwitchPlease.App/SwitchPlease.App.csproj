@@ -6,6 +6,10 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AssemblyName>SwitchPlease</AssemblyName>
+    <!-- Becomes FileDescription in the Win32 version resource, which is what Task
+         Manager shows in its Description column. Without it that reads SwitchPlease,
+         the assembly name, which is a build artefact and not a name for a person. -->
+    <AssemblyTitle>Switch Please</AssemblyTitle>
     <RootNamespace>SwitchPlease.App</RootNamespace>
     <!-- Hot path must not stall: workstation concurrent GC keeps pauses sub-millisecond. -->
     <ServerGarbageCollection>false</ServerGarbageCollection>
