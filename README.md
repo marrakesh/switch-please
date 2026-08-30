@@ -6,7 +6,7 @@
 A keyboard layout switcher for Windows, in the spirit of Punto Switcher. Fixes text you
 typed before noticing the layout was wrong — by hotkey, or automatically.
 
-**[Русская версия](README.ru.md)** · **[Українська версія](README.uk.md)**
+**[Русская](README.ru.md)** · **[Українська](README.uk.md)** · **[Deutsch](README.de.md)** · **[Čeština](README.cs.md)**
 
 ![Typing "ghbdtn rfr ltkf", pressing Shift twice, and getting "привет как дела"](docs/demo.svg)
 
@@ -185,6 +185,9 @@ Most of it is in the tray menu, and the numbers are in *Settings...*. Everything
   applications may need a longer one.
 - The hotkey leaves alone any text that already reads far better than every alternative.
   This does not apply to the Russian/Ukrainian pair, where the hotkey simply toggles.
+- Layouts that put diacritics on the number row — Czech, Slovak, Hungarian — land a digit
+  where the accented letter was meant, and words containing digits are never touched. The
+  `y`/`z` half of such a layout is corrected; `děkuji` arriving as `d2kuji` is not.
 - Password-field detection is best-effort. Applications that draw their own controls and
   expose no accessibility information cannot be asked.
 - Layout names come from the input language as Windows reports it, which does not always
