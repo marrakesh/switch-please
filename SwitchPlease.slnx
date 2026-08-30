@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/SwitchPlease.Core/SwitchPlease.Core.csproj" />
+  </Folder>
+</Solution>
