@@ -6,7 +6,7 @@
 Перемикач розкладки для Windows у дусі Punto Switcher. Виправляє текст, набраний не в тій
 розкладці — гарячою клавішею або автоматично.
 
-**[English version](README.md)** · **[Русская версия](README.ru.md)**
+**[English](README.md)** · **[Русская](README.ru.md)** · **[Deutsch](README.de.md)** · **[Čeština](README.cs.md)**
 
 ![Набирається «ghbdtn rfr ltkf», подвійний Shift, виходить «привет как дела»](docs/demo.svg)
 
