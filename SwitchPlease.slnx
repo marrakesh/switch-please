@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/SwitchPlease.App/SwitchPlease.App.csproj" />
     <Project Path="src/SwitchPlease.Core/SwitchPlease.Core.csproj" />
     <Project Path="src/SwitchPlease.Win32/SwitchPlease.Win32.csproj" />
   </Folder>
