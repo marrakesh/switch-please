@@ -7,5 +7,6 @@
   <Folder Name="/tests/">
     <Project Path="tests/SwitchPlease.App.Tests/SwitchPlease.App.Tests.csproj" />
     <Project Path="tests/SwitchPlease.Core.Tests/SwitchPlease.Core.Tests.csproj" />
+    <Project Path="tests/SwitchPlease.Probe/SwitchPlease.Probe.csproj" />
   </Folder>
 </Solution>

@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <!--
+      A console application that happens to put a window on screen. The window is where the
+      typing goes; the console is where the report comes out, and the exit code is what makes
+      this scriptable.
+    -->
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <IsPackable>false</IsPackable>
+    <AssemblyName>SwitchPlease.Probe</AssemblyName>
+    <RootNamespace>SwitchPlease.Probe</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+</Project>
