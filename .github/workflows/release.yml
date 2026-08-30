@@ -1,0 +1,158 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Test
+        run: dotnet test --configuration Release
+
+      # Four builds, because neither the runtime question nor the architecture one has a
+      # single right answer. The self-contained ones need nothing installed but carry the
+      # whole runtime; compression takes each from about 116 MB to about 52 MB, which is the
+      # difference between a plausible download and an unreasonable one.
+      - name: Publish
+        shell: pwsh
+        run: |
+          foreach ($architecture in 'x64', 'arm64') {
+            dotnet publish src/SwitchPlease.App `
+              --configuration Release `
+              --runtime "win-$architecture" `
+              --self-contained true `
+              -p:PublishSingleFile=true `
+              -p:IncludeNativeLibrariesForSelfExtract=true `
+              -p:EnableCompressionInSingleFile=true `
+              --output "publish/standalone-$architecture"
+
+            # For anyone who already has the .NET Desktop Runtime: 0.4 MB instead of 52.
+            dotnet publish src/SwitchPlease.App `
+              --configuration Release `
+              --runtime "win-$architecture" `
+              --self-contained false `
+              -p:PublishSingleFile=true `
+              --output "publish/framework-dependent-$architecture"
+          }
+
+      - name: Name the artefacts
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path artifacts | Out-Null
+
+          # x64 keeps the plain names it has always had, so existing links and any script
+          # that downloads the latest release do not break.
+          Copy-Item publish/standalone-x64/SwitchPlease.exe artifacts/SwitchPlease.exe
+          Copy-Item publish/framework-dependent-x64/SwitchPlease.exe artifacts/SwitchPlease-runtime-required.exe
+          Copy-Item publish/standalone-arm64/SwitchPlease.exe artifacts/SwitchPlease-arm64.exe
+          Copy-Item publish/framework-dependent-arm64/SwitchPlease.exe artifacts/SwitchPlease-arm64-runtime-required.exe
+
+      # The binaries are not code-signed, so Windows SmartScreen will warn about them. There
+      # is nothing to be done about that without a certificate, but a checksum published by
+      # the same run that built the file at least lets anyone verify they downloaded what was
+      # built rather than what someone reuploaded.
+      - name: Checksums
+        shell: pwsh
+        run: |
+          Get-ChildItem artifacts/*.exe |
+            ForEach-Object { "{0}  {1}" -f (Get-FileHash $_ -Algorithm SHA256).Hash.ToLower(), $_.Name } |
+            Set-Content artifacts/SHA256SUMS.txt -Encoding ascii
+
+          Get-Content artifacts/SHA256SUMS.txt
+
+      # winget is where most people would rather get a tray utility than from a browser
+      # download that SmartScreen argues with. Submitting to the community repository is a
+      # pull request against microsoft/winget-pkgs and stays a deliberate, manual act; what
+      # is automated here is the tedious half, which is filling in the version, the URLs and
+      # the hashes of the files this run actually produced.
+      - name: Generate winget manifests
+        shell: pwsh
+        run: |
+          $version = "${{ github.ref_name }}" -replace '^v', ''
+          $base = "https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}"
+          $manifests = 'artifacts/winget'
+          New-Item -ItemType Directory -Force -Path $manifests | Out-Null
+
+          function Hash($name) { (Get-FileHash "artifacts/$name" -Algorithm SHA256).Hash }
+
+          @"
+          PackageIdentifier: Marrakesh.SwitchPlease
+          PackageVersion: $version
+          DefaultLocale: en-US
+          ManifestType: version
+          ManifestVersion: 1.6.0
+          "@ | Set-Content "$manifests/Marrakesh.SwitchPlease.yaml" -Encoding utf8
+
+          @"
+          PackageIdentifier: Marrakesh.SwitchPlease
+          PackageVersion: $version
+          PackageLocale: en-US
+          Publisher: Oleksii Ozerov
+          PublisherUrl: https://github.com/marrakesh
+          PackageName: Switch Please
+          PackageUrl: https://github.com/${{ github.repository }}
+          License: MIT
+          LicenseUrl: https://github.com/${{ github.repository }}/blob/main/LICENSE
+          ShortDescription: Fixes text typed in the wrong keyboard layout.
+          Description: >-
+            A keyboard layout switcher for Windows in the spirit of Punto Switcher. Fixes text
+            typed before you noticed the layout was wrong, by hotkey or automatically. Works
+            with any pair of installed layouts, uses the Windows spell-check dictionaries, and
+            makes no network requests.
+          Tags:
+          - keyboard
+          - layout
+          - punto
+          - russian
+          - ukrainian
+          ManifestType: defaultLocale
+          ManifestVersion: 1.6.0
+          "@ | Set-Content "$manifests/Marrakesh.SwitchPlease.locale.en-US.yaml" -Encoding utf8
+
+          @"
+          PackageIdentifier: Marrakesh.SwitchPlease
+          PackageVersion: $version
+          InstallerType: portable
+          Commands:
+          - switchplease
+          Installers:
+          - Architecture: x64
+            InstallerUrl: $base/SwitchPlease.exe
+            InstallerSha256: $(Hash 'SwitchPlease.exe')
+          - Architecture: arm64
+            InstallerUrl: $base/SwitchPlease-arm64.exe
+            InstallerSha256: $(Hash 'SwitchPlease-arm64.exe')
+          ManifestType: installer
+          ManifestVersion: 1.6.0
+          "@ | Set-Content "$manifests/Marrakesh.SwitchPlease.installer.yaml" -Encoding utf8
+
+          Get-ChildItem $manifests | ForEach-Object { Write-Host "--- $($_.Name)"; Get-Content $_.FullName }
+
+      - name: Upload winget manifests
+        uses: actions/upload-artifact@v4
+        with:
+          name: winget-manifests
+          path: artifacts/winget/
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/SwitchPlease.exe
+            artifacts/SwitchPlease-runtime-required.exe
+            artifacts/SwitchPlease-arm64.exe
+            artifacts/SwitchPlease-arm64-runtime-required.exe
+            artifacts/SHA256SUMS.txt
+          generate_release_notes: true

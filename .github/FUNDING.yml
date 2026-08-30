@@ -1,0 +1,8 @@
+# Shows a Sponsor button on the repository page, listing both.
+ko_fi: marrakeshgtp
+buy_me_a_coffee: marrakesh
+
+# The About window inside the application links to one of these only -- a donor gains
+# nothing from choosing between two identical pages. It points at Ko-fi because Ko-fi
+# takes no cut of a one-off donation and Buy Me a Coffee takes five percent, so more of
+# the same donation arrives. To swap them, change AboutForm.DonateUrl.

@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    # The application targets net10.0-windows and its tests exercise Windows APIs, so
+    # there is nothing to gain from a Linux runner here.
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          # Read from global.json, so the version CI builds with is the version the
+          # repository pins and not whatever the runner image happened to ship.
+          global-json-file: global.json
+
+      - name: Restore
+        run: dotnet restore
+
+      # Analysers and code style run as part of the build, and warnings are errors, so a
+      # regression in either fails here rather than in review.
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test --no-build --configuration Release --verbosity normal
+
+      # The formatting rules live in .editorconfig; this is what makes them true of the
+      # repository rather than merely written down in it.
+      - name: Check formatting
+        run: dotnet format --verify-no-changes --no-restore
+
+      # Not published anywhere: this is here so that a change which builds and passes its
+      # tests but cannot actually be shipped is caught on the pull request rather than on
+      # the day someone pushes a tag.
+      - name: Check that a release build still publishes
+        run: >
+          dotnet publish src/SwitchPlease.App
+          --configuration Release
+          --runtime win-x64
+          --self-contained true
+          -p:PublishSingleFile=true
+          -p:EnableCompressionInSingleFile=true
+          --output publish/ci-check
