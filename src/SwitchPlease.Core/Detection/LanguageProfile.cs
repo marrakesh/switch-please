@@ -21,7 +21,8 @@ namespace SwitchPlease.Core.Detection;
 /// 3. Outright impossible pairs and a small frequent-word list, which sharpen the edges.
 ///
 /// These lists are hand-built, which is what keeps the assembly small and dependency-free.
-/// A model derived from a real corpus would score better on rare words; see README.
+/// A model derived from a real corpus would score better on rare words; see
+/// docs/internals.md.
 /// </summary>
 public sealed class LanguageProfile
 {

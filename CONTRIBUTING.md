@@ -4,6 +4,10 @@ Thanks for taking a look. Bug reports are as useful as code here — this progra
 every keystroke on the machine, so the failure modes that matter are the ones only real use
 finds.
 
+Before changing anything, [docs/internals.md](docs/internals.md) explains how the program is
+put together and why. Most of the odd-looking decisions in it are the result of a
+measurement or a crash, and that document says which.
+
 ## Reporting a bug
 
 The single most useful thing you can attach is a diagnostics log:
