@@ -1,0 +1,10 @@
+# The source is CRLF, which .editorconfig also states, and this is what makes that true for
+# anyone who clones on a machine that would otherwise convert it. Without it a contributor on
+# Linux or macOS gets a whole-file diff on the first save and the CI formatting check fails
+# on every line of every file they touched.
+* text=auto eol=crlf
+
+# Binary, so git never tries to normalise them.
+*.png binary
+*.ico binary
+*.gif binary

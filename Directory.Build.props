@@ -1,0 +1,44 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+
+    <!-- Style and analyser rules are on, and .editorconfig decides which of them matter. -->
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+
+    <!-- CLS compliance is a promise to other languages compiling against a library.
+         Nothing here is a library, and the Win32 layer could not keep the promise anyway. -->
+    <NoWarn>$(NoWarn);CA1014</NoWarn>
+
+    <!-- A compiler warning is a defect and stays an error. An analyser suggestion is advice,
+         and a build that fails because a method could have been static is a build that
+         teaches people to switch the analysers off. -->
+    <CodeAnalysisTreatWarningsAsErrors>false</CodeAnalysisTreatWarningsAsErrors>
+
+    <!--
+      No ICU data is shipped, which is most of what keeps the self-contained download near
+      50 MB rather than 80.
+    -->
+    <InvariantGlobalization>true</InvariantGlobalization>
+
+    <!--
+      And this is what stops that being a crash. Windows Forms builds a CultureInfo from the
+      window's input language every time the keyboard layout changes, and in invariant mode
+      asking for any culture but the invariant one throws. For most applications that never
+      comes up; for this one the keyboard layout changing under a focused window is the
+      entire subject matter, so switching layouts while any of its windows had focus would
+      take the process down. With this, an unknown culture comes back as a stub instead of
+      an exception.
+    -->
+    <PredefinedCulturesOnly>false</PredefinedCulturesOnly>
+    <Version>1.0.0</Version>
+    <Authors>Oleksii Ozerov</Authors>
+    <Product>Switch Please</Product>
+    <Copyright>Copyright (c) 2026 Oleksii Ozerov</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/marrakesh/switch-please</RepositoryUrl>
+  </PropertyGroup>
+</Project>
