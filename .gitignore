@@ -6,3 +6,4 @@ artifacts/
 TestResults/
 publish/
 publish-*/
+installer-output/

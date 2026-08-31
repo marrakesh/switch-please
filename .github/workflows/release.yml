@@ -47,10 +47,42 @@ jobs:
               --output "publish/framework-dependent-$architecture"
           }
 
+      # Not guaranteed to be on the runner image, and reinstalling it when it is already
+      # there costs half a minute on every release for nothing.
+      - name: Install Inno Setup
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe")) {
+            choco install innosetup --no-progress -y
+          }
+
+      # Wraps the self-contained build, so the installed copy needs no runtime either. It
+      # installs per user and asks for no elevation, which is not only politeness: Switch
+      # Please must not run elevated, because SendInput from a higher integrity level cannot
+      # reach an ordinary window.
+      - name: Build installers
+        shell: pwsh
+        run: |
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          $version = "${{ github.ref_name }}" -replace '^v', ''
+
+          foreach ($architecture in 'x64', 'arm64') {
+            & $iscc /Qp `
+              "/DAppVersion=$version" `
+              "/DArch=$architecture" `
+              "/DSourceExe=..\publish\standalone-$architecture\SwitchPlease.exe" `
+              installer\SwitchPlease.iss
+
+            if ($LASTEXITCODE -ne 0) { throw "ISCC failed for $architecture" }
+          }
+
       - name: Name the artefacts
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path artifacts | Out-Null
+
+          Copy-Item installer-output/SwitchPlease-Setup-x64.exe artifacts/SwitchPlease-Setup.exe
+          Copy-Item installer-output/SwitchPlease-Setup-arm64.exe artifacts/SwitchPlease-Setup-arm64.exe
 
           # x64 keeps the plain names it has always had, so existing links and any script
           # that downloads the latest release do not break.
@@ -150,6 +182,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
+            artifacts/SwitchPlease-Setup.exe
+            artifacts/SwitchPlease-Setup-arm64.exe
             artifacts/SwitchPlease.exe
             artifacts/SwitchPlease-runtime-required.exe
             artifacts/SwitchPlease-arm64.exe

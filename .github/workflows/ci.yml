@@ -49,3 +49,21 @@ jobs:
           -p:PublishSingleFile=true
           -p:EnableCompressionInSingleFile=true
           --output publish/ci-check
+
+      # And the same for the installer. A mistake in the .iss is invisible until something
+      # compiles it, and the only thing that ever did was the release, by which point the
+      # tag is pushed and the version number is spent.
+      - name: Check that the installer still builds
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe")) {
+            choco install innosetup --no-progress -y
+          }
+
+          & "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" /Qp `
+            "/DAppVersion=0.0.0" `
+            "/DArch=x64" `
+            "/DSourceExe=..\publish\ci-check\SwitchPlease.exe" `
+            installer\SwitchPlease.iss
+
+          if ($LASTEXITCODE -ne 0) { throw "ISCC failed" }
