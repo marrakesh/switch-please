@@ -109,6 +109,13 @@ jobs:
       # pull request against microsoft/winget-pkgs and stays a deliberate, manual act; what
       # is automated here is the tedious half, which is filling in the version, the URLs and
       # the hashes of the files this run actually produced.
+      #
+      # It offers the installer rather than the portable executable, so winget users get an
+      # entry in Apps & features and an uninstall that works. Two fields follow from how the
+      # installer is built and would be wrong if either changed: Scope is user because the
+      # installer asks for no elevation, and ProductCode is the AppId from
+      # installer/SwitchPlease.iss with Inno's _is1 suffix, which is the uninstall key it
+      # registers. Without them winget cannot tell whether the package is already installed.
       - name: Generate winget manifests
         shell: pwsh
         run: |
@@ -154,16 +161,21 @@ jobs:
           @"
           PackageIdentifier: Marrakesh.SwitchPlease
           PackageVersion: $version
-          InstallerType: portable
-          Commands:
-          - switchplease
+          InstallerType: inno
+          Scope: user
+          UpgradeBehavior: install
+          InstallModes:
+          - interactive
+          - silent
+          - silentWithProgress
+          ProductCode: '{8F3A6C21-5D74-4E9B-A1C8-7B2E4F6D9013}_is1'
           Installers:
           - Architecture: x64
-            InstallerUrl: $base/SwitchPlease.exe
-            InstallerSha256: $(Hash 'SwitchPlease.exe')
+            InstallerUrl: $base/SwitchPlease-Setup.exe
+            InstallerSha256: $(Hash 'SwitchPlease-Setup.exe')
           - Architecture: arm64
-            InstallerUrl: $base/SwitchPlease-arm64.exe
-            InstallerSha256: $(Hash 'SwitchPlease-arm64.exe')
+            InstallerUrl: $base/SwitchPlease-Setup-arm64.exe
+            InstallerSha256: $(Hash 'SwitchPlease-Setup-arm64.exe')
           ManifestType: installer
           ManifestVersion: 1.6.0
           "@ | Set-Content "$manifests/Marrakesh.SwitchPlease.installer.yaml" -Encoding utf8
