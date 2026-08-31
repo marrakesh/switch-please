@@ -50,9 +50,20 @@ Absichtlich unangetastet bleiben: Wörter unter drei Zeichen, Wörter mit Ziffer
 ## Installation
 
 Von den [Releases](https://github.com/marrakesh/switch-please/releases) herunterladen und
-starten. Kein Installer, nichts einzurichten.
+den Installer starten:
 
-| Datei | Größe | Benötigt |
+| Installer | Größe | |
+|---|---|---|
+| **`SwitchPlease-Setup.exe`** | ~47 MB | die meisten Rechner |
+| `SwitchPlease-Setup-arm64.exe` | ~45 MB | ARM-Rechner |
+
+Er installiert nur für Sie und verlangt keine Administratorrechte, bietet den Start mit
+Windows an und fragt beim Deinstallieren, ob Ihre Einstellungen bleiben sollen.
+
+Oder nehmen Sie die Anwendung für sich allein: nichts wird installiert, und außerhalb von
+`%APPDATA%\SwitchPlease` wird nichts geschrieben:
+
+| Portabel | Größe | Benötigt |
 |---|---|---|
 | `SwitchPlease.exe` | ~52 MB | nichts |
 | `SwitchPlease-runtime-required.exe` | ~0,4 MB | [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) |

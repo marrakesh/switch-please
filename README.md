@@ -58,10 +58,21 @@ And what it leaves alone on purpose, in either mode:
 
 ## Install
 
-Download from [Releases](https://github.com/marrakesh/switch-please/releases) and run it.
-No installer, nothing to configure.
+Download from [Releases](https://github.com/marrakesh/switch-please/releases) and run the
+installer:
 
-| File | Size | Requires |
+| Installer | Size | |
+|---|---|---|
+| **`SwitchPlease-Setup.exe`** | ~47 MB | most machines |
+| `SwitchPlease-Setup-arm64.exe` | ~45 MB | ARM machines |
+
+It installs for you alone and never asks for administrator rights, offers to start Switch
+Please with Windows, and asks on uninstall whether to keep your settings.
+
+Or take the executable on its own. Nothing is installed, and nothing is written outside
+`%APPDATA%\SwitchPlease`:
+
+| Portable | Size | Requires |
 |---|---|---|
 | `SwitchPlease.exe` | ~52 MB | nothing |
 | `SwitchPlease-runtime-required.exe` | ~0.4 MB | [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) |

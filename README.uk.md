@@ -46,10 +46,21 @@
 
 ## Встановлення
 
-Завантажте з [Releases](https://github.com/marrakesh/switch-please/releases) і запустіть.
-Інсталятор не потрібен.
+Завантажте з [Releases](https://github.com/marrakesh/switch-please/releases) і запустіть
+інсталятор:
 
-| Файл | Розмір | Потребує |
+| Інсталятор | Розмір | |
+|---|---|---|
+| **`SwitchPlease-Setup.exe`** | ~47 МБ | більшість машин |
+| `SwitchPlease-Setup-arm64.exe` | ~45 МБ | ARM-машини |
+
+Встановлюється лише для вас, прав адміністратора не просить, пропонує запуск разом із
+Windows, а під час видалення питає, чи лишати налаштування.
+
+Або візьміть сам виконуваний файл: нічого не встановлюється й нічого не пишеться поза
+`%APPDATA%\SwitchPlease`:
+
+| Портативно | Розмір | Потребує |
 |---|---|---|
 | `SwitchPlease.exe` | ~52 МБ | нічого |
 | `SwitchPlease-runtime-required.exe` | ~0.4 МБ | [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) |

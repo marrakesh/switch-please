@@ -62,10 +62,21 @@ zaškrtnutým „Základní psaní". Které slovníky máte, ukáže *Status and
 
 ## Instalace
 
-Stáhněte z [Releases](https://github.com/marrakesh/switch-please/releases) a spusťte.
-Instalátor není potřeba.
+Stáhněte z [Releases](https://github.com/marrakesh/switch-please/releases) a spusťte
+instalátor:
 
-| Soubor | Velikost | Vyžaduje |
+| Instalátor | Velikost | |
+|---|---|---|
+| **`SwitchPlease-Setup.exe`** | ~47 MB | většina strojů |
+| `SwitchPlease-Setup-arm64.exe` | ~45 MB | stroje s ARM |
+
+Instaluje se jen pro vás, práva správce nevyžaduje, nabídne spouštění se systémem Windows a
+při odinstalaci se zeptá, zda ponechat vaše nastavení.
+
+Nebo si vezměte samotný spustitelný soubor: nic se neinstaluje a mimo `%APPDATA%\SwitchPlease` se nic
+nezapisuje:
+
+| Přenosně | Velikost | Vyžaduje |
 |---|---|---|
 | `SwitchPlease.exe` | ~52 MB | nic |
 | `SwitchPlease-runtime-required.exe` | ~0,4 MB | [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) |
