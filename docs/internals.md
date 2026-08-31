@@ -15,10 +15,9 @@ SwitchPlease.App     tray icon, settings, and the worker thread tying it togethe
 
 ## Why a double tap instead of Pause/Break
 
-Punto trained everyone to reach for Pause/Break, but laptops and compact keyboards often do
-not have that key, and nearly every free chord is already taken by some application.
-Double-tapping a modifier works everywhere and collides with nothing: Shift on its own does
-nothing.
+The obvious key is Pause/Break, but laptops and compact keyboards often do not have it, and
+nearly every free chord is already taken by some application. Double-tapping a modifier
+works everywhere and collides with nothing: Shift on its own does nothing.
 
 Shift and Ctrl, and not Alt. Alt on its own is how Windows opens a window's menu bar, and it
 does so on the release — the very event a double tap is recognised on, and one that cannot

@@ -5,10 +5,12 @@
 [![Ko-fi](https://img.shields.io/badge/Ko--fi-support-FF5E5B?logo=kofi&logoColor=white)](https://ko-fi.com/marrakeshgtp)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy_Me_a_Coffee-support-FFDD00?logo=buymeacoffee&logoColor=black)](https://www.buymeacoffee.com/marrakesh)
 
-Přepínač klávesnicového rozložení pro Windows v duchu Punto Switcheru. Opraví text napsaný
-ve špatném rozložení — klávesovou zkratkou nebo automaticky.
+Přepínač klávesnicového rozložení pro Windows. Opraví text napsaný ve špatném rozložení —
+klávesovou zkratkou nebo automaticky.
 
 **[English](README.md)** · **[Русская](README.ru.md)** · **[Українська](README.uk.md)** · **[Deutsch](README.de.md)**
+
+![Napíše se „ykusme yase“, dvakrát Shift, a vyjde „zkusme zase“](docs/demo.cs.svg)
 
 ## Nejdřív to podstatné pro češtinu
 

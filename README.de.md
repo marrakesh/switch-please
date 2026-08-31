@@ -5,10 +5,12 @@
 [![Ko-fi](https://img.shields.io/badge/Ko--fi-support-FF5E5B?logo=kofi&logoColor=white)](https://ko-fi.com/marrakeshgtp)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy_Me_a_Coffee-support-FFDD00?logo=buymeacoffee&logoColor=black)](https://www.buymeacoffee.com/marrakesh)
 
-Ein Tastaturlayout-Umschalter für Windows, im Geiste von Punto Switcher. Korrigiert Text,
-den Sie im falschen Layout getippt haben — per Tastenkürzel oder automatisch.
+Ein Tastaturlayout-Umschalter für Windows. Korrigiert Text, den Sie im falschen Layout
+getippt haben — per Tastenkürzel oder automatisch.
 
 **[English](README.md)** · **[Русская](README.ru.md)** · **[Українська](README.uk.md)** · **[Čeština](README.cs.md)**
+
+![Getippt wird „kurye Yeit“, zweimal Shift, und es wird „kurze Zeit“](docs/demo.de.svg)
 
 ## Was es tut
 

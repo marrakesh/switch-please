@@ -5,12 +5,12 @@
 [![Ko-fi](https://img.shields.io/badge/Ko--fi-support-FF5E5B?logo=kofi&logoColor=white)](https://ko-fi.com/marrakeshgtp)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy_Me_a_Coffee-support-FFDD00?logo=buymeacoffee&logoColor=black)](https://www.buymeacoffee.com/marrakesh)
 
-Перемикач розкладки для Windows у дусі Punto Switcher. Виправляє текст, набраний не в тій
-розкладці — гарячою клавішею або автоматично.
+Перемикач розкладки для Windows. Виправляє текст, набраний не в тій розкладці — гарячою
+клавішею або автоматично.
 
 **[English](README.md)** · **[Русская](README.ru.md)** · **[Deutsch](README.de.md)** · **[Čeština](README.cs.md)**
 
-![Набирається «ghbdtn rfr ltkf», подвійний Shift, виходить «привет как дела»](docs/demo.svg)
+![Набирається «ghbdsn zr cghfdb», подвійний Shift, виходить «привіт як справи»](docs/demo.uk.svg)
 
 ## Що робить
 

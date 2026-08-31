@@ -139,14 +139,12 @@ jobs:
           LicenseUrl: https://github.com/${{ github.repository }}/blob/main/LICENSE
           ShortDescription: Fixes text typed in the wrong keyboard layout.
           Description: >-
-            A keyboard layout switcher for Windows in the spirit of Punto Switcher. Fixes text
-            typed before you noticed the layout was wrong, by hotkey or automatically. Works
-            with any pair of installed layouts, uses the Windows spell-check dictionaries, and
-            makes no network requests.
+            A keyboard layout switcher for Windows. Fixes text typed before you noticed the
+            layout was wrong, by hotkey or automatically. Works with any pair of installed
+            layouts, uses the Windows spell-check dictionaries, and makes no network requests.
           Tags:
           - keyboard
           - layout
-          - punto
           - russian
           - ukrainian
           ManifestType: defaultLocale

@@ -5,12 +5,12 @@
 [![Ko-fi](https://img.shields.io/badge/Ko--fi-support-FF5E5B?logo=kofi&logoColor=white)](https://ko-fi.com/marrakeshgtp)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy_Me_a_Coffee-support-FFDD00?logo=buymeacoffee&logoColor=black)](https://www.buymeacoffee.com/marrakesh)
 
-A keyboard layout switcher for Windows, in the spirit of Punto Switcher. Fixes text you
-typed before noticing the layout was wrong — by hotkey, or automatically.
+A keyboard layout switcher for Windows. Fixes text you typed before noticing the layout
+was wrong — by hotkey, or automatically.
 
 **[Русская](README.ru.md)** · **[Українська](README.uk.md)** · **[Deutsch](README.de.md)** · **[Čeština](README.cs.md)**
 
-![Typing "ghbdtn rfr ltkf", pressing Shift twice, and getting "привет как дела"](docs/demo.svg)
+![Typing "ghbdsn zr cghfdb", pressing Shift twice, and getting "привіт як справи"](docs/demo.uk.svg)
 
 ## What it does
 
