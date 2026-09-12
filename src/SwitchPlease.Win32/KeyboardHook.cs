@@ -46,7 +46,9 @@ public sealed class KeyboardHook : IDisposable
     private const int BitRightAlt = 5;
     private const int BitLeftWin = 6;
     private const int BitRightWin = 7;
-    private const int BitCapsLock = 8;
+
+    /// <summary>Every bit above, so the whole held-key state can be replaced at once.</summary>
+    private const int HeldBits = 0xFF;
 
     private const ModifierKeys RelevantModifiers =
         ModifierKeys.Shift | ModifierKeys.Control | ModifierKeys.Alt | ModifierKeys.Win;
@@ -203,7 +205,7 @@ public sealed class KeyboardHook : IDisposable
         // Warm the callback so the very first keystroke does not pay for JIT.
         PrepareCallback();
 
-        SeedCapsLock();
+        ResyncHeldModifiers();
 
         // Seeded, not left at zero: otherwise the first watchdog tick sees a callback that
         // has "not run since the epoch" and rebuilds a hook that was installed a second ago.
@@ -401,6 +403,11 @@ public sealed class KeyboardHook : IDisposable
 
         if (restored)
         {
+            // Whatever happened between the hook going quiet and being put back was not seen
+            // here, and a release that fell into that gap would otherwise be believed held
+            // for the rest of the session.
+            ResyncHeldModifiers();
+
             _lastCallbackTicks = Environment.TickCount;
             Interlocked.Increment(ref _reinstalls);
         }
@@ -513,6 +520,17 @@ public sealed class KeyboardHook : IDisposable
         bool isKeyDown = message is NativeMethods.WM_KEYDOWN or NativeMethods.WM_SYSKEYDOWN;
         ushort virtualKey = (ushort)data.VirtualKeyCode;
 
+        // Believing a modifier is held after the user let go of it is the one error here
+        // with a visible consequence: every key after it is recorded as its shifted
+        // character, and the next correction comes out in capitals. So whenever we think
+        // something is down, check with the input system before this event is applied --
+        // which costs nothing while ordinary text is being typed, because then there is
+        // nothing to check.
+        if (_modifierBits != 0)
+        {
+            ResyncHeldModifiers();
+        }
+
         // Modifier state is tracked even while disabled so it is correct the moment we
         // are switched back on.
         TrackModifier(virtualKey, isKeyDown);
@@ -579,33 +597,81 @@ public sealed class KeyboardHook : IDisposable
         return suppress ? 1 : NativeMethods.CallNextHookEx(0, nCode, wParam, lParam);
     }
 
+    /// <summary>
+    /// Applies one key event to the record of which modifiers are held.
+    ///
+    /// A keyboard says which of the two Shift keys was pressed, so most events name a side.
+    /// Synthesised input does not have to: the on-screen keyboard, remote desktop clients and
+    /// automation tools all send the neutral VK_SHIFT, and those used to be ignored outright,
+    /// which left the switcher recording their keystrokes unshifted. A press that names no
+    /// side is taken as the left one -- a guess, but a press seen only through the neutral
+    /// code is released through it too, and a neutral release clears both sides.
+    /// </summary>
     private void TrackModifier(ushort virtualKey, bool isKeyDown)
     {
-        int bit = virtualKey switch
+        int mask = virtualKey switch
         {
-            VirtualKeys.LShift => BitLeftShift,
-            VirtualKeys.RShift => BitRightShift,
-            VirtualKeys.LControl => BitLeftControl,
-            VirtualKeys.RControl => BitRightControl,
-            VirtualKeys.LMenu => BitLeftAlt,
-            VirtualKeys.RMenu => BitRightAlt,
-            VirtualKeys.LWin => BitLeftWin,
-            VirtualKeys.RWin => BitRightWin,
-            _ => -1,
+            VirtualKeys.LShift => 1 << BitLeftShift,
+            VirtualKeys.RShift => 1 << BitRightShift,
+            VirtualKeys.LControl => 1 << BitLeftControl,
+            VirtualKeys.RControl => 1 << BitRightControl,
+            VirtualKeys.LMenu => 1 << BitLeftAlt,
+            VirtualKeys.RMenu => 1 << BitRightAlt,
+            VirtualKeys.LWin => 1 << BitLeftWin,
+            VirtualKeys.RWin => 1 << BitRightWin,
+            VirtualKeys.Shift => (1 << BitLeftShift) | (1 << BitRightShift),
+            VirtualKeys.Control => (1 << BitLeftControl) | (1 << BitRightControl),
+            VirtualKeys.Menu => (1 << BitLeftAlt) | (1 << BitRightAlt),
+            _ => 0,
         };
 
-        if (bit >= 0)
+        if (mask == 0)
         {
-            int bits = _modifierBits;
-            _modifierBits = isKeyDown ? bits | (1 << bit) : bits & ~(1 << bit);
             return;
         }
 
-        if (virtualKey == VirtualKeys.Capital && isKeyDown)
-        {
-            _modifierBits ^= 1 << BitCapsLock;
-        }
+        int bits = _modifierBits;
+
+        // Setting the lowest bit of the mask sets exactly one side; clearing the whole mask
+        // clears both, because leaving either of them set is the failure that matters.
+        _modifierBits = isKeyDown ? bits | (mask & -mask) : bits & ~mask;
     }
+
+    /// <summary>
+    /// Replaces what we believe is held with what the input system says is held.
+    ///
+    /// Needed because the key stream this class watches has gaps in it and none of them
+    /// announce themselves. Windows stops calling a low-level hook that answers too slowly;
+    /// the secure desktop behind a UAC prompt, Ctrl+Alt+Del or the lock screen delivers
+    /// nothing to hooks at all. Either can swallow the release of a key whose press we saw,
+    /// and nothing puts that right on its own: a Shift released inside one of those gaps
+    /// stays "held" until the user next happens to press and release Shift. Until then every
+    /// keystroke is recorded as a capital -- invisible on screen, because the application got
+    /// the real one, and revealed only when a correction is typed back in shouting.
+    /// </summary>
+    private void ResyncHeldModifiers()
+    {
+        int bits = 0;
+
+        if (IsPhysicallyDown(VirtualKeys.LShift)) bits |= 1 << BitLeftShift;
+        if (IsPhysicallyDown(VirtualKeys.RShift)) bits |= 1 << BitRightShift;
+        if (IsPhysicallyDown(VirtualKeys.LControl)) bits |= 1 << BitLeftControl;
+        if (IsPhysicallyDown(VirtualKeys.RControl)) bits |= 1 << BitRightControl;
+        if (IsPhysicallyDown(VirtualKeys.LMenu)) bits |= 1 << BitLeftAlt;
+        if (IsPhysicallyDown(VirtualKeys.RMenu)) bits |= 1 << BitRightAlt;
+        if (IsPhysicallyDown(VirtualKeys.LWin)) bits |= 1 << BitLeftWin;
+        if (IsPhysicallyDown(VirtualKeys.RWin)) bits |= 1 << BitRightWin;
+
+        _modifierBits = (_modifierBits & ~HeldBits) | bits;
+    }
+
+    /// <summary>
+    /// Whether a key is down right now, asked of the input system rather than of this
+    /// thread's message queue -- the hook thread reads no key messages, so GetKeyState
+    /// would answer for a keyboard it has never seen.
+    /// </summary>
+    private static bool IsPhysicallyDown(ushort virtualKey) =>
+        (NativeMethods.GetAsyncKeyState(virtualKey) & 0x8000) != 0;
 
     private ModifierKeys CurrentModifiers()
     {
@@ -616,7 +682,18 @@ public sealed class KeyboardHook : IDisposable
         if ((bits & ((1 << BitLeftControl) | (1 << BitRightControl))) != 0) modifiers |= ModifierKeys.Control;
         if ((bits & ((1 << BitLeftAlt) | (1 << BitRightAlt))) != 0) modifiers |= ModifierKeys.Alt;
         if ((bits & ((1 << BitLeftWin) | (1 << BitRightWin))) != 0) modifiers |= ModifierKeys.Win;
-        if ((bits & (1 << BitCapsLock)) != 0) modifiers |= ModifierKeys.CapsLock;
+        // Asked of Windows rather than counted from the key stream, because counting was
+        // wrong in both directions and each error stuck for the rest of the session. Windows
+        // toggles Caps Lock once per press however many key-downs the press produces, so a
+        // repeat while the key is held flipped our count and not its state; and a press that
+        // never reaches us at all -- on the lock screen, or where Windows is set to clear
+        // Caps Lock with Shift instead of with the key -- flipped its state and not our
+        // count. The low bit of GetKeyState is the toggle, and unlike the held state it is
+        // reported correctly to a thread that reads no key messages.
+        if ((NativeMethods.GetKeyState(VirtualKeys.Capital) & 1) != 0)
+        {
+            modifiers |= ModifierKeys.CapsLock;
+        }
 
         return modifiers;
     }
@@ -644,14 +721,6 @@ public sealed class KeyboardHook : IDisposable
             }
 
             observed = previous;
-        }
-    }
-
-    private void SeedCapsLock()
-    {
-        if ((NativeMethods.GetKeyState(VirtualKeys.Capital) & 1) != 0)
-        {
-            _modifierBits |= 1 << BitCapsLock;
         }
     }
 

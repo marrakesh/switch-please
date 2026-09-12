@@ -222,6 +222,18 @@ internal static class NativeMethods
     [DllImport("user32.dll")]
     internal static extern short GetKeyState(int nVirtKey);
 
+    /// <summary>
+    /// The physical state of a key, as the input system sees it rather than as the calling
+    /// thread's message queue has caught up with it. That distinction is the whole point of
+    /// using it here: the hook thread never reads key messages, so <c>GetKeyState</c> is not
+    /// a safe way to ask whether a modifier is held right now, while the high bit of this is.
+    ///
+    /// Its low bit is documented as meaningless, so the toggle state of Caps Lock still has
+    /// to come from <c>GetKeyState</c>, which reports that one correctly from any thread.
+    /// </summary>
+    [DllImport("user32.dll")]
+    internal static extern short GetAsyncKeyState(int nVirtKey);
+
     [DllImport("user32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     internal static extern bool AttachThreadInput(uint idAttach, uint idAttachTo, [MarshalAs(UnmanagedType.Bool)] bool fAttach);
