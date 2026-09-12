@@ -124,6 +124,13 @@ Name: "{autodesktop}\Switch Please"; Filename: "{app}\SwitchPlease.exe"; Tasks: 
 Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; \
     ValueName: "SwitchPlease"; ValueData: """{app}\SwitchPlease.exe"""; \
     Flags: uninsdeletevalue; Tasks: startup
+; Ticking the task has to mean the program actually starts, and writing the entry above is
+; not enough on its own to promise that. Task Manager switches a startup entry off by
+; recording it here and leaving the entry itself alone, so an earlier install that the user
+; disabled that way would otherwise come back ticked and still not start. Deleting is safe
+; in a way the note below is about: it is a different value, in a different key.
+Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run"; \
+    ValueName: "SwitchPlease"; Flags: deletevalue; Tasks: startup
 ; Removal is in [Code] rather than a second entry here. A `deletevalue` entry would run at
 ; install time, in order, and delete the value the entry above had just written.
 
@@ -146,6 +153,11 @@ begin
     // executable that no longer exists is worse than no entry at all.
     RegDeleteValue(HKEY_CURRENT_USER,
       'Software\Microsoft\Windows\CurrentVersion\Run', 'SwitchPlease');
+
+    // And Task Manager's verdict on that entry, which outlives it. Left behind, it would be
+    // waiting for the next install to write the entry again, and would switch it back off.
+    RegDeleteValue(HKEY_CURRENT_USER,
+      'Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run', 'SwitchPlease');
 
     DataDir := ExpandConstant('{userappdata}\SwitchPlease');
 
