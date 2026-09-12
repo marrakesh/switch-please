@@ -234,6 +234,20 @@ internal static class NativeMethods
     [DllImport("user32.dll")]
     internal static extern short GetAsyncKeyState(int nVirtKey);
 
+    internal const uint DESKTOP_READOBJECTS = 0x0001;
+
+    /// <summary>
+    /// The desktop the user is typing into, which is not always the one this process is on.
+    /// A UAC prompt, the lock screen and Ctrl+Alt+Del all move the input to a desktop we
+    /// cannot open, and the failure to open it is the answer.
+    /// </summary>
+    [DllImport("user32.dll", SetLastError = true)]
+    internal static extern nint OpenInputDesktop(uint dwFlags, [MarshalAs(UnmanagedType.Bool)] bool fInherit, uint dwDesiredAccess);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static extern bool CloseDesktop(nint hDesktop);
+
     [DllImport("user32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     internal static extern bool AttachThreadInput(uint idAttach, uint idAttachTo, [MarshalAs(UnmanagedType.Bool)] bool fAttach);

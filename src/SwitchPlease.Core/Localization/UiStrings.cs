@@ -62,7 +62,11 @@ public sealed class UiStrings
 
     public required string StatusInstalled { get; init; }
 
-    /// <summary>{0} = how many times the hook had to be put back. Only shown when above zero.</summary>
+    /// <summary>
+    /// {0} = how many times the hooks were rebuilt. Only shown when above zero. It does not
+    /// say Windows dropped them, because until the log is read nobody knows that it did:
+    /// a hook that goes quiet while still installed is rebuilt by the same watchdog.
+    /// </summary>
     public required string StatusHookRecovered { get; init; }
 
     public required string StatusNotInstalled { get; init; }

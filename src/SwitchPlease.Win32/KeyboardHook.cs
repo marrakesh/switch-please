@@ -22,7 +22,10 @@ namespace SwitchPlease.Win32;
 /// 2. The callback must return inside LowLevelHooksTimeout (300 ms by default) or Windows
 ///    quietly stops calling it. So the callback only compares a few integers and writes one
 ///    struct into a lock-free queue: no allocation, no I/O, no locks, nothing that can be
-///    paused by the garbage collector for long.
+///    paused by the garbage collector for long. Measured on Windows 11, an overrun costs the
+///    events that arrive during it and nothing more -- the hook is skipped, not removed, and
+///    the handle stays valid -- but the older behaviour is documented and the watchdog below
+///    still assumes it can happen.
 /// </summary>
 public sealed class KeyboardHook : IDisposable
 {
@@ -82,6 +85,7 @@ public sealed class KeyboardHook : IDisposable
 
     private nuint _watchdogTimer;
     private long _reinstalls;
+    private long _falseAlarms;
 
     // One object holding every binding, swapped wholesale when settings change. A single
     // volatile read in the callback then gives a consistent set: with a field per hotkey the
@@ -118,6 +122,17 @@ public sealed class KeyboardHook : IDisposable
     /// Anything above zero is worth showing the user: it means corrections were being missed.
     /// </summary>
     public long Reinstalls => Interlocked.Read(ref _reinstalls);
+
+    /// <summary>
+    /// How many of those reinstalls found the hooks still installed.
+    ///
+    /// Worth separating, because the two are different faults with different cures. A hook
+    /// that is gone is put back by reinstalling it; a hook that is installed and simply not
+    /// being called is not, and rebuilding it only costs the events that arrive while it is
+    /// down. On Windows 11 the second is the common one, because an overrunning callback is
+    /// skipped rather than unhooked.
+    /// </summary>
+    public long FalseAlarms => Interlocked.Read(ref _falseAlarms);
 
     /// <summary>
     /// Keystrokes waiting for the worker. Steadily above zero means the worker is falling
@@ -372,6 +387,18 @@ public sealed class KeyboardHook : IDisposable
     /// </summary>
     private void ReinstallIfDropped()
     {
+        // Input that no hook on this desktop could have seen is not evidence about our hooks.
+        // While a UAC prompt, the lock screen or Ctrl+Alt+Del owns the input, every key the
+        // user presses moves the clock GetLastInputInfo reports and none of it reaches us,
+        // which reads exactly like a dropped hook and is not one. It is also the shape the
+        // symptom had: a report every six seconds -- the soonest the grace period allows --
+        // for as long as the spell lasted, because putting the hooks back cured nothing.
+        if (!OwnsInputDesktop())
+        {
+            _lastCallbackTicks = Environment.TickCount;
+            return;
+        }
+
         var info = new NativeMethods.LASTINPUTINFO
         {
             Size = (uint)Marshal.SizeOf<NativeMethods.LASTINPUTINFO>(),
@@ -383,9 +410,14 @@ public sealed class KeyboardHook : IDisposable
         }
 
         if (_watchdog.LooksDropped(
-                (uint)Environment.TickCount, (uint)_lastCallbackTicks, info.Time))
+                (uint)Environment.TickCount, (uint)_lastCallbackTicks, info.Time)
+            && RemoveHooks())
         {
-            RemoveHooks();
+            // Still installed, so the silence was never a dropped hook. Nothing asks Windows
+            // whether a hook is still in the chain, and taking it out is the only way to find
+            // out -- which is what this was doing anyway, unconditionally and without ever
+            // learning the answer. Now it is at least counted honestly.
+            Interlocked.Increment(ref _falseAlarms);
         }
 
         // Each hook is put back on its own, and a handle left at zero is reason enough to try
@@ -436,19 +468,50 @@ public sealed class KeyboardHook : IDisposable
         }
     }
 
-    private void RemoveHooks()
+    /// <summary>
+    /// Takes both hooks out of the chain.
+    /// </summary>
+    /// <returns>
+    /// Whether either was still in it. Windows invalidates the handle of a hook it has
+    /// removed itself, so an unhook that succeeds is proof the hook was alive and an unhook
+    /// that fails is proof it was not.
+    /// </returns>
+    private bool RemoveHooks()
     {
+        bool wasInstalled = false;
+
         if (_hookHandle != 0)
         {
-            NativeMethods.UnhookWindowsHookEx(_hookHandle);
+            wasInstalled |= NativeMethods.UnhookWindowsHookEx(_hookHandle);
             _hookHandle = 0;
         }
 
         if (_mouseHookHandle != 0)
         {
-            NativeMethods.UnhookWindowsHookEx(_mouseHookHandle);
+            wasInstalled |= NativeMethods.UnhookWindowsHookEx(_mouseHookHandle);
             _mouseHookHandle = 0;
         }
+
+        return wasInstalled;
+    }
+
+    /// <summary>
+    /// Whether the desktop the user is typing into is one this process can see.
+    ///
+    /// Opening it is the question: the secure desktop behind a UAC prompt, the lock screen
+    /// and the screen saver all refuse, and refusal is the whole answer.
+    /// </summary>
+    private static bool OwnsInputDesktop()
+    {
+        nint desktop = NativeMethods.OpenInputDesktop(0, false, NativeMethods.DESKTOP_READOBJECTS);
+
+        if (desktop == 0)
+        {
+            return false;
+        }
+
+        NativeMethods.CloseDesktop(desktop);
+        return true;
     }
 
     /// <summary>

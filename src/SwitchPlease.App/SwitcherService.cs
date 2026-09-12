@@ -72,6 +72,7 @@ public sealed class SwitcherService : IDisposable
 
     // Last reinstall count that was written to the log, so a recovery is reported once.
     private long _reportedReinstalls;
+    private long _reportedFalseAlarms;
 
     private long _corrections;
     private long _lastEventTicks = Environment.TickCount64;
@@ -122,8 +123,15 @@ public sealed class SwitcherService : IDisposable
     public long HookReinstalls => _hook.Reinstalls;
 
     /// <summary>
-    /// Notes in the log when the hook has been recovered. Called on the tray's tick, because
-    /// the hook thread has no business formatting messages.
+    /// Notes in the log when the hooks have been rebuilt, and says which of the two things
+    /// happened. Called on the tray's tick, because the hook thread has no business
+    /// formatting messages.
+    ///
+    /// The distinction is the whole point. This line used to read "Windows had dropped the
+    /// keyboard hook" every time, which was a guess dressed as a fact: the watchdog only ever
+    /// knew that the callback had gone quiet while the machine was being used. It is now
+    /// asked, and the answer decides the wording -- a hook that turned out to be installed
+    /// all along is a different fault, and reinstalling it is not the cure.
     /// </summary>
     public void ReportHookRecovery()
     {
@@ -134,8 +142,16 @@ public sealed class SwitcherService : IDisposable
             return;
         }
 
+        long alarms = _hook.FalseAlarms;
+        bool stillInstalled = alarms != _reportedFalseAlarms;
+
         _reportedReinstalls = count;
-        Log($"Windows had dropped the keyboard hook; it has been put back ({count} so far this session).");
+        _reportedFalseAlarms = alarms;
+
+        Log(stillInstalled
+            ? $"the hooks went quiet for over 5 s while the machine was in use, but were still "
+                + $"installed; they have been rebuilt anyway ({alarms} of {count} this session)."
+            : $"Windows had dropped the keyboard hook; it has been put back ({count} so far this session).");
     }
 
     /// <summary>Languages Windows can spell-check here, shown in the diagnostics view.</summary>
