@@ -1,5 +1,4 @@
 using System.Text;
-using Microsoft.Win32;
 using SwitchPlease.App.Localization;
 using SwitchPlease.Core.Localization;
 using SwitchPlease.Core.Config;
@@ -13,9 +12,6 @@ namespace SwitchPlease.App;
 /// </summary>
 public sealed class TrayContext : ApplicationContext
 {
-    private const string StartupRegistryKey = @"Software\Microsoft\Windows\CurrentVersion\Run";
-    private const string StartupValueName = "SwitchPlease";
-
     private readonly NotifyIcon _icon;
     private readonly SwitcherService _service;
     private readonly AppSettings _settings;
@@ -172,7 +168,7 @@ public sealed class TrayContext : ApplicationContext
 
         _startupItem = new ToolStripMenuItem(Text.MenuStartup, null, (_, _) => ToggleStartup())
         {
-            Checked = IsStartupEnabled(),
+            Checked = StartupRegistration.IsEnabled(),
         };
 
         _diagnosticsItem = new ToolStripMenuItem(Text.MenuDiagnostics, null, (_, _) => ToggleDiagnostics())
@@ -226,8 +222,14 @@ public sealed class TrayContext : ApplicationContext
 
         // The application typing was last seen in is only known once some has happened, and
         // it changes as the user moves around, so the entry naming it is filled in each time
-        // the menu opens rather than when it is built.
-        menu.Opening += (_, _) => RefreshExclusionItem();
+        // the menu opens rather than when it is built. The startup tick is refreshed here for
+        // the same reason: the Run key is the record, and an installer, an uninstaller or
+        // regedit can change it while the application is running.
+        menu.Opening += (_, _) =>
+        {
+            RefreshExclusionItem();
+            _startupItem.Checked = StartupRegistration.IsEnabled();
+        };
 
         return menu;
     }
@@ -507,44 +509,24 @@ public sealed class TrayContext : ApplicationContext
         ApplyAndSave();
     }
 
+    /// <summary>
+    /// Unlike its neighbours this one saves nothing: <see cref="StartupRegistration"/> is
+    /// where autostart is recorded and where the menu is ticked from. Mirroring it into the
+    /// settings file would add a copy that an install, or an edit made outside the
+    /// application, could leave contradicting the registry.
+    /// </summary>
     private void ToggleStartup()
     {
-        bool enable = !IsStartupEnabled();
+        bool enable = !StartupRegistration.IsEnabled();
 
         try
         {
-            using var key = Registry.CurrentUser.OpenSubKey(StartupRegistryKey, writable: true)
-                ?? Registry.CurrentUser.CreateSubKey(StartupRegistryKey);
-
-            if (enable)
-            {
-                key.SetValue(StartupValueName, $"\"{Environment.ProcessPath}\"");
-            }
-            else
-            {
-                key.DeleteValue(StartupValueName, throwOnMissingValue: false);
-            }
-
-            _settings.RunAtStartup = enable;
+            StartupRegistration.SetEnabled(enable, Environment.ProcessPath ?? string.Empty);
             _startupItem.Checked = enable;
-            ApplyAndSave();
         }
         catch (Exception ex)
         {
             MessageBox.Show(string.Format(Text.ErrorStartup, ex.Message), "Switch Please");
-        }
-    }
-
-    private static bool IsStartupEnabled()
-    {
-        try
-        {
-            using var key = Registry.CurrentUser.OpenSubKey(StartupRegistryKey);
-            return key?.GetValue(StartupValueName) is not null;
-        }
-        catch (Exception)
-        {
-            return false;
         }
     }
 

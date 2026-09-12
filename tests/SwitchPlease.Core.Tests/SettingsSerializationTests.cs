@@ -27,7 +27,6 @@ public class SettingsSerializationTests
             AutoDetectSensitivity = 0.42,
             CorrectionDelayMilliseconds = 33,
             PlaySoundOnConvert = false,
-            RunAtStartup = true,
             Language = "uk",
             DoubleTapWindowMilliseconds = 321,
             DoubleTapHoldMilliseconds = 222,
@@ -49,7 +48,6 @@ public class SettingsSerializationTests
         Assert.Equal(original.AutoDetectSensitivity, restored.AutoDetectSensitivity);
         Assert.Equal(original.CorrectionDelayMilliseconds, restored.CorrectionDelayMilliseconds);
         Assert.Equal(original.PlaySoundOnConvert, restored.PlaySoundOnConvert);
-        Assert.Equal(original.RunAtStartup, restored.RunAtStartup);
         Assert.Equal(original.Language, restored.Language);
         Assert.Equal(original.DoubleTapWindowMilliseconds, restored.DoubleTapWindowMilliseconds);
         Assert.Equal(original.DoubleTapHoldMilliseconds, restored.DoubleTapHoldMilliseconds);

@@ -152,6 +152,34 @@ public sealed class SettingsStoreTests : IDisposable
     }
 
     [Fact]
+    public void AFileNamingASettingThatNoLongerExistsStillLoadsTheRest()
+    {
+        // RunAtStartup was dropped once the Run key became the only place autostart is
+        // recorded, so every file written by an earlier version still names it. A leftover
+        // key has to be ignored rather than treated as a parse failure: Load answers a bad
+        // file with defaults, so getting this wrong would quietly discard real settings.
+        const string WithRemovedSetting = """
+            {
+              "Enabled": false,
+              "RunAtStartup": true,
+              "AutoDetectSensitivity": 0.35,
+              "ExcludedProcesses": [ "wt.exe" ]
+            }
+            """;
+
+        Directory.CreateDirectory(_directory);
+        File.WriteAllText(Path0, WithRemovedSetting);
+
+        var settings = SettingsStore.Load(Path0);
+
+        // Every value here differs from the default, so a file rejected outright -- which
+        // Load answers with defaults, silently -- fails rather than slipping through.
+        Assert.False(settings.Enabled);
+        Assert.Equal(0.35, settings.AutoDetectSensitivity);
+        Assert.Equal(["wt.exe"], settings.ExcludedProcesses);
+    }
+
+    [Fact]
     public void TheFileIsIndentedJsonSomebodyCanEditByHand()
     {
         // The README tells people they can edit it, and the tray has an "open settings

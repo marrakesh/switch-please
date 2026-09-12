@@ -179,7 +179,10 @@ public sealed class AppSettings
     /// </summary>
     public bool CheckForUpdates { get; set; }
 
-    public bool RunAtStartup { get; set; }
+    // Deliberately no RunAtStartup here. Autostart is recorded in the Run key under HKCU,
+    // which Windows persists and the installer writes; the tray menu reads it back rather
+    // than keeping a copy. A copy in this file could only drift away from the registry,
+    // which is what the installer and Windows itself act on.
 
     /// <summary>
     /// Interface language: "auto" to follow Windows, otherwise one of the two-letter tags
