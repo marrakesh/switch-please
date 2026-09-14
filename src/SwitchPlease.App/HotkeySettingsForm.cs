@@ -160,11 +160,12 @@ public sealed class HotkeySettingsForm : Form, IMessageFilter
     {
         uint now = unchecked((uint)Environment.TickCount);
         bool tapped = false;
+        var modifiers = CurrentModifiers();
 
         // Every tracker must see every event, so none of these calls may be skipped.
         foreach (var tracker in _trackers)
         {
-            if (tracker.Feed(virtualKey, isKeyDown, now))
+            if (tracker.Feed(virtualKey, isKeyDown, now, modifiers))
             {
                 Assign(new Hotkey(tracker.TrackedKey, Kind: HotkeyKind.DoubleTap));
                 tapped = true;

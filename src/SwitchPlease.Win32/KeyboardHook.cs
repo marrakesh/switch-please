@@ -613,7 +613,7 @@ public sealed class KeyboardHook : IDisposable
             for (int i = 0; i < taps.Length; i++)
             {
                 var tracker = taps[i];
-                bool tapped = tracker is not null && tracker.Feed(virtualKey, isKeyDown, data.Time);
+                bool tapped = tracker is not null && tracker.Feed(virtualKey, isKeyDown, data.Time, modifiers);
 
                 if (tapped && hotkey == HotkeyAction.None)
                 {
