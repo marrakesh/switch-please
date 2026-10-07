@@ -191,7 +191,9 @@ Four guards, all on by default:
 
 - **Password fields.** Detected through two independent probes, and never read.
 - **Games and presentations.** Nothing happens while a full-screen application has the
-  screen, so double-tapping Shift to sprint stays double-tapping Shift to sprint.
+  screen, so double-tapping Shift to sprint stays double-tapping Shift to sprint. A
+  Remote Desktop session shown full screen is not one of them: it is a desktop being
+  typed into.
 - **Excluded applications.** Password managers, terminals and code editors — Visual Studio,
   VS Code, Cursor, the JetBrains IDEs and a few more — are excluded out of the box, because
   what gets typed there is mostly passwords, commands and identifiers. *Never run in …* in

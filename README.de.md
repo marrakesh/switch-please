@@ -223,6 +223,8 @@ Vier Schutzvorkehrungen, alle standardmäßig an:
 - **Passwortfelder.** Werden über zwei unabhängige Prüfungen erkannt und nie gelesen.
 - **Spiele und Präsentationen.** Nichts passiert, solange eine Vollbildanwendung den
   Bildschirm belegt; zweimal Shift zum Sprinten bleibt also zweimal Shift zum Sprinten.
+  Eine Remotedesktopsitzung im Vollbild zählt nicht dazu: Sie ist ein Desktop, auf dem
+  geschrieben wird.
 - **Ausgeschlossene Anwendungen.** Passwortmanager, Terminals und Code-Editoren — Visual
   Studio, VS Code, Cursor, die JetBrains-IDEs und einige weitere — sind von Haus aus
   ausgeschlossen, weil dort überwiegend Passwörter, Befehle und Bezeichner getippt werden.

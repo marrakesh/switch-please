@@ -226,6 +226,7 @@ aby náhodný dvojí stisk pokazil správně napsané slovo.
 - **Pole pro hesla.** Rozpoznávají se dvěma nezávislými sondami a nikdy se nečtou.
 - **Hry a prezentace.** Nic se neděje, dokud obrazovku zabírá aplikace přes celou plochu,
   takže dvojí stisk Shiftu při sprintu zůstane dvojím stiskem Shiftu při sprintu.
+  Vzdálená plocha přes celou obrazovku mezi ně nepatří: je to plocha, do které se píše.
 - **Vyloučené aplikace.** Správci hesel, terminály a editory kódu — Visual Studio, VS Code,
   Cursor, IDE od JetBrains a několik dalších — jsou vyloučené hned po instalaci, protože se
   tam píšou většinou hesla, příkazy a identifikátory. *Nikdy nespouštět v …* v nabídce
