@@ -34,6 +34,14 @@ public static class FullscreenGuard
     /// </summary>
     private static readonly string[] DesktopClasses = ["Progman", "WorkerW", "Shell_TrayWnd"];
 
+    /// <summary>
+    /// Remote desktop clients: Remote Desktop Connection, and the client behind Windows App
+    /// and Azure Virtual Desktop. A session shown full screen covers its monitor exactly, and
+    /// Windows counts it as a full-screen application, so both questions below call it a
+    /// game. What is on screen is a desktop that is being typed into like any other window.
+    /// </summary>
+    private static readonly string[] RemoteDesktopClients = ["mstsc.exe", "msrdc.exe"];
+
     [ThreadStatic]
     private static nint _cachedWindow;
 
@@ -61,7 +69,8 @@ public static class FullscreenGuard
             return _cachedVerdict;
         }
 
-        bool verdict = IsPresentingOrPlaying() || CoversItsMonitor(foregroundWindow);
+        bool verdict = !IsRemoteDesktop(foregroundWindow)
+            && (IsPresentingOrPlaying() || CoversItsMonitor(foregroundWindow));
 
         _cachedWindow = foregroundWindow;
         _cachedAt = now;
@@ -69,6 +78,9 @@ public static class FullscreenGuard
 
         return verdict;
     }
+
+    private static bool IsRemoteDesktop(nint window) =>
+        RemoteDesktopClients.Contains(ForegroundWindowInfo.GetProcessName(window), StringComparer.Ordinal);
 
     private static bool IsPresentingOrPlaying()
     {
