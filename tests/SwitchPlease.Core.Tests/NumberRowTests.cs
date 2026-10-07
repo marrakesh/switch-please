@@ -149,6 +149,54 @@ public class NumberRowTests
         Assert.Equal("привет 2024", map.Convert(typed));
     }
 
+    [Theory]
+    [InlineData("2024")]
+    [InlineData("150")]
+    [InlineData("07.10.2026")]
+    [InlineData("3,50")]
+    public void TheWordHotkeyLeavesANumberAlone(string number)
+    {
+        // A number has no letters for any language to judge, and it used to go through as a
+        // plain toggle, the path meant for an alphabet nothing models. With Czech installed
+        // that is a stray double tap away from "ěéěč" for "2024" and "+řé" for "150".
+        foreach (var layouts in new[] { EnglishAndCzech, CzechAndCyrillic })
+        {
+            var plan = Plan(layouts, number, FakeWordValidator.RussianAndEnglishOnly(), out string? reason);
+
+            Assert.True(plan is null, $"\"{number}\" would become \"{plan?.Converted}\"");
+            Assert.Equal("left alone: no letters in it", reason);
+        }
+    }
+
+    [Theory]
+    [InlineData("3959", "šíří")]
+    [InlineData("49", "čí")]
+    public void AWordOfAccentsAloneIsTakenForTheNumberItLooksLike(string typed, string meant)
+    {
+        // The price of the test above, paid on purpose. On the US layout these are the very
+        // keys of a number, and a Czech dictionary that knows the word changes nothing: "49"
+        // and "čí" are typed the same way, and both are what somebody meant.
+        var withThem = FakeWordValidator.RussianAndEnglishOnly().With("cs-CZ", meant);
+
+        var plan = Plan(CzechAndCyrillic, typed, withThem, out string? reason);
+
+        Assert.True(plan is null, $"\"{typed}\" would become \"{plan?.Converted}\"");
+        Assert.Equal("left alone: no letters in it", reason);
+    }
+
+    [Theory]
+    [InlineData("3959", "šíří")]
+    [InlineData("49", "čí")]
+    public void ASelectionStillConvertsOne(string typed, string meant)
+    {
+        // Selecting a number and asking for it to be converted is no accident, so the
+        // selection is where such a word can still be had.
+        var map = PlannerFor(CzechAndCyrillic, FakeWordValidator.RussianAndEnglishOnly()).ChooseMapFor(typed);
+
+        Assert.NotNull(map);
+        Assert.Equal(meant, map.Convert(typed));
+    }
+
     private static ConversionPlanner PlannerFor(FakeLayoutResolver layouts, IWordValidator validator) =>
         new(layouts, LayoutFixture.LanguagesOf([.. layouts.InstalledLayouts]), validator);
 

@@ -242,6 +242,14 @@ glued to a word typed in the wrong layout — `5км` as `5rv` — goes to Czech
 gained in exchange. With a Czech dictionary, `město` typed on the Czech layout used to sit
 within the refusal margin of `m2sto`, and a stray double tap rewrote it.
 
+A number on its own is left alone by the word hotkey. It has no letters for any language to
+judge, so it used to go through as a plain toggle, and with Czech installed a stray double tap
+after a year turned `2024` into `ěéěč`. The same keys are how a Czech word made only of
+accented letters arrives — `šíří` as `3959`, `čí` as `49` — and nothing tells the two apart.
+The number wins: it is typed far more often, and a price or a date quietly rewritten is worse
+than a word left as digits. Such a word can still be selected and converted, since nobody
+selects a number by accident.
+
 ### What the models are
 
 Hand-built lists rather than a corpus: alphabet, vowels, frequent bigrams, impossible

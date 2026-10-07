@@ -111,6 +111,29 @@ public sealed class ConversionPlanner(
         string intended = slipped is null ? original : Render(buffer, range, activeLayout, slipped);
         var capsLockOnly = CapsLockFix(buffer, range, original, intended, activeLayout);
 
+        // A number is left alone. It has no letters, so no language can judge it, and it
+        // used to fall through to the plain toggle below, which is meant for letters in an
+        // alphabet nothing here models. With a Czech layout installed the number row is
+        // letters, and a stray double tap after a year or a price rewrote it: measured on the
+        // real layouts, "2024" became "ěéěč" and "150" became "+řé".
+        //
+        // The same keys are also how a Czech word made only of accented letters arrives:
+        // "šíří" typed on the US layout is "3959", and "čí" is "49". Nothing tells the two
+        // apart -- not the keys, and not a dictionary, since "čí" is a word. This favours the
+        // number. Numbers are typed all the time and those words are a handful; a mangled
+        // price or date can pass unnoticed, where "3959" left standing is plain to see.
+        //
+        // A selection is converted regardless (see ChooseMapFor). Selecting a number and
+        // asking for it to be converted is deliberate, never a stray tap, and it is how such
+        // a word can still be had.
+        if (!intended.Any(char.IsLetter))
+        {
+            explain?.Invoke(capsLockOnly is null
+                ? "left alone: no letters in it"
+                : "only Caps Lock to undo: no letters in it");
+            return capsLockOnly;
+        }
+
         var (targetLayout, targetScore) = ChooseTargetLayout(buffer, range, activeLayout, intended, slipped);
 
         if (targetLayout is null)
@@ -360,6 +383,9 @@ public sealed class ConversionPlanner(
     /// so the layout the text was produced in has to be inferred. Trying every ordered pair
     /// also covers the user having switched layouts before reaching for the hotkey, which
     /// would make the active layout a misleading starting point.
+    ///
+    /// Text with no letters in it is converted too, unlike the word hotkey's; why is in
+    /// <see cref="Build"/>.
     /// </summary>
     public LayoutMap? ChooseMapFor(string text)
     {
