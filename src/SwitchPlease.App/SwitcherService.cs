@@ -54,6 +54,11 @@ public sealed class SwitcherService : IDisposable
 
     private AppSettings _settings;
     private IWrongLayoutDetector _detector = DisabledDetector.Instance;
+
+    // A snapshot rather than the list in the settings, which the interface thread edits. A
+    // word learned here goes into the snapshot at once, so it is honoured from the very next
+    // keystroke rather than once the interface has caught up.
+    private WordExceptions _neverCorrect = WordExceptions.Empty;
     private Thread? _worker;
     private nint _lastWindow;
     private int _disposed;
@@ -108,6 +113,12 @@ public sealed class SwitcherService : IDisposable
 
     /// <summary>Raised on the worker thread after a correction has been typed.</summary>
     public event Action? Corrected;
+
+    /// <summary>
+    /// Raised on the worker thread when undoing an automatic correction has put a word on the
+    /// never-correct list, so the settings can be saved and the user told.
+    /// </summary>
+    public event Action<string>? WordLearned;
 
     public KeyboardLayoutService Layouts => _layouts;
 
@@ -261,6 +272,8 @@ public sealed class SwitcherService : IDisposable
             _dictionary,
             _languages,
             settings.MinimumAutoWordLength);
+
+        _neverCorrect = new WordExceptions(settings.NeverCorrectWords);
     }
 
     /// <summary>
@@ -679,6 +692,12 @@ public sealed class SwitcherService : IDisposable
             return;
         }
 
+        if (_neverCorrect.Contains(_buffer.GetText(range)))
+        {
+            Log("auto: left alone, the word is on the never-correct list");
+            return;
+        }
+
         var plan = BuildPlan(range);
 
         if (plan is null)
@@ -733,7 +752,7 @@ public sealed class SwitcherService : IDisposable
         // The keystroke that ended the word is still in flight to the application.
         Thread.Sleep(Math.Clamp(_settings.CorrectionDelayMilliseconds, 0, 200));
 
-        Apply(plan);
+        Apply(plan, automatic: true);
     }
 
     private void ConvertLastWord(bool automatic)
@@ -762,7 +781,7 @@ public sealed class SwitcherService : IDisposable
         }
 
         Log($"{(automatic ? "auto" : "hotkey")}: {Redact(plan.Original)} -> {Redact(plan.Converted)}");
-        Apply(plan);
+        Apply(plan, automatic);
     }
 
     /// <summary>
@@ -778,7 +797,7 @@ public sealed class SwitcherService : IDisposable
             : _planner.Build(_buffer, range, activeLayout, Log);
     }
 
-    private void Apply(ConversionPlan plan)
+    private void Apply(ConversionPlan plan, bool automatic)
     {
         if (IsProtectedField())
         {
@@ -806,7 +825,7 @@ public sealed class SwitcherService : IDisposable
 
         // Enough to type the original back over what is now on screen. The caret is exactly
         // where it started, so the same erase count applies in reverse.
-        _undo = CorrectionUndo.ForWord(plan);
+        _undo = CorrectionUndo.ForWord(plan) with { Automatic = automatic };
 
         Announce();
     }
@@ -861,6 +880,32 @@ public sealed class SwitcherService : IDisposable
         undo.RestoreBuffer(_buffer);
 
         Log($"undo: {Redact(undo.Wrote)} -> {Redact(undo.Restore)}");
+
+        if (undo.Automatic)
+        {
+            Learn(undo.Original);
+        }
+    }
+
+    /// <summary>
+    /// Puts a word whose automatic correction was just undone on the never-correct list.
+    ///
+    /// Straight away, on the first undo. The user has just said, as plainly as they can,
+    /// that the word was right; correcting it again tomorrow and making them say it again is
+    /// the behaviour that gets automatic correction switched off for good.
+    /// </summary>
+    private void Learn(string word)
+    {
+        if (_neverCorrect.Contains(word) || WordExceptions.Normalize(word).Length == 0)
+        {
+            return;
+        }
+
+        _neverCorrect = _neverCorrect.With(word);
+        Log($"remembered {Redact(word)}: automatic correction will leave it alone");
+
+        // Raised while the buffer lock is held, like Corrected; the tray posts it.
+        WordLearned?.Invoke(WordExceptions.Normalize(word));
     }
 
     /// <summary>
@@ -964,7 +1009,7 @@ public sealed class SwitcherService : IDisposable
         }
 
         Log($"line: {Redact(plan.Original)} -> {Redact(plan.Converted)}");
-        Apply(plan);
+        Apply(plan, automatic: false);
     }
 
     private string? ReadSelection()

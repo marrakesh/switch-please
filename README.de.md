@@ -47,6 +47,12 @@ wird ausgeschaltet. Erkannt wird das an Shift: Bei eingeschaltetem Caps Lock hä
 wer nicht weiß, dass es an ist — absichtlich ohne Shift getippte Großbuchstaben bleiben also
 stehen. Die automatische Korrektur tut das ebenfalls, wenn sie eingeschaltet ist.
 
+Eine **automatische** Korrektur rückgängig zu machen, lehrt sie außerdem etwas: Das Wort
+kommt auf eine Liste, die die automatische Korrektur fortan in Ruhe lässt — ein Nachname, ein
+Login, ein Wort in einer Sprache ohne Modell. Eine Benachrichtigung nennt das Wort, und unter
+*Einstellungen...* → *Diese Wörter nie automatisch korrigieren* lässt sich die Liste lesen und
+bearbeiten. Die Tastenkürzel wirken weiterhin auf diese Wörter.
+
 Alle drei Tastenkürzel sind unter *Tastenkürzel...* frei belegbar; der Dialog nimmt auf, was
 Sie tatsächlich drücken — zweimal Shift, Strg oder Alt oder eine gewöhnliche Kombination wie
 `Strg+Shift+L`. Rücktaste löscht eine Belegung. Die automatische Korrektur schaltet *Falsches
@@ -130,7 +136,10 @@ fragt GitHub nach der neuesten Release-Nummer, übermittelt nichts über Sie und
 **standardmäßig aus**.
 
 Getipptes verlässt den Rechner nicht, und standardmäßig wird außer den Einstellungen nichts
-auf die Festplatte geschrieben. Ein Protokoll entsteht nur, solange *Hook-Latenz messen*
+auf die Festplatte geschrieben. Der einzige getippte Text, der in den Einstellungen landen
+kann, ist ein Wort, auf das Sie selbst gezeigt haben: Wer eine automatische Korrektur
+rückgängig macht, setzt das Wort auf die Liste „nie korrigieren“; eine Benachrichtigung sagt
+das, und unter *Einstellungen...* lässt sich die Liste ansehen und bereinigen. Ein Protokoll entsteht nur, solange *Hook-Latenz messen*
 eingeschaltet ist; es hält Entscheidungen fest, der Text ist auf seine Länge reduziert. Die
 Wörter selbst erscheinen nur, wenn Sie *Getippten Text ins Protokoll schreiben* einschalten.
 

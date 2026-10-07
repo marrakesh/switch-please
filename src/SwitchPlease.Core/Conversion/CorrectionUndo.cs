@@ -31,6 +31,12 @@ public sealed record CorrectionUndo(
     string Original,
     string ConvertedWord)
 {
+    /// <summary>
+    /// Whether the switcher made this correction on its own. Undoing one of those is the user
+    /// saying the word was right, which is worth remembering.
+    /// </summary>
+    public bool Automatic { get; init; }
+
     public static CorrectionUndo ForWord(ConversionPlan plan) => new(
         plan.Converted + plan.Suffix,
         plan.Original + plan.Suffix,

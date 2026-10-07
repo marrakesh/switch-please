@@ -74,6 +74,11 @@ vypne. Pozná se to podle Shiftu: se zapnutým Caps Lockem ho drží jen ten, kd
 zapnutý — velká písmena napsaná záměrně, bez Shiftu, proto zůstanou. Automatická oprava to
 dělá také, pokud je zapnutá.
 
+Vrácení **automatické** opravy ji navíc něco naučí: slovo se dostane na seznam, kterého si
+automatická oprava od té chvíle nevšímá — příjmení, přihlašovací jméno, slovo v jazyce bez
+modelu. Oznámení slovo jmenuje a v *Nastavení...* → *Tato slova nikdy neopravovat
+automaticky* se dá seznam číst i upravovat. Klávesové zkratky na tato slova dál fungují.
+
 Všechny tři zkratky lze přeřadit v *Klávesové zkratky...*; dialog zachytí to, co skutečně
 stisknete — dvojí stisk Shift, Ctrl nebo Alt, nebo běžnou kombinaci jako `Ctrl+Shift+L`.
 Backspace přiřazení zruší. Automatickou opravu zapíná *Rozpoznávat špatné rozložení
@@ -137,7 +142,9 @@ hlášení o pádech. Jediné místo, kde se otevírá socket, je kontrola aktua
 GitHubu na číslo posledního vydání, nesděluje o vás nic a je **ve výchozím stavu vypnutá**.
 
 Napsané neopouští počítač a ve výchozím stavu se na disk nezapisuje nic kromě nastavení.
-Protokol vzniká jen, dokud je zapnuté *Měřit latenci hooku*; zaznamenává rozhodnutí a text
+Jediný napsaný text, který se může v nastavení ocitnout, je slovo, na které jste sami
+ukázali: vrácení automatické opravy ho zařadí na seznam „neopravovat“, oznámení to řekne a v
+*Nastavení...* si seznam můžete prohlédnout a pročistit. Protokol vzniká jen, dokud je zapnuté *Měřit latenci hooku*; zaznamenává rozhodnutí a text
 zkracuje na jeho délku. Samotná slova se objeví, jen když zapnete *Zapisovat napsaný text do
 protokolu*.
 

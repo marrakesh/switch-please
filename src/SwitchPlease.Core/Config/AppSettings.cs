@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using SwitchPlease.Core.Detection;
 using SwitchPlease.Core.Keys;
 
 namespace SwitchPlease.Core.Config;
@@ -241,6 +242,37 @@ public sealed class AppSettings
         "gvim.exe",
         "emacs.exe",
     ];
+
+    /// <summary>
+    /// Words automatic correction never rewrites. The hotkeys still work on them: pressing
+    /// one is a request, and a request is not what this list is about.
+    ///
+    /// Filled by undoing an automatic correction, and editable in the settings window. Kept
+    /// in lower case without surrounding punctuation; see <see cref="WordExceptions"/>.
+    /// </summary>
+    /// <remarks>
+    /// The one place typed text is written to disk without the user switching anything on,
+    /// and only text they have pointed at: a word whose correction they undid. The privacy
+    /// section of the README says so.
+    /// </remarks>
+    public List<string> NeverCorrectWords { get; set; } = [];
+
+    /// <summary>
+    /// Adds <paramref name="word"/> to <see cref="NeverCorrectWords"/>.
+    /// </summary>
+    /// <returns>False when it was already there, or had no letters to keep.</returns>
+    public bool RememberNeverCorrect(string word)
+    {
+        string key = WordExceptions.Normalize(word);
+
+        if (key.Length == 0 || NeverCorrectWords.Contains(key, StringComparer.Ordinal))
+        {
+            return false;
+        }
+
+        NeverCorrectWords.Add(key);
+        return true;
+    }
 
     /// <summary>
     /// Applications where automatic correction differs from the global setting, by

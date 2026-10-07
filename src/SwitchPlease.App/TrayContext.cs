@@ -64,6 +64,7 @@ public sealed class TrayContext : ApplicationContext
         // lock, is a deadlock that ends with Windows declaring the application hung.
         _service.InputBlocked += _ => PostToUi(ShowBlockedNotice);
         _service.Corrected += () => PostToUi(PlayCorrectionAnimation);
+        _service.WordLearned += word => PostToUi(() => RememberWord(word));
 
         _icon = new NotifyIcon
         {
@@ -388,6 +389,27 @@ public sealed class TrayContext : ApplicationContext
         _icon.BalloonTipText = Text.BlockedBody;
         _icon.BalloonTipIcon = ToolTipIcon.Warning;
         _icon.ShowBalloonTip(10_000);
+    }
+
+    /// <summary>
+    /// Saves a word the switcher has learned to leave alone, and says so. Said, because it is
+    /// typed text going into a file on disk, and that should never happen without the user
+    /// seeing it -- and so that a word learned from an undo that was itself a slip can be
+    /// found and taken off the list again.
+    /// </summary>
+    private void RememberWord(string word)
+    {
+        if (!_settings.RememberNeverCorrect(word))
+        {
+            return;
+        }
+
+        ApplyAndSave();
+
+        _icon.BalloonTipTitle = Text.LearnedTitle;
+        _icon.BalloonTipText = string.Format(Text.LearnedBody, word);
+        _icon.BalloonTipIcon = ToolTipIcon.Info;
+        _icon.ShowBalloonTip(5_000);
     }
 
     private async Task CheckForUpdatesAsync(bool announceWhenCurrent)

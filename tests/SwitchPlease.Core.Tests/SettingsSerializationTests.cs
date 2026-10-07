@@ -36,6 +36,7 @@ public class SettingsSerializationTests
             LogMaximumBytes = 4096,
             CheckForUpdates = true,
             ExcludedProcesses = ["one.exe", "two.exe"],
+            NeverCorrectWords = ["ntcn", "привыт"],
             ConvertWordHotkey = new Hotkey(VirtualKeys.Pause),
             ConvertSelectionHotkey = new Hotkey((ushort)'L', ModifierKeys.Control | ModifierKeys.Shift),
             UndoHotkey = new Hotkey(VirtualKeys.Menu, Kind: HotkeyKind.DoubleTap),
@@ -57,6 +58,7 @@ public class SettingsSerializationTests
         Assert.Equal(original.LogMaximumBytes, restored.LogMaximumBytes);
         Assert.Equal(original.CheckForUpdates, restored.CheckForUpdates);
         Assert.Equal(original.ExcludedProcesses, restored.ExcludedProcesses);
+        Assert.Equal(original.NeverCorrectWords, restored.NeverCorrectWords);
         Assert.Equal(original.ConvertWordHotkey, restored.ConvertWordHotkey);
         Assert.Equal(original.ConvertSelectionHotkey, restored.ConvertSelectionHotkey);
         Assert.Equal(original.UndoHotkey, restored.UndoHotkey);

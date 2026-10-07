@@ -237,6 +237,16 @@ public sealed class UiStrings
 
     public required string SettingsExcludedHint { get; init; }
 
+    public required string SettingsNeverCorrect { get; init; }
+
+    public required string SettingsNeverCorrectHint { get; init; }
+
+    // Notification after undoing an automatic correction.
+    public required string LearnedTitle { get; init; }
+
+    /// <summary>{0} = the word, as it will be kept: lower case, no punctuation.</summary>
+    public required string LearnedBody { get; init; }
+
     // Update check.
     public required string UpdateTitle { get; init; }
 

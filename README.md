@@ -106,6 +106,12 @@ with the hotkeys still one keypress away there.
 pressing Shift ×2 again does the same; the undo hotkey also covers a converted selection,
 which Shift ×2 cannot reverse.
 
+Undoing an **automatic** correction also teaches it: the word goes on a list that automatic
+correction leaves alone from then on — a surname, a login, a word in a language it has no
+model for. A notification names the word, and *Never correct these words automatically* in
+*Settings...* is where the list can be read and edited. The hotkeys still work on those
+words.
+
 **Caps Lock left on** is put right along with the layout: `пРИВЕТ` becomes `Привет`, and
 Caps Lock is switched off. Shift is how it tells: nobody holds Shift with Caps Lock on unless
 they did not know it was on, so capitals typed on purpose, with no Shift, are left as they
@@ -187,8 +193,11 @@ reporting, no licence check. The only code that opens a socket is the update che
 GitHub for the latest release tag, sends nothing about you, and is **off by default**.
 
 Nothing you type leaves the machine, and by default nothing at all is written to disk but
-the settings. The diagnostic log exists only while *Measure hook latency* is on, and records
-decisions with the text reduced to its length:
+the settings. The one piece of typed text the settings can hold is a word you have pointed
+at: undoing an automatic correction puts that word on the never-correct list, a notification
+says so, and *Settings...* shows the list and lets you remove it. The diagnostic log exists
+only while *Measure hook latency* is on, and records decisions with the text reduced to its
+length:
 
 ```
 14:22:07 auto: <6 chars> -> <6 chars> [ru=0.94 en=0.11 margin=0.83 after=ru]
@@ -241,6 +250,7 @@ file is read at startup and rewritten whenever something changes in the menu.
 | `RespectPasswordFields` | `true` | Stay out of password fields. |
 | `PauseInFullscreenApps` | `true` | Stand aside while a game or a presentation has the screen. |
 | `ExcludedProcesses` | see above | Applications the switcher stays out of entirely. |
+| `NeverCorrectWords` | none | Words automatic correction leaves alone. Undoing an automatic correction adds one. |
 | `DiagnosticsEnabled` | `false` | Measure hook latency and keep the diagnostic log. |
 | `LogTextContent` | `false` | Whether the log may contain what was typed. |
 | `LogMaximumBytes` | `1048576` | Size at which the log rolls over. |

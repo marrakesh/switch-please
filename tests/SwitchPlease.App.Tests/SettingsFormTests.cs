@@ -31,6 +31,7 @@ public class SettingsFormTests
         CheckForUpdates = true,
         TypewriterMillisecondsPerCharacter = 20,
         ExcludedProcesses = ["one.exe", "two.exe"],
+        NeverCorrectWords = ["ntcn", "привыт"],
     };
 
     [Fact]
@@ -56,6 +57,7 @@ public class SettingsFormTests
             Assert.Equal(original.LogTextContent, applied.LogTextContent);
             Assert.Equal(original.CheckForUpdates, applied.CheckForUpdates);
             Assert.Equal(original.ExcludedProcesses, applied.ExcludedProcesses);
+            Assert.Equal(original.NeverCorrectWords, applied.NeverCorrectWords);
 
             // Kept as a speed rather than a flag, so switching it on must not reset a value
             // the user chose by hand.

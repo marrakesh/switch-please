@@ -1,5 +1,6 @@
 using SwitchPlease.App.Localization;
 using SwitchPlease.Core.Config;
+using SwitchPlease.Core.Detection;
 
 namespace SwitchPlease.App;
 
@@ -43,6 +44,7 @@ public sealed class SettingsForm : Form
     private readonly CheckBox _logText;
     private readonly CheckBox _updates;
     private readonly TextBox _excluded;
+    private readonly TextBox _neverCorrect;
     private readonly Label _sensitivityValue;
 
     // The checkbox only chooses between off and on; the speed itself has no control, so it
@@ -121,6 +123,10 @@ public sealed class SettingsForm : Form
 
         _minimumWord = Number(stack, strings.SettingsMinimumWord, settings.MinimumAutoWordLength, 2, 10);
 
+        Caption(stack, strings.SettingsNeverCorrect);
+        _neverCorrect = List(stack, settings.NeverCorrectWords, height: 72);
+        Hint(stack, strings.SettingsNeverCorrectHint);
+
         // ---- Double tap -----------------------------------------------------------------
         Section(stack, strings.SettingsGroupHotkeys);
 
@@ -147,20 +153,7 @@ public sealed class SettingsForm : Form
         Section(stack, strings.SettingsGroupApplications);
 
         Caption(stack, strings.SettingsExcluded);
-
-        _excluded = new TextBox
-        {
-            Width = ContentWidth,
-            Height = 108,
-            Multiline = true,
-            ScrollBars = ScrollBars.Vertical,
-            WordWrap = false,
-            BorderStyle = BorderStyle.FixedSingle,
-            Margin = new Padding(0, 0, 0, Theme.Tight),
-            Text = string.Join(Environment.NewLine, settings.ExcludedProcesses),
-        };
-
-        stack.Controls.Add(_excluded);
+        _excluded = List(stack, settings.ExcludedProcesses, height: 108);
         Hint(stack, strings.SettingsExcludedHint);
 
         // The window would otherwise be as tall as its contents, which on a laptop screen is
@@ -214,6 +207,35 @@ public sealed class SettingsForm : Form
                 .Where(line => line.Length > 0)
                 .Distinct(StringComparer.Ordinal),
         ];
+
+        // Kept in the form they are compared in, so a word typed here with a capital or a
+        // trailing comma matches exactly as one the switcher learned by itself.
+        settings.NeverCorrectWords =
+        [
+            .. _neverCorrect.Lines
+                .Select(WordExceptions.Normalize)
+                .Where(word => word.Length > 0)
+                .Distinct(StringComparer.Ordinal),
+        ];
+    }
+
+    /// <summary>A box holding one entry per line.</summary>
+    private static TextBox List(TableLayoutPanel stack, IEnumerable<string> entries, int height)
+    {
+        var box = new TextBox
+        {
+            Width = ContentWidth,
+            Height = height,
+            Multiline = true,
+            ScrollBars = ScrollBars.Vertical,
+            WordWrap = false,
+            BorderStyle = BorderStyle.FixedSingle,
+            Margin = new Padding(0, 0, 0, Theme.Tight),
+            Text = string.Join(Environment.NewLine, entries),
+        };
+
+        stack.Controls.Add(box);
+        return box;
     }
 
     private void ShowSensitivity() =>
