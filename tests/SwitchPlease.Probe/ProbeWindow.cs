@@ -124,6 +124,32 @@ internal sealed class ProbeWindow : IDisposable
         Wait.For(250);
     }
 
+    /// <summary>
+    /// Types <paramref name="text"/> as keys: a small letter with Shift held, a capital
+    /// without. With Caps Lock on, that is how "пРИВЕТ" comes about.
+    /// </summary>
+    public void TypeWithShiftOnSmallLetters(string text)
+    {
+        foreach (char c in text)
+        {
+            Guard();
+            ushort key = (ushort)char.ToUpperInvariant(c);
+
+            if (char.IsLower(c))
+            {
+                Input.PressShifted(key);
+            }
+            else
+            {
+                Input.Press(key);
+            }
+
+            Wait.For(45);
+        }
+
+        Wait.For(250);
+    }
+
     public void DoubleTap(ushort modifier)
     {
         Guard();

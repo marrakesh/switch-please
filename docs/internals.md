@@ -173,6 +173,23 @@ rather than the next one in the list — cycling would land on Ukrainian for a R
 which shares almost every key with it and would change nothing while silently switching the
 keyboard to a language nobody asked for.
 
+### Caps Lock left on
+
+`пРИВЕТ` is a slip of a different kind, and every guard above reads it as an identifier:
+mixed case inside a word. The capitals themselves cannot tell it from `mRNA` or `iOS`. The
+keys can. Every recorded stroke carries the Caps Lock state, and nobody holds Shift with Caps
+Lock on unless they did not know it was on — someone who switched it on for capitals has no
+reason to. So a stretch typed with Caps Lock on counts as a slip only if Shift was held for a
+letter somewhere inside it, and then the whole stretch is replayed as if Caps Lock had been
+off, through `ToUnicodeEx` like any other conversion. The evidence reaches the words in the
+stretch that had no Shift, which is most of them: in `пРИВЕТ КАК ДЕЛА` only the first did.
+
+The replayed reading is what gets judged, so `gHBDTN` competes as `Ghbdtn` against `Привет`.
+When no other layout wins, the case is still put right on its own and the layout is left
+where it is. Either way Caps Lock is then switched off, by pressing it, because otherwise the
+next word would need the same correction. A selection has no recorded keys, so there the
+characters have to do, and only while Caps Lock is actually on.
+
 ### What the models are
 
 Hand-built lists rather than a corpus: alphabet, vowels, frequent bigrams, impossible

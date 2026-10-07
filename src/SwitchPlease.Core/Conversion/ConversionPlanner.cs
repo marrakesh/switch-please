@@ -37,6 +37,22 @@ public sealed record ConversionPlan(
     string Suffix,
     LayoutInfo TargetLayout)
 {
+    /// <summary>
+    /// The word as the user meant it in the layout that was active: <see cref="Original"/>
+    /// with a Caps Lock slip undone, and otherwise the same. This, not what is on screen, is
+    /// what a reading in another layout has to beat.
+    /// </summary>
+    public string Intended { get; init; } = Original;
+
+    /// <summary>
+    /// False for a correction that only undoes Caps Lock: the letters were right, so the
+    /// keyboard already is too.
+    /// </summary>
+    public bool SwitchesLayout { get; init; } = true;
+
+    /// <summary>Whether Caps Lock was on by mistake, so it should be switched off afterwards.</summary>
+    public bool FixesCapsLock => !string.Equals(Intended, Original, StringComparison.Ordinal);
+
     /// <summary>How many characters have to be erased before the replacement is typed.</summary>
     public int EraseCount => Word.Length + Tail.Length;
 
@@ -87,21 +103,31 @@ public sealed class ConversionPlanner(
         Action<string>? explain = null)
     {
         string original = buffer.GetText(range);
-        var (targetLayout, targetScore) = ChooseTargetLayout(buffer, range, activeLayout, original);
+
+        // A word typed with Caps Lock on by mistake is judged as it was meant, "Ghbdtn"
+        // rather than "gHBDTN", and corrected as it was meant, "Привет". Read as it stands it
+        // is mixed case, which every guard treats as an identifier and leaves alone.
+        var slipped = CapsLockSlip.Find(buffer.Strokes, range);
+        string intended = slipped is null ? original : Render(buffer, range, activeLayout, slipped);
+        var capsLockOnly = CapsLockFix(buffer, range, original, intended, activeLayout);
+
+        var (targetLayout, targetScore) = ChooseTargetLayout(buffer, range, activeLayout, intended, slipped);
 
         if (targetLayout is null)
         {
-            explain?.Invoke("no other layout would change this text");
-            return null;
+            explain?.Invoke(capsLockOnly is null
+                ? "no other layout would change this text"
+                : "only Caps Lock to undo: no other layout would change this text");
+            return capsLockOnly;
         }
 
-        // Everything typed after the word (usually the space that ended it) is erased too,
-        // then retyped unchanged, so the caret ends up exactly where it started.
-        var tail = new StrokeRange(range.End, buffer.Count - range.End);
-        string suffix = buffer.GetText(tail);
+        var tail = TailAfter(buffer, range);
 
         var plan = new ConversionPlan(
-            range, tail, original, Render(buffer, range, targetLayout), suffix, targetLayout);
+            range, tail, original, Render(buffer, range, targetLayout, slipped), buffer.GetText(tail), targetLayout)
+        {
+            Intended = intended,
+        };
 
         // Refuse to wreck text that is plainly already right. The hotkey is two taps of
         // Shift, which is easy to trigger by accident, and "convert anyway" would turn a
@@ -112,36 +138,92 @@ public sealed class ConversionPlanner(
         // this way at all, and pretending otherwise would refuse or mangle it at random.
         // There the hotkey behaves as a plain toggle, which is what the user asked for by
         // pressing it.
-        if (!languages.IsFamiliar(original, validator))
+        if (!languages.IsFamiliar(intended, validator))
         {
             explain?.Invoke("converting without judging it: unfamiliar alphabet");
             return plan;
         }
 
-        double typedScore = Plausibility(original);
+        double typedScore = Plausibility(intended);
 
         if (typedScore - targetScore >= RefuseConversionMargin)
         {
-            explain?.Invoke($"left alone: already reads better than any alternative "
-                + $"({typedScore:F2} vs {targetScore:F2})");
-            return null;
+            explain?.Invoke(capsLockOnly is null
+                ? $"left alone: already reads better than any alternative ({typedScore:F2} vs {targetScore:F2})"
+                : $"only Caps Lock to undo: already reads better than any alternative ({typedScore:F2} vs {targetScore:F2})");
+            return capsLockOnly;
         }
 
         return plan;
     }
 
     /// <summary>
+    /// The correction that undoes a Caps Lock slip and nothing else, keeping the layout. Null
+    /// when there was no slip.
+    ///
+    /// Automatic correction falls back to this when the word, once its case is put right,
+    /// turns out to have been in the right layout all along: "пРИВЕТ" is Russian typed on the
+    /// Russian keyboard, and only the capitals are wrong.
+    /// </summary>
+    public ConversionPlan? BuildCapsLockFix(TypingBuffer buffer, StrokeRange range, LayoutInfo activeLayout)
+    {
+        var slipped = CapsLockSlip.Find(buffer.Strokes, range);
+
+        return slipped is null
+            ? null
+            : CapsLockFix(buffer, range, buffer.GetText(range), Render(buffer, range, activeLayout, slipped), activeLayout);
+    }
+
+    private static ConversionPlan? CapsLockFix(
+        TypingBuffer buffer,
+        StrokeRange range,
+        string original,
+        string intended,
+        LayoutInfo activeLayout)
+    {
+        if (string.Equals(original, intended, StringComparison.Ordinal))
+        {
+            return null;
+        }
+
+        var tail = TailAfter(buffer, range);
+
+        return new ConversionPlan(range, tail, original, intended, buffer.GetText(tail), activeLayout)
+        {
+            Intended = intended,
+            SwitchesLayout = false,
+        };
+    }
+
+    /// <summary>
+    /// Everything typed after the word, usually the space that ended it. It is erased too,
+    /// then retyped unchanged, so the caret ends up exactly where it started.
+    /// </summary>
+    private static StrokeRange TailAfter(TypingBuffer buffer, StrokeRange range) =>
+        new(range.End, buffer.Count - range.End);
+
+    /// <summary>
     /// Replays the recorded keys as if <paramref name="layout"/> had been active. Keys with
     /// no counterpart there keep whatever they originally produced.
     /// </summary>
-    public string Render(TypingBuffer buffer, StrokeRange range, LayoutInfo layout)
+    /// <param name="slipped">
+    /// Strokes to replay as if Caps Lock had been off, from <see cref="CapsLockSlip.Find"/>.
+    /// </param>
+    public string Render(TypingBuffer buffer, StrokeRange range, LayoutInfo layout, bool[]? slipped = null)
     {
         var strokes = buffer.Strokes;
         var converted = new char[range.Length];
 
         for (int i = 0; i < range.Length; i++)
         {
-            var stroke = strokes[range.Start + i];
+            int index = range.Start + i;
+            var stroke = strokes[index];
+
+            if (slipped is not null && slipped[index])
+            {
+                stroke = stroke with { Modifiers = stroke.Modifiers & ~ModifierKeys.CapsLock };
+            }
+
             char resolved = layouts.ResolveCharacter(stroke, layout);
             converted[i] = resolved == '\0' ? stroke.Character : resolved;
         }
@@ -155,11 +237,14 @@ public sealed class ConversionPlanner(
     /// Russian and a Ukrainian layout alongside English, say -- cycling would land on a
     /// layout the user did not mean.
     /// </summary>
+    /// <param name="asTyped">The text as meant in the current layout, Caps Lock slip undone.</param>
+    /// <param name="slipped">Strokes to replay without Caps Lock, as for <see cref="Render"/>.</param>
     public (LayoutInfo? Layout, double Score) ChooseTargetLayout(
         TypingBuffer buffer,
         StrokeRange range,
         LayoutInfo current,
-        string asTyped)
+        string asTyped,
+        bool[]? slipped = null)
     {
         LayoutInfo? best = null;
         double bestScore = double.NegativeInfinity;
@@ -171,7 +256,7 @@ public sealed class ConversionPlanner(
                 continue;
             }
 
-            string rendered = Render(buffer, range, candidate);
+            string rendered = Render(buffer, range, candidate, slipped);
 
             // A layout that produces the very same text is not a candidate. Russian and
             // Ukrainian share almost every key, so most words look identical in both;
@@ -243,6 +328,34 @@ public sealed class ConversionPlanner(
         }
 
         return best;
+    }
+
+    /// <summary>
+    /// What a selection typed with Caps Lock on by mistake should become: the same text with
+    /// its capitals put right, and in another layout as well only when that reads clearly
+    /// better. A plain selection is simply toggled, because converting it is all the user can
+    /// have meant; here they may have meant either, and the text has to say which.
+    /// </summary>
+    /// <returns>The replacement, and the layout to switch to or null to keep the current one.</returns>
+    public (string Text, LayoutInfo? Target) FixCapsLockSelection(string selected)
+    {
+        string intended = CapsLockSlip.Invert(selected);
+        var map = ChooseMapFor(intended);
+
+        if (map is null)
+        {
+            return (intended, null);
+        }
+
+        string converted = map.Convert(intended);
+
+        if (languages.IsFamiliar(intended, validator)
+            && Plausibility(intended) - Plausibility(converted) >= RefuseConversionMargin)
+        {
+            return (intended, null);
+        }
+
+        return (converted, map.Target);
     }
 
     private double Plausibility(string text) => languages.Evaluate(text, validator).Score;

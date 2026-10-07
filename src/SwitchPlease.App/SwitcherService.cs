@@ -684,21 +684,50 @@ public sealed class SwitcherService : IDisposable
             return;
         }
 
-        var context = new StrokeRange(0, range.Start);
-
-        var verdict = _detector.Evaluate(
-            plan.Original,
-            plan.Converted,
-            _buffer.GetText(context),
-            context.IsEmpty ? string.Empty : _planner.Render(_buffer, context, plan.TargetLayout));
-
-        Log($"auto: {Redact(plan.Original)} -> {Redact(plan.Converted)} [{verdict.Reason}]");
-
-        if (!verdict.ShouldConvert)
+        if (plan.SwitchesLayout)
         {
+            var context = new StrokeRange(0, range.Start);
+
+            var verdict = _detector.Evaluate(
+                plan.Intended,
+                plan.Converted,
+                _buffer.GetText(context),
+                context.IsEmpty ? string.Empty : _planner.Render(_buffer, context, plan.TargetLayout));
+
+            Log($"auto: {Redact(plan.Original)} -> {Redact(plan.Converted)} [{verdict.Reason}]");
+
+            if (verdict.ShouldConvert)
+            {
+                ApplyAfterDelay(plan);
+                return;
+            }
+
+            // The other layout did not win, but the capitals can still be wrong: "пРИВЕТ"
+            // typed on the Russian keyboard is Russian, just upside down.
+            if (!plan.FixesCapsLock || _layouts.GetActiveLayout() is not { } active
+                || _planner.BuildCapsLockFix(_buffer, range, active) is not { } fix)
+            {
+                return;
+            }
+
+            plan = fix;
+        }
+
+        // A Caps Lock slip on its own needs no detector: the Shift held inside it is the
+        // evidence, and it is far stronger than letter statistics. The guards still apply,
+        // so a code or a path typed with Caps Lock on is left as it is.
+        if (TextGuards.IsIneligible(plan.Converted, _settings.MinimumAutoWordLength, out string reason))
+        {
+            Log($"auto: Caps Lock left on, word left alone [{reason}]");
             return;
         }
 
+        Log($"auto: {Redact(plan.Original)} -> {Redact(plan.Converted)} [Caps Lock left on]");
+        ApplyAfterDelay(plan);
+    }
+
+    private void ApplyAfterDelay(ConversionPlan plan)
+    {
         // The keystroke that ended the word is still in flight to the application.
         Thread.Sleep(Math.Clamp(_settings.CorrectionDelayMilliseconds, 0, 200));
 
@@ -761,9 +790,14 @@ public sealed class SwitcherService : IDisposable
         // Keep typing in the layout the user evidently meant. Whether it took is checked
         // after the buffer lock is released: the documented route is a posted message, so the
         // answer is not available yet and waiting for it here would hold up the worker.
-        if (!KeyboardLayoutService.SetActiveLayout(plan.TargetLayout))
+        if (plan.SwitchesLayout && !KeyboardLayoutService.SetActiveLayout(plan.TargetLayout))
         {
             _layoutToVerify = plan.TargetLayout;
+        }
+
+        if (plan.FixesCapsLock)
+        {
+            InputSender.TurnOffCapsLock();
         }
 
         RewriteBuffer(plan);
@@ -860,15 +894,25 @@ public sealed class SwitcherService : IDisposable
             return;
         }
 
-        var map = _planner.ChooseMapFor(selected);
+        // Only while Caps Lock is still on. The characters alone cannot tell "пРИВЕТ" from
+        // "mRNA"; that the key which turns letters round is down right now can.
+        bool capsLockSlip = InputSender.IsCapsLockOn && CapsLockSlip.LooksInverted(selected);
+        string converted;
+        LayoutInfo? target;
 
-        if (map is null)
+        if (capsLockSlip)
+        {
+            (converted, target) = _planner.FixCapsLockSelection(selected);
+        }
+        else if (_planner.ChooseMapFor(selected) is { } map)
+        {
+            (converted, target) = (map.Convert(selected), map.Target);
+        }
+        else
         {
             Log("no other keyboard layout to switch to");
             return;
         }
-
-        string converted = map.Convert(selected);
 
         if (string.Equals(converted, selected, StringComparison.Ordinal))
         {
@@ -876,14 +920,19 @@ public sealed class SwitcherService : IDisposable
             return;
         }
 
-        Log($"selection: {Redact(selected)} -> {Redact(converted)}");
+        Log($"selection: {Redact(selected)} -> {Redact(converted)}{(capsLockSlip ? " [Caps Lock left on]" : string.Empty)}");
 
         // The selection is still highlighted, so typing over it replaces it.
         InputSender.SendText(converted, _settings.TypewriterMillisecondsPerCharacter);
 
-        if (!KeyboardLayoutService.SetActiveLayout(map.Target))
+        if (target is not null && !KeyboardLayoutService.SetActiveLayout(target))
         {
-            _layoutToVerify = map.Target;
+            _layoutToVerify = target;
+        }
+
+        if (capsLockSlip)
+        {
+            InputSender.TurnOffCapsLock();
         }
 
         _buffer.Clear();

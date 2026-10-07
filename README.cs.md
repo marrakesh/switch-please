@@ -69,6 +69,11 @@ Shift ×2 pracuje se záznamem toho, co jste psali, a zahodí ho, jakmile kurzor
 kam ho záznam nemůže sledovat: Enter, Tab, šipky, Home/End, Esc a jakékoli kliknutí myší.
 Pokud už je kurzor jinde, označte text a stiskněte dvakrát Ctrl.
 
+Zapomenutý Caps Lock se opraví spolu s rozložením: z `aHOJ` bude `Ahoj` a Caps Lock se
+vypne. Pozná se to podle Shiftu: se zapnutým Caps Lockem ho drží jen ten, kdo neví, že je
+zapnutý — velká písmena napsaná záměrně, bez Shiftu, proto zůstanou. Automatická oprava to
+dělá také, pokud je zapnutá.
+
 Všechny tři zkratky lze přeřadit v *Klávesové zkratky...*; dialog zachytí to, co skutečně
 stisknete — dvojí stisk Shift, Ctrl nebo Alt, nebo běžnou kombinaci jako `Ctrl+Shift+L`.
 Backspace přiřazení zruší. Automatickou opravu zapíná *Rozpoznávat špatné rozložení

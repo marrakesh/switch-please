@@ -42,6 +42,11 @@ sobald der Cursor dorthin springt, wohin sie ihm nicht folgen kann: Enter, Tab, 
 Pos1/Ende, Esc und jeder Mausklick. Ist der Cursor schon woanders, markieren Sie den Text und
 drücken Sie zweimal Strg.
 
+Vergessenes Caps Lock wird gleich mit korrigiert: Aus `hALLO` wird `Hallo`, und Caps Lock
+wird ausgeschaltet. Erkannt wird das an Shift: Bei eingeschaltetem Caps Lock hält Shift nur,
+wer nicht weiß, dass es an ist — absichtlich ohne Shift getippte Großbuchstaben bleiben also
+stehen. Die automatische Korrektur tut das ebenfalls, wenn sie eingeschaltet ist.
+
 Alle drei Tastenkürzel sind unter *Tastenkürzel...* frei belegbar; der Dialog nimmt auf, was
 Sie tatsächlich drücken — zweimal Shift, Strg oder Alt oder eine gewöhnliche Kombination wie
 `Strg+Shift+L`. Rücktaste löscht eine Belegung. Die automatische Korrektur schaltet *Falsches
@@ -61,6 +66,8 @@ Windows-Einstellung.
 | `tzpisch` | typisch | Deutsch, US-Layout aktiv |
 | `sch;n` | schön | Deutsch, US-Layout aktiv |
 | `Gr;-e` | Größe | Deutsch, US-Layout aktiv |
+| `yEIT` | Zeit | Deutsch, US-Layout aktiv, Caps Lock vergessen |
+| `hALLO` | Hallo | Caps Lock vergessen, das Layout stimmt |
 | `zes` | yes | Englisch, deutsches Layout aktiv |
 | `siye` | size | Englisch, deutsches Layout aktiv |
 

@@ -106,6 +106,11 @@ with the hotkeys still one keypress away there.
 pressing Shift ×2 again does the same; the undo hotkey also covers a converted selection,
 which Shift ×2 cannot reverse.
 
+**Caps Lock left on** is put right along with the layout: `пРИВЕТ` becomes `Привет`, and
+Caps Lock is switched off. Shift is how it tells: nobody holds Shift with Caps Lock on unless
+they did not know it was on, so capitals typed on purpose, with no Shift, are left as they
+are. Automatic correction does this too, when it is on.
+
 All three hotkeys are reassignable from *Hotkeys...* in the tray menu. The dialog captures
 whatever you actually press — a double tap of Shift, Ctrl or Alt, or an ordinary chord like
 `Ctrl+Shift+L`. Backspace clears a binding.
@@ -120,6 +125,8 @@ What lands when the layout was wrong, and what the hotkey turns it into:
 | `cgfcb,j` | спасибо | Russian typed on the US layout |
 | `руддщ` | hello | English typed on the Russian layout |
 | `ерфтлы` | thanks | English typed on the Russian layout |
+| `gHBDTN` | Привет | Russian typed on the US layout, with Caps Lock left on |
+| `пРИВЕТ` | Привет | Caps Lock left on; the layout was right |
 | `привыт` | привіт | Ukrainian typed on the Russian layout |
 | `мысто` | місто | Ukrainian typed on the Russian layout |
 
@@ -136,6 +143,7 @@ And what automatic correction leaves alone on purpose:
 | `C:\Windows\System32` | Looks like a path |
 | `user@example.com` | Looks like an address |
 | `camelCase`, `getUserName` | Mixed case inside a word |
+| `NASA` with Caps Lock on | Capitals on purpose: no Shift was held |
 | `příliš`, `Grüße` | No model and no dictionary for that language, so it abstains |
 
 The hotkeys are not bound by these rules: pressing one is a request, so they convert. They

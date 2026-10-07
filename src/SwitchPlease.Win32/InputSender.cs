@@ -113,6 +113,28 @@ public static class InputSender
         ]);
     }
 
+    /// <summary>Whether Caps Lock is on. The toggle bit is reported to any thread.</summary>
+    public static bool IsCapsLockOn => (NativeMethods.GetKeyState(VirtualKeys.Capital) & 1) != 0;
+
+    /// <summary>
+    /// Switches Caps Lock off after a correction that undid it, so the next word does not
+    /// need correcting too. Done by pressing the key, which is what the user would have done:
+    /// Windows offers no call that sets the toggle for the whole system.
+    /// </summary>
+    public static void TurnOffCapsLock()
+    {
+        if (!IsCapsLockOn)
+        {
+            return;
+        }
+
+        Send(
+        [
+            KeyInput(VirtualKeys.Capital, isKeyUp: false),
+            KeyInput(VirtualKeys.Capital, isKeyUp: true),
+        ]);
+    }
+
     private static void Send(NativeMethods.INPUT[] inputs)
     {
         uint sent = NativeMethods.SendInput((uint)inputs.Length, inputs, StructSize);

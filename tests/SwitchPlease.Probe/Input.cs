@@ -18,6 +18,7 @@ internal static class Input
     public const ushort Escape = 0x1B;
     public const ushort Space = 0x20;
     public const ushort Alt = 0x12;
+    public const ushort CapsLock = 0x14;
 
     private const int EnglishPrimaryLanguage = 0x09;
 
@@ -70,6 +71,28 @@ internal static class Input
         for (int i = held.Count - 1; i >= 0; i--)
         {
             Send(held[i], up: true);
+        }
+    }
+
+    /// <summary>A key with Shift held around it.</summary>
+    public static void PressShifted(ushort virtualKey)
+    {
+        Send(Shift, up: false);
+        Wait.For(25);
+        Press(virtualKey);
+        Wait.For(25);
+        Send(Shift, up: true);
+    }
+
+    public static bool CapsLockOn => (GetKeyState(CapsLock) & 1) != 0;
+
+    /// <summary>Sets Caps Lock by pressing it, which is the only way there is.</summary>
+    public static void SetCapsLock(bool on)
+    {
+        if (CapsLockOn != on)
+        {
+            Press(CapsLock);
+            Wait.For(100);
         }
     }
 
@@ -262,6 +285,9 @@ internal static class Input
 
     [DllImport("user32.dll")]
     private static extern nint GetForegroundWindow();
+
+    [DllImport("user32.dll")]
+    private static extern short GetKeyState(int virtualKey);
 
     [DllImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]

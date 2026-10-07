@@ -63,6 +63,7 @@ internal sealed class ProbeSession(string? outputDirectory) : IDisposable
         PressingAgainPutsItBack();
         TypingOnEndsTheOfferToUndo();
         CorrectTextIsLeftAlone();
+        CapsLockSlipIsCorrected();
         SelectionIsConverted();
     }
 
@@ -176,6 +177,41 @@ internal sealed class ProbeSession(string? outputDirectory) : IDisposable
             _window.DoubleTap(Input.Shift);
             return _window.WaitForText("привет", settleMilliseconds: 1200);
         });
+    }
+
+    /// <summary>
+    /// Caps Lock left on, and the wrong layout as well: Shift on the first letter and the
+    /// keys of "привет" on a Latin layout give "gHBDTN". One double tap has to put both right
+    /// and switch Caps Lock off, which is the part only the real thing can show.
+    /// </summary>
+    private void CapsLockSlipIsCorrected()
+    {
+        if (!Input.UseLatinLayout(_window.Handle))
+        {
+            Note("skipped the Caps Lock check: could not return to a Latin layout");
+            return;
+        }
+
+        _window.Settle();
+        _window.Clear();
+
+        try
+        {
+            Input.SetCapsLock(on: true);
+            _window.TypeWithShiftOnSmallLetters("gHBDTN");
+
+            Check("a Caps Lock slip in the wrong layout is corrected in both respects", () =>
+            {
+                _window.DoubleTap(Input.Shift);
+                return _window.WaitForText("Привет");
+            });
+
+            Check("Caps Lock is switched off afterwards", () => !Input.CapsLockOn);
+        }
+        finally
+        {
+            Input.SetCapsLock(on: false);
+        }
     }
 
     /// <summary>

@@ -38,10 +38,15 @@ internal sealed class FakeLayoutResolver(params LayoutInfo[] layouts) : ILayoutR
         }
 
         char produced = row[index];
+        bool upper = (stroke.Modifiers & ModifierKeys.Shift) != 0;
 
-        return (stroke.Modifiers & ModifierKeys.Shift) != 0
-            ? char.ToUpperInvariant(produced)
-            : produced;
+        // Caps Lock turns letters round and leaves everything else alone, as Windows does.
+        if ((stroke.Modifiers & ModifierKeys.CapsLock) != 0 && char.IsLetter(produced))
+        {
+            upper = !upper;
+        }
+
+        return upper ? char.ToUpperInvariant(produced) : produced;
     }
 
     public LayoutMap GetMap(LayoutInfo source, LayoutInfo target) => LayoutFixture.MapFor(source, target);
@@ -52,10 +57,21 @@ internal sealed class FakeLayoutResolver(params LayoutInfo[] layouts) : ILayoutR
     /// keys they pressed to get them.
     /// </summary>
     /// <param name="text">What appeared on screen.</param>
-    public static TypingBuffer Typed(string text, LayoutInfo layout)
+    /// <param name="capsLock">
+    /// Whether Caps Lock was on, in which case a small letter on screen is one Shift was held
+    /// for.
+    /// </param>
+    public static TypingBuffer Typed(string text, LayoutInfo layout, bool capsLock = false) =>
+        Append(new TypingBuffer(), text, layout, capsLock);
+
+    /// <summary>
+    /// Adds more typing to <paramref name="buffer"/>, for a line typed partly one way and
+    /// partly another.
+    /// </summary>
+    public static TypingBuffer Append(TypingBuffer buffer, string text, LayoutInfo layout, bool capsLock = false)
     {
         string row = LayoutFixture.RowOf(layout);
-        var buffer = new TypingBuffer();
+        var capsLockState = capsLock ? ModifierKeys.CapsLock : ModifierKeys.None;
 
         foreach (char c in text)
         {
@@ -66,11 +82,12 @@ internal sealed class FakeLayoutResolver(params LayoutInfo[] layouts) : ILayoutR
             {
                 // Space and punctuation outside the table: no layout changes them, so the
                 // scan code can be anything the table does not claim.
-                buffer.Append(new KeyStroke(0, 0, ModifierKeys.None, c));
+                buffer.Append(new KeyStroke(0, 0, capsLockState, c));
                 continue;
             }
 
-            var modifiers = char.IsUpper(c) ? ModifierKeys.Shift : ModifierKeys.None;
+            bool shifted = capsLock ? char.IsLower(c) : char.IsUpper(c);
+            var modifiers = (shifted ? ModifierKeys.Shift : ModifierKeys.None) | capsLockState;
 
             buffer.Append(new KeyStroke((ushort)(index + 1), 0, modifiers, c));
         }
