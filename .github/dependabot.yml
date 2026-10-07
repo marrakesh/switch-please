@@ -1,0 +1,10 @@
+# Keeps the actions the workflows use up to date. NuGet is left out on purpose: the only
+# packages are the test framework's, held at xunit v2 for the reason given in
+# Directory.Packages.props, and Dependabot would propose the next major version every time.
+# Security alerts for them still arrive either way.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
