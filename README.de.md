@@ -1,29 +1,56 @@
 # Switch Please
 
 [![CI](https://github.com/marrakesh/switch-please/actions/workflows/ci.yml/badge.svg)](https://github.com/marrakesh/switch-please/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/marrakesh/switch-please)](https://github.com/marrakesh/switch-please/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Ko-fi](https://img.shields.io/badge/Ko--fi-support-FF5E5B?logo=kofi&logoColor=white)](https://ko-fi.com/marrakeshgtp)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy_Me_a_Coffee-support-FFDD00?logo=buymeacoffee&logoColor=black)](https://www.buymeacoffee.com/marrakesh)
 
-Ein Tastaturlayout-Umschalter für Windows. Korrigiert Text, den Sie im falschen Layout
-getippt haben — per Tastenkürzel oder automatisch.
+Korrigiert Text, den Sie im falschen Tastaturlayout getippt haben. Aus `Ywiebel` wird
+`Zwiebel`, aus `zes` wird `yes`, und das Layout wird umgeschaltet, damit Sie gleich
+weitertippen können.
+
+Ein kostenloses Open-Source-Programm für Windows 10 und 11, das im Infobereich sitzt.
+Deutsch und jede andere Sprache, für die Windows ein Rechtschreibwörterbuch hat, werden
+anhand dieses Wörterbuchs beurteilt; Russisch, Ukrainisch und Englisch haben ein eigenes
+Modell.
 
 **[English](README.md)** · **[Русская](README.ru.md)** · **[Українська](README.uk.md)** · **[Čeština](README.cs.md)**
 
-![Getippt wird „kurye Yeit“, zweimal Shift, und es wird „kurze Zeit“](docs/demo.de.svg)
+![Getippt wird „kurye Yeit“, zweimal Strg, und es wird „kurze Zeit“](docs/demo.de.svg)
+
+- **Zwei Tastenkürzel.** Zweimal Shift korrigiert das letzte Wort, zweimal Strg die Auswahl
+  oder die ganze Zeile. Gleich danach noch einmal zweimal Shift, und das Wort ist zurück.
+- **Vorsichtig von Haus aus.** Die automatische Korrektur ist aus, bis Sie sie wollen, und so
+  abgestimmt, dass sie korrekten Text in Ruhe lässt.
+- **Hält sich heraus** aus Passwortfeldern, Spielen, Terminals und Code-Editoren.
+- **Privat.** Keine Telemetrie, kein Netzwerkzugriff, solange Sie die Update-Prüfung nicht
+  einschalten, und nichts Getipptes landet auf der Festplatte.
+- **Keine Administratorrechte.** Installiert sich nur für Sie oder läuft als einzelne Datei.
 
 ## Was es tut
 
-| | |
+| Tasten | Was passiert |
 |---|---|
-| **Shift ×2** | Korrigiert das letzte Wort und wechselt das Layout |
-| **Strg ×2** | Korrigiert die Auswahl, oder die ganze Zeile, wenn nichts ausgewählt ist |
-| Rückgängig | Stellt die letzte Korrektur zurück. Standardmäßig nicht belegt |
-| Automatisch | Standardmäßig aus, einzuschalten im Tray-Menü |
+| **Shift ×2** | Korrigiert das letzte Wort und wechselt das Layout. Sofort noch einmal gedrückt, stellt es das Wort wieder her |
+| **Strg ×2** | Korrigiert die Auswahl, oder die ganze Zeile, wenn nichts ausgewählt ist, und wechselt das Layout |
+| Rückgängig | Stellt die letzte Korrektur zurück, auch eine umgewandelte Auswahl. Standardmäßig nicht belegt |
+| Automatisch | Korrigiert jedes Wort, sobald es fertig getippt ist. Standardmäßig aus |
 
-Alle drei Tastenkürzel sind frei belegbar; der Dialog nimmt auf, was Sie tatsächlich
-drücken. Rücktaste löscht eine Belegung. Oberfläche auf Deutsch, Englisch, Russisch,
-Ukrainisch und Tschechisch, hell oder dunkel nach der Windows-Einstellung.
+Shift ×2 arbeitet mit der Aufzeichnung dessen, was Sie getippt haben, und verwirft sie,
+sobald der Cursor dorthin springt, wohin sie ihm nicht folgen kann: Enter, Tab, Pfeiltasten,
+Pos1/Ende, Esc und jeder Mausklick. Ist der Cursor schon woanders, markieren Sie den Text und
+drücken Sie zweimal Strg.
+
+Alle drei Tastenkürzel sind unter *Tastenkürzel...* frei belegbar; der Dialog nimmt auf, was
+Sie tatsächlich drücken — zweimal Shift, Strg oder Alt oder eine gewöhnliche Kombination wie
+`Strg+Shift+L`. Rücktaste löscht eine Belegung. Die automatische Korrektur schaltet *Falsches
+Layout automatisch erkennen* im Tray-Menü ein, und *In … automatisch korrigieren* schaltet sie
+für die aktuelle Anwendung ein oder aus.
+
+Oberfläche auf Deutsch, Englisch, Russisch, Ukrainisch und Tschechisch — nach der
+Windows-Anzeigesprache oder wie unter *Sprache* gewählt. Hell oder dunkel nach der
+Windows-Einstellung.
 
 ## Beispiele
 
@@ -42,15 +69,18 @@ Ukrainisch und Englisch. Deutsch wird stattdessen anhand des **Windows-Wörterbu
 beurteilt, und ohne dieses Wörterbuch enthält sich der Umschalter, statt zu raten. Zu
 installieren über Einstellungen → Zeit und Sprache → Sprache und Region → Sprache
 hinzufügen, mit angehaktem „Grundlegende Eingabe". Welche Wörterbücher vorhanden sind, zeigt
-*Status and latency...*.
+*Status und Latenz...*.
 
-Absichtlich unangetastet bleiben: Wörter unter drei Zeichen, Wörter mit Ziffern, Pfade
-(`C:\Windows`), Adressen (`user@example.com`) und `camelCase`.
+Die automatische Korrektur lässt absichtlich in Ruhe: Wörter unter drei Zeichen, Wörter mit
+Ziffern, Pfade (`C:\Windows`), Adressen (`user@example.com`) und `camelCase`. Die
+Tastenkürzel sind an diese Regeln nicht gebunden — ein Druck darauf ist eine Bitte —, aber
+auch sie lassen Text stehen, der sich schon deutlich besser liest als jede Alternative. Ein
+versehentliches doppeltes Shift verdirbt deshalb kein richtig getipptes Wort.
 
 ## Installation
 
-Von den [Releases](https://github.com/marrakesh/switch-please/releases) herunterladen und
-den Installer starten:
+Aus dem [neuesten Release](https://github.com/marrakesh/switch-please/releases/latest)
+herunterladen und den Installer starten:
 
 | Installer | Größe | |
 |---|---|---|
@@ -70,27 +100,38 @@ Oder nehmen Sie die Anwendung für sich allein: nichts wird installiert, und au�
 | `SwitchPlease-arm64.exe` | ~50 MB | nichts, auf einem ARM-Rechner |
 | `SwitchPlease-arm64-runtime-required.exe` | ~0,4 MB | die ARM64-Desktop-Runtime |
 
-Die Dateien sind **nicht signiert**, daher warnt SmartScreen beim ersten Start. Jedes Release
-enthält eine `SHA256SUMS.txt`, erzeugt vom selben Lauf, der auch die Dateien gebaut hat:
-`certutil -hashfile SwitchPlease.exe SHA256`.
+Erfordert Windows 10 oder neuer. **Ohne Administratorrechte** starten, sonst erreichen die
+Korrekturen gewöhnliche Fenster nicht mehr.
 
-**Ohne Administratorrechte** starten, sonst erreichen die Korrekturen gewöhnliche Fenster
-nicht mehr. Erfordert Windows 10 oder neuer.
+Die Dateien sind **nicht signiert**, daher warnt SmartScreen beim ersten Start — *Weitere
+Informationen → Trotzdem ausführen*. Jedes Release enthält eine `SHA256SUMS.txt`, erzeugt vom
+selben Lauf, der auch die Dateien gebaut hat:
+
+```powershell
+Get-FileHash .\SwitchPlease-Setup.exe -Algorithm SHA256
+```
+
+Nach dem Start sitzt das Programm im Infobereich, und sein Symbol zeigt das aktuelle Layout.
+Ist es nicht zu sehen, liegt es unter dem Pfeil ^ und lässt sich von dort auf die Taskleiste
+ziehen.
 
 ## Datenschutz
 
-**Keinerlei Netzwerkanfragen.** Keine Telemetrie, keine Analyse, keine Absturzberichte. Die
-einzige Stelle, die einen Socket öffnet, ist die Update-Prüfung: Sie fragt GitHub nach der
-neuesten Release-Nummer, übermittelt nichts über Sie und ist **standardmäßig aus**.
+**Keine Netzwerkanfragen, solange Sie keine wollen.** Keine Telemetrie, keine Analyse, keine
+Absturzberichte. Die einzige Stelle, die einen Socket öffnet, ist die Update-Prüfung: Sie
+fragt GitHub nach der neuesten Release-Nummer, übermittelt nichts über Sie und ist
+**standardmäßig aus**.
 
-Getipptes verlässt den Rechner nicht und wird standardmäßig nicht auf die Festplatte
-geschrieben: Das Protokoll hält Entscheidungen fest, der Text ist auf seine Länge reduziert.
-Die Wörter selbst erscheinen nur, wenn Sie *Write the typed text to the log* einschalten.
+Getipptes verlässt den Rechner nicht, und standardmäßig wird außer den Einstellungen nichts
+auf die Festplatte geschrieben. Ein Protokoll entsteht nur, solange *Hook-Latenz messen*
+eingeschaltet ist; es hält Entscheidungen fest, der Text ist auf seine Länge reduziert. Die
+Wörter selbst erscheinen nur, wenn Sie *Getippten Text ins Protokoll schreiben* einschalten.
 
 ## Einstellungen
 
-Das Wesentliche steht im Tray-Menü, die Zahlen unter *Settings...*, alles zusammen in
-`%APPDATA%\SwitchPlease\settings.json`. Die vollständige Beschreibung jedes Parameters steht
+Das Wesentliche steht im Tray-Menü, die Zahlen unter *Einstellungen...*, alles zusammen in
+`%APPDATA%\SwitchPlease\settings.json`; vor dem Bearbeiten von Hand das Programm beenden. Die
+vollständige Beschreibung jedes Parameters samt Standardwert steht
 [in der englischen Fassung](README.md#settings).
 
 ## Unterstützen
@@ -105,9 +146,9 @@ Ko-fi behält bei einer einmaligen Spende nichts ein, Buy Me a Coffee fünf Proz
 ## Weiter
 
 Die vollständige Dokumentation ist das [englische README](README.md): die beiden Modi, wo
-sich der Umschalter heraushält, die gemessene Erkennungsqualität, alle Einstellungen und
-Einschränkungen. Wie es innen aufgebaut ist und warum, steht in
-[docs/internals.md](docs/internals.md). Fehlerberichte und Pull Requests:
+sich der Umschalter heraushält, die gemessene Erkennungsqualität, alle Einstellungen, was zu
+tun ist, wenn es nicht funktioniert, und die Einschränkungen. Wie es innen aufgebaut ist und
+warum, steht in [docs/internals.md](docs/internals.md). Fehlerberichte und Pull Requests:
 [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Lizenz

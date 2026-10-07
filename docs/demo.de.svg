@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 220" width="720" height="220" role="img" aria-labelledby="title desc">
   <title id="title">Switch Please fixes text typed in the wrong keyboard layout</title>
-  <desc id="desc">A line reading "kurye Yeit" is typed, the hotkey is pressed, and it becomes "kurze Zeit".</desc>
+  <desc id="desc">A line reading "kurye Yeit" is typed, the line hotkey is pressed, and it becomes "kurze Zeit".</desc>
 
   <!--
     The German demonstration. QWERTZ against the US layout swaps y and z, which is the
@@ -73,7 +73,9 @@
              dur="1.1s" repeatCount="indefinite" />
   </rect>
 
-  <!-- The hotkey, shown at the moment it does its work. -->
+  <!-- The hotkey, shown at the moment it does its work. The line hotkey rather than Shift ×2:
+       the phrase is more than one word, and Shift ×2 fixes only the last one, whereas Ctrl ×2
+       with nothing selected takes everything typed on the line. -->
   <g opacity="0">
     <animate attributeName="opacity"
              values="0;0;1;1;0;0"
@@ -82,6 +84,6 @@
     <rect x="40" y="158" width="118" height="34" rx="8" fill="#1f2937" stroke="#3b4250" />
     <text x="99" y="180" text-anchor="middle"
           font-family="ui-sans-serif, Segoe UI, Helvetica, Arial, sans-serif"
-          font-size="15" fill="#e6e6e6">Shift ×2</text>
+          font-size="15" fill="#e6e6e6">Strg ×2</text>
   </g>
 </svg>
