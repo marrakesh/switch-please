@@ -1,0 +1,402 @@
+/*
+  The site of Switch Please: one page per language, no scripts beyond remembering the chosen
+  language, and nothing loaded from anywhere else. A program whose selling point includes "no
+  telemetry" does not get to have a page that phones a font server or an analytics service.
+
+  The accent is the application's own, the blue of the tray icon, and the demonstration is the
+  same drawing the READMEs show, copied in from docs/ when the site is built.
+*/
+
+:root {
+  --accent: #2d7dd2;
+  --accent-strong: #1f63ad;
+  --accent-soft: #e6f0fb;
+  --text: #1d2026;
+  --muted: #5b616b;
+  --surface: #ffffff;
+  --page: #f6f7f9;
+  --border: #dee1e6;
+  --key: #ffffff;
+  --key-edge: #c9cdd4;
+  --warning: #fff7e0;
+  --warning-border: #f0d68a;
+  --radius: 12px;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --accent: #4c9ae8;
+    --accent-strong: #6eb0f0;
+    --accent-soft: #1d2a3a;
+    --text: #e6e8eb;
+    --muted: #a3a9b3;
+    --surface: #24262a;
+    --page: #1b1d21;
+    --border: #3c3f45;
+    --key: #2f3237;
+    --key-edge: #4a4e55;
+    --warning: #2e2915;
+    --warning-border: #6b5a22;
+    color-scheme: dark;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--text);
+  font: 17px/1.6 "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+a {
+  color: var(--accent);
+}
+
+a:hover {
+  color: var(--accent-strong);
+}
+
+.wrap {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Header */
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 18px 0;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 18px;
+  text-decoration: none;
+}
+
+.brand:hover {
+  color: var(--text);
+}
+
+.logo {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #2d7dd2;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.languages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 15px;
+}
+
+.languages a {
+  display: block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.languages a:hover {
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
+.languages a[aria-current="page"] {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* First screen */
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 48px;
+  align-items: center;
+  padding: 40px 0 56px;
+}
+
+.hero h1 {
+  margin: 0 0 16px;
+  font-size: clamp(32px, 5vw, 46px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.lede {
+  margin: 0 0 28px;
+  color: var(--muted);
+  font-size: 19px;
+}
+
+.lede code {
+  color: var(--text);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+}
+
+.download {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 24px;
+  border-radius: 10px;
+  background: #2d7dd2;
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 6px 18px rgba(45, 125, 210, 0.3);
+}
+
+.download:hover {
+  background: #1f63ad;
+  color: #fff;
+}
+
+.download svg {
+  flex: none;
+}
+
+.other {
+  font-size: 15px;
+}
+
+.facts {
+  margin: 16px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.stage {
+  margin: 0;
+}
+
+/* The demonstration draws its own window, rounded corners included, so the shadow follows
+   its shape rather than a box around it. */
+.stage img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0.22));
+}
+
+kbd {
+  display: inline-block;
+  min-width: 1.6em;
+  padding: 0 0.45em;
+  border: 1px solid var(--key-edge);
+  border-bottom-width: 3px;
+  border-radius: 6px;
+  background: var(--key);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.85em;
+  font-weight: 600;
+  line-height: 1.5;
+  text-align: center;
+  white-space: nowrap;
+}
+
+h1 kbd {
+  padding: 0 0.3em;
+  border-radius: 10px;
+  font-size: 0.78em;
+  vertical-align: 0.06em;
+}
+
+code {
+  font-family: Consolas, "Cascadia Mono", ui-monospace, monospace;
+  font-size: 0.92em;
+}
+
+/* Sections */
+
+section {
+  padding: 48px 0;
+  border-top: 1px solid var(--border);
+}
+
+h2 {
+  margin: 0 0 24px;
+  font-size: 28px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.card {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.card h3 {
+  margin: 0 0 8px;
+  font-size: 17px;
+  line-height: 1.35;
+}
+
+.card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.steps li {
+  position: relative;
+  padding: 20px 20px 20px 64px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 15px;
+  counter-increment: step;
+}
+
+.steps li::before {
+  content: counter(step);
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.steps strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 17px;
+}
+
+.note {
+  margin: 24px 0 0;
+  padding: 16px 20px;
+  border: 1px solid var(--warning-border);
+  border-radius: var(--radius);
+  background: var(--warning);
+  font-size: 15px;
+}
+
+.privacy p {
+  max-width: 760px;
+  margin: 0 0 14px;
+}
+
+/* Footer */
+
+footer {
+  padding: 32px 0 48px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 14px;
+}
+
+footer ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+footer p {
+  margin: 0;
+}
+
+@media (max-width: 820px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+    padding: 24px 0 40px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .wrap {
+    padding: 0 16px;
+  }
+
+  .lede {
+    font-size: 17px;
+  }
+
+  .download {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  section {
+    padding: 36px 0;
+  }
+}

@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Switch Please — přepínač rozložení klávesnice pro Windows</title>
+<meta name="description" content="Napsali jste yima, a mysleli zima? Stiskněte dvakrát Shift: slovo se napíše znovu tak, jak jste ho zamýšleli, a rozložení se přepne. Zdarma a s otevřeným kódem, pro Windows 10 a 11.">
+<link rel="canonical" href="https://marrakesh.github.io/switch-please/cs/">
+<link rel="alternate" hreflang="en" href="https://marrakesh.github.io/switch-please/">
+<link rel="alternate" hreflang="ru" href="https://marrakesh.github.io/switch-please/ru/">
+<link rel="alternate" hreflang="uk" href="https://marrakesh.github.io/switch-please/uk/">
+<link rel="alternate" hreflang="de" href="https://marrakesh.github.io/switch-please/de/">
+<link rel="alternate" hreflang="cs" href="https://marrakesh.github.io/switch-please/cs/">
+<link rel="alternate" hreflang="x-default" href="https://marrakesh.github.io/switch-please/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:title" content="Switch Please — přepínač rozložení klávesnice pro Windows">
+<meta property="og:description" content="Opraví text napsaný ve špatném rozložení klávesnice. Dvakrát Shift a pište dál.">
+<meta property="og:url" content="https://marrakesh.github.io/switch-please/cs/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='1' y='1' width='30' height='30' rx='7' fill='%232D7DD2'/%3E%3Ctext x='16' y='21' font-family='Segoe UI,Arial,sans-serif' font-size='13' font-weight='700' fill='white' text-anchor='middle'%3ECS%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="./"><span class="logo" aria-hidden="true">CS</span>Switch Please</a>
+    <nav aria-label="Jazyk">
+      <ul class="languages">
+        <li><a href="../" data-language="en" hreflang="en" lang="en">English</a></li>
+        <li><a href="../ru/" data-language="ru" hreflang="ru" lang="ru">Русский</a></li>
+        <li><a href="../uk/" data-language="uk" hreflang="uk" lang="uk">Українська</a></li>
+        <li><a href="../de/" data-language="de" hreflang="de" lang="de">Deutsch</a></li>
+        <li><a href="./" data-language="cs" hreflang="cs" aria-current="page">Čeština</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div>
+        <h1>Psali jste ve špatném rozložení? Stiskněte dvakrát <kbd>Shift</kbd>.</h1>
+        <p class="lede">Napsali jste <code>yima</code>, a přitom jste mysleli <code>zima</code>, nebo <code>zes</code> místo <code>yes</code>? Switch Please slovo napíše znovu tak, jak jste ho zamýšleli, a přepne rozložení, takže můžete psát dál.</p>
+        <div class="actions">
+          <a class="download" href="https://github.com/marrakesh/switch-please/releases/latest/download/SwitchPlease-Setup.exe">
+            <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2v11m0 0-4.5-4.5M10 13l4.5-4.5M3 17h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Stáhnout pro Windows
+          </a>
+          <a class="other" href="https://github.com/marrakesh/switch-please/releases/latest">Verze pro ARM64 a přenosné verze</a>
+        </div>
+        <p class="facts">Zdarma a s otevřeným kódem · Windows 10 a 11 · Bez práv správce</p>
+      </div>
+      <figure class="stage">
+        <img src="../demo.cs.svg" width="720" height="220" alt="Napíše se „ykusme yase“, dvakrát Ctrl, a vyjde „zkusme zase“">
+      </figure>
+    </div>
+
+    <section>
+      <h2>Co umí</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>Dvě klávesové zkratky</h3>
+          <p><kbd>Shift</kbd> ×2 opraví poslední slovo, <kbd>Ctrl</kbd> ×2 výběr nebo celý řádek. Hned poté znovu <kbd>Shift</kbd> ×2 a slovo je zpátky.</p>
+        </article>
+        <article class="card">
+          <h3>Automatická oprava, když ji chcete</h3>
+          <p>Ve výchozím stavu vypnutá. Když ji zapnete, opraví každé slovo, jakmile ho dopíšete — všude, nebo jen v aplikacích, které si vyberete.</p>
+        </article>
+        <article class="card">
+          <h3>Správný text nechává být</h3>
+          <p>Při průchodu běžnou prózou slovo po slovu nepřepsala ani jedno z 233 správně napsaných slov. Zmeškaná oprava stojí jeden stisk klávesy, pokažené slovo mnohem víc.</p>
+        </article>
+        <article class="card">
+          <h3>Čeština: y a z ano, diakritika zatím ne</h3>
+          <p>Prohozené <code>y</code> a <code>z</code> opraví (<code>yima</code> → <code>zima</code>). Diakritika ale sedí na číselné řadě a slova s číslicí automatická oprava nechává být, takže <code>d2kuji</code> neopraví. <a href="https://github.com/marrakesh/switch-please/blob/main/README.cs.md#nejdřív-to-podstatné-pro-češtinu">Podrobnosti</a></p>
+        </article>
+        <article class="card">
+          <h3>Každý nainstalovaný jazyk</h3>
+          <p>Ruština, ukrajinština a angličtina fungují hned, stejně jako čeština a každý další jazyk, pro který má Windows slovník kontroly pravopisu.</p>
+        </article>
+        <article class="card">
+          <h3>Zapomenutý Caps Lock</h3>
+          <p>Z <code>aHOJ</code> bude <code>Ahoj</code> a Caps Lock se vypne. Velká písmena napsaná záměrně zůstanou.</p>
+        </article>
+        <article class="card">
+          <h3>Pamatuje si, co nechat být</h3>
+          <p>Vrátíte-li automatickou opravu, slovo se už nikdy automaticky neopraví: příjmení, přihlašovací jméno, slovo v jazyce bez modelu.</p>
+        </article>
+        <article class="card">
+          <h3>Drží se stranou</h3>
+          <p>Pole pro hesla, hry na celou obrazovku, terminály, editory kódu a správci hesel zůstávají od začátku nedotčené.</p>
+        </article>
+        <article class="card">
+          <h3>Rozložení u kurzoru</h3>
+          <p>Pokud chcete, při změně rozložení se pod textovým kurzorem na chvíli objeví malý štítek <code>CS</code> nebo <code>EN</code>.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Začínáme</h2>
+      <ol class="steps">
+        <li><strong>Nainstalujte</strong>Spusťte <code>SwitchPlease-Setup.exe</code>. Nainstaluje se jen pro vás, nežádá práva správce a nabídne spouštění s Windows.</li>
+        <li><strong>Najděte ikonu</strong>Program sídlí v oznamovací oblasti a ikona ukazuje aktuální rozložení. Nevidíte ji? Je pod šipkou <code>^</code> — přetáhněte ji na hlavní panel.</li>
+        <li><strong>Pište</strong>Špatné rozložení? <kbd>Shift</kbd> ×2 pro poslední slovo, <kbd>Ctrl</kbd> ×2 pro výběr nebo řádek.</li>
+      </ol>
+      <p class="note"><strong>Windows SmartScreen poprvé varuje.</strong> Soubory zatím nejsou podepsané, takže je jednou nutné kliknout na <em>Další informace → Přesto spustit</em>. Každé vydání obsahuje <code>SHA256SUMS.txt</code> pro kontrolu staženého souboru a <a href="https://github.com/marrakesh/switch-please/blob/main/docs/code-signing.md">zásady podepisování kódu</a> (anglicky) popisují, jak se podepisování zavádí.</p>
+    </section>
+
+    <section class="privacy">
+      <h2>Soukromí</h2>
+      <p>Žádná telemetrie, analytika, hlášení pádů ani kontrola licence. Jediný síťový požadavek je kontrola aktualizací: zeptá se GitHubu na značku nejnovějšího vydání, nic o vás neposílá a ve výchozím stavu je vypnutá.</p>
+      <p>Nic z napsaného neopustí váš počítač a ve výchozím stavu se na disk zapisuje jen nastavení. Kód je otevřený — <a href="https://github.com/marrakesh/switch-please/blob/main/README.cs.md#soukromí">podrobnosti v README</a>.</p>
+    </section>
+  </main>
+
+  <footer>
+    <ul>
+      <li><a href="https://github.com/marrakesh/switch-please">GitHub</a></li>
+      <li><a href="https://github.com/marrakesh/switch-please/releases">Vydání</a></li>
+      <li><a href="https://github.com/marrakesh/switch-please/blob/main/README.cs.md">Dokumentace</a></li>
+      <li><a href="https://github.com/marrakesh/switch-please/blob/main/docs/code-signing.md">Zásady podepisování kódu</a></li>
+      <li><a href="https://github.com/marrakesh/switch-please/blob/main/LICENSE">Licence MIT</a></li>
+      <li><a href="https://ko-fi.com/marrakeshgtp">Ko-fi</a></li>
+      <li><a href="https://www.buymeacoffee.com/marrakesh">Buy Me a Coffee</a></li>
+    </ul>
+    <p>© 2026 Oleksii Ozerov</p>
+  </footer>
+</div>
+<script>
+  document.querySelectorAll("[data-language]").forEach(function (link) {
+    link.addEventListener("click", function () {
+      try {
+        localStorage.setItem("switch-please-language", link.getAttribute("data-language"));
+      } catch (e) {
+      }
+    });
+  });
+</script>
+</body>
+</html>

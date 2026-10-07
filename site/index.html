@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Switch Please — keyboard layout switcher for Windows</title>
+<meta name="description" content="Typed ghbdtn when you meant привет? Press Shift twice: the word is retyped the way you meant it and the layout is switched. Free and open source, for Windows 10 and 11.">
+<link rel="canonical" href="https://marrakesh.github.io/switch-please/">
+<link rel="alternate" hreflang="en" href="https://marrakesh.github.io/switch-please/">
+<link rel="alternate" hreflang="ru" href="https://marrakesh.github.io/switch-please/ru/">
+<link rel="alternate" hreflang="uk" href="https://marrakesh.github.io/switch-please/uk/">
+<link rel="alternate" hreflang="de" href="https://marrakesh.github.io/switch-please/de/">
+<link rel="alternate" hreflang="cs" href="https://marrakesh.github.io/switch-please/cs/">
+<link rel="alternate" hreflang="x-default" href="https://marrakesh.github.io/switch-please/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Switch Please — keyboard layout switcher for Windows">
+<meta property="og:description" content="Fixes text typed in the wrong keyboard layout. Press Shift twice and carry on typing.">
+<meta property="og:url" content="https://marrakesh.github.io/switch-please/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='1' y='1' width='30' height='30' rx='7' fill='%232D7DD2'/%3E%3Ctext x='16' y='21' font-family='Segoe UI,Arial,sans-serif' font-size='13' font-weight='700' fill='white' text-anchor='middle'%3EEN%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+<script>
+  // The English page is also the front door, so a visitor whose browser asks for one of the
+  // other languages is taken there -- once. Choosing a language on any page is remembered,
+  // and from then on that choice wins, English included.
+  (function () {
+    try {
+      var chosen = localStorage.getItem("switch-please-language");
+      var wanted = chosen || ((navigator.languages && navigator.languages[0]) || navigator.language || "").slice(0, 2).toLowerCase();
+      if (["ru", "uk", "de", "cs"].indexOf(wanted) >= 0) {
+        location.replace(wanted + "/");
+      }
+    } catch (e) {
+    }
+  })();
+</script>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="./"><span class="logo" aria-hidden="true">EN</span>Switch Please</a>
+    <nav aria-label="Language">
+      <ul class="languages">
+        <li><a href="./" data-language="en" hreflang="en" aria-current="page">English</a></li>
+        <li><a href="ru/" data-language="ru" hreflang="ru" lang="ru">Русский</a></li>
+        <li><a href="uk/" data-language="uk" hreflang="uk" lang="uk">Українська</a></li>
+        <li><a href="de/" data-language="de" hreflang="de" lang="de">Deutsch</a></li>
+        <li><a href="cs/" data-language="cs" hreflang="cs" lang="cs">Čeština</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div>
+        <h1>Typed in the wrong layout? Press <kbd>Shift</kbd> twice.</h1>
+        <p class="lede">Typed <code>ghbdtn</code> when you meant <code>привет</code>, or <code>руддщ</code> when you meant <code>hello</code>? Switch Please retypes the word the way you meant it and switches the layout, so you can carry on typing.</p>
+        <div class="actions">
+          <a class="download" href="https://github.com/marrakesh/switch-please/releases/latest/download/SwitchPlease-Setup.exe">
+            <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2v11m0 0-4.5-4.5M10 13l4.5-4.5M3 17h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Download for Windows
+          </a>
+          <a class="other" href="https://github.com/marrakesh/switch-please/releases/latest">ARM64 and portable versions</a>
+        </div>
+        <p class="facts">Free and open source · Windows 10 and 11 · No administrator rights</p>
+      </div>
+      <figure class="stage">
+        <img src="demo.uk.svg" width="720" height="220" alt="Typing “ghbdsn zr cghfdb”, pressing Ctrl twice, and getting “привіт як справи”">
+      </figure>
+    </div>
+
+    <section>
+      <h2>What it does</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>Two hotkeys</h3>
+          <p><kbd>Shift</kbd> ×2 fixes the last word, <kbd>Ctrl</kbd> ×2 the selection or the whole line. Press <kbd>Shift</kbd> ×2 again straight away and the word goes back.</p>
+        </article>
+        <article class="card">
+          <h3>Automatic correction, when you want it</h3>
+          <p>Off by default. Switched on, it fixes each word as you finish it — everywhere, or only in the applications you choose.</p>
+        </article>
+        <article class="card">
+          <h3>Leaves correct text alone</h3>
+          <p>Run word by word over ordinary prose, it rewrote none of 233 correctly typed words. A missed correction costs one keypress; a mangled word costs far more.</p>
+        </article>
+        <article class="card">
+          <h3>Tells Russian from Ukrainian</h3>
+          <p><code>привыт</code> and <code>привіт</code> are both plausible Cyrillic; only a dictionary knows which one is a word.</p>
+        </article>
+        <article class="card">
+          <h3>Any language you have installed</h3>
+          <p>Russian, Ukrainian and English work out of the box, and so does any other language Windows has a spell-check dictionary for.</p>
+        </article>
+        <article class="card">
+          <h3>Caps Lock left on</h3>
+          <p><code>пРИВЕТ</code> becomes <code>Привет</code>, and Caps Lock is switched off. Capitals typed on purpose stay as they are.</p>
+        </article>
+        <article class="card">
+          <h3>Learns what to leave alone</h3>
+          <p>Undo an automatic correction and the word is never corrected automatically again: a surname, a login, a word it has no model for.</p>
+        </article>
+        <article class="card">
+          <h3>Stays out of the way</h3>
+          <p>Password fields, full-screen games, terminals, code editors and password managers are left alone out of the box.</p>
+        </article>
+        <article class="card">
+          <h3>The layout at the cursor</h3>
+          <p>If you like, a small <code>RU</code> or <code>EN</code> tag appears under the text cursor for a moment whenever the layout changes.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Getting started</h2>
+      <ol class="steps">
+        <li><strong>Install</strong>Run <code>SwitchPlease-Setup.exe</code>. It installs for you alone, asks for no administrator rights, and offers to start with Windows.</li>
+        <li><strong>Find the icon</strong>It lives in the notification area and shows the current layout. Not there? It is under the <code>^</code> arrow; drag it onto the taskbar.</li>
+        <li><strong>Type</strong>Wrong layout? <kbd>Shift</kbd> ×2 for the last word, <kbd>Ctrl</kbd> ×2 for the selection or the line.</li>
+      </ol>
+      <p class="note"><strong>Windows SmartScreen will warn the first time.</strong> The files are not code-signed yet, so <em>More info → Run anyway</em> is needed once. Every release has a <code>SHA256SUMS.txt</code> to check a download against, and the <a href="https://github.com/marrakesh/switch-please/blob/main/docs/code-signing.md">code signing policy</a> says how signing is being set up.</p>
+    </section>
+
+    <section class="privacy">
+      <h2>Private</h2>
+      <p>No telemetry, no analytics, no crash reporting, no licence check. The only network request it can make is the update check: it asks GitHub for the latest release tag, sends nothing about you, and is off by default.</p>
+      <p>Nothing you type leaves your computer, and by default nothing is written to disk but the settings. The source is open — <a href="https://github.com/marrakesh/switch-please#privacy">the details are in the README</a>.</p>
+    </section>
+  </main>
+
+  <footer>
+    <ul>
+      <li><a href="https://github.com/marrakesh/switch-please">GitHub</a></li>
+      <li><a href="https://github.com/marrakesh/switch-please/releases">Releases</a></li>
+      <li><a href="https://github.com/marrakesh/switch-please#readme">Documentation</a></li>
+      <li><a href="https://github.com/marrakesh/switch-please/blob/main/docs/code-signing.md">Code signing policy</a></li>
+      <li><a href="https://github.com/marrakesh/switch-please/blob/main/LICENSE">MIT License</a></li>
+      <li><a href="https://ko-fi.com/marrakeshgtp">Ko-fi</a></li>
+      <li><a href="https://www.buymeacoffee.com/marrakesh">Buy Me a Coffee</a></li>
+    </ul>
+    <p>© 2026 Oleksii Ozerov</p>
+  </footer>
+</div>
+<script>
+  document.querySelectorAll("[data-language]").forEach(function (link) {
+    link.addEventListener("click", function () {
+      try {
+        localStorage.setItem("switch-please-language", link.getAttribute("data-language"));
+      } catch (e) {
+      }
+    });
+  });
+</script>
+</body>
+</html>
