@@ -6,11 +6,12 @@
 [![Ko-fi](https://img.shields.io/badge/Ko--fi-support-FF5E5B?logo=kofi&logoColor=white)](https://ko-fi.com/marrakeshgtp)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy_Me_a_Coffee-support-FFDD00?logo=buymeacoffee&logoColor=black)](https://www.buymeacoffee.com/marrakesh)
 
-Fixes text you typed before noticing the keyboard layout was wrong. `ghbdtn` becomes
-`привет`, `руддщ` becomes `hello`, and the layout is switched so you can carry on typing.
+A keyboard layout switcher for Windows that fixes text typed in the wrong layout. Typed
+`ghbdtn` when you meant `привет`, or `руддщ` when you meant `hello`? Press Shift twice: the
+word is retyped the way you meant it and the layout is switched, so you can carry on typing.
 
-A free, open-source tray utility for Windows 10 and 11. Russian, Ukrainian and English work
-out of the box, and so does any other language Windows has a spell-check dictionary for.
+Free and open source, for Windows 10 and 11. Russian, Ukrainian and English work out of the
+box, and so does any other language Windows has a spell-check dictionary for.
 
 **[Русская](README.ru.md)** · **[Українська](README.uk.md)** · **[Deutsch](README.de.md)** · **[Čeština](README.cs.md)**
 
@@ -18,67 +19,59 @@ out of the box, and so does any other language Windows has a spell-check diction
 
 - **Two hotkeys.** Shift ×2 fixes the last word, Ctrl ×2 the selection or the whole line.
   Press Shift ×2 again straight away and the word goes back.
-- **Careful by design.** Automatic correction is off until you want it, and tuned to leave
-  correct text alone: over ordinary prose it rewrote none of 233 correctly typed words.
-- **Tells Russian from Ukrainian.** The two layouts differ by three keys, and only a
-  dictionary can tell `привыт` from `привіт`.
+- **Automatic correction, when you want it.** Off by default. Switched on, it fixes each
+  word as you finish it — everywhere, or only in the applications you choose.
+- **Leaves correct text alone.** Run word by word over ordinary prose, it rewrote none of
+  233 correctly typed words. A missed correction costs one keypress, a mangled word costs
+  far more, and the tuning follows from that.
+- **Tells Russian from Ukrainian.** `привыт` and `привіт` are both plausible Cyrillic;
+  only a dictionary knows which one is a word.
 - **Stays out of the way** of password fields, games, terminals and code editors.
-- **Private.** No telemetry, no network access unless you switch on the update check, and
-  nothing you type is written to disk.
-- **No administrator rights.** Installs for you alone, or runs as a single executable.
+- **Private.** No telemetry, no network requests unless you switch on the update check,
+  and nothing you type is written to disk.
+- **No administrator rights.** Installs for you alone, or runs as a single portable
+  executable.
 
 ## Install
 
-Download from the [latest release](https://github.com/marrakesh/switch-please/releases/latest)
-and run the installer:
+Download **`SwitchPlease-Setup.exe`** from the
+[latest release](https://github.com/marrakesh/switch-please/releases/latest)
+(`SwitchPlease-Setup-arm64.exe` on an ARM machine) and run it. The installer asks for no
+administrator rights: it installs for you alone, offers to start Switch Please with Windows,
+and asks on uninstall whether to keep your settings.
 
-| Installer | Size | |
-|---|---|---|
-| **`SwitchPlease-Setup.exe`** | ~47 MB | most machines |
-| `SwitchPlease-Setup-arm64.exe` | ~45 MB | ARM machines |
-
-It installs for you alone and never asks for administrator rights, offers to start Switch
-Please with Windows, and asks on uninstall whether to keep your settings.
-
-Or take the executable on its own. Nothing is installed, and nothing is written outside
-`%APPDATA%\SwitchPlease`:
+If you would rather install nothing, each release also has portable executables. They write
+nothing outside `%APPDATA%\SwitchPlease`:
 
 | Portable | Size | Requires |
 |---|---|---|
 | `SwitchPlease.exe` | ~52 MB | nothing |
-| `SwitchPlease-runtime-required.exe` | ~0.4 MB | [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) |
 | `SwitchPlease-arm64.exe` | ~50 MB | nothing, on an ARM machine |
-| `SwitchPlease-arm64-runtime-required.exe` | ~0.4 MB | the ARM64 desktop runtime |
+| `SwitchPlease-runtime-required.exe` | ~0.4 MB | [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) |
+| `SwitchPlease-arm64-runtime-required.exe` | ~0.4 MB | the ARM64 .NET 10 Desktop Runtime |
 
-Requires Windows 10 or later. Run it **without administrator rights**: an elevated Switch
-Please cannot send input to ordinary windows, so it would stop correcting text everywhere it
-matters.
+The large files carry the .NET runtime inside them; the small ones are the same program for
+a machine that already has it. The installers (~47 MB, ~45 MB for ARM) wrap the large ones.
 
-The binaries are **not code-signed**, so Windows SmartScreen will warn about them the first
-time; *More info → Run anyway* gets past it. Every release ships a `SHA256SUMS.txt` produced
-by the same GitHub Actions run that built the files, so you can check what you downloaded:
+**Windows SmartScreen will warn the first time.** The files are not code-signed yet, so
+*More info → Run anyway* is needed once. Signing through SignPath Foundation is being set
+up, and the [code signing policy](docs/code-signing.md) says what will be signed, by whom,
+and how. Until then, every release has a `SHA256SUMS.txt` written by the same GitHub Actions
+run that built the files, to check a download against:
 
 ```powershell
 Get-FileHash .\SwitchPlease-Setup.exe -Algorithm SHA256
 ```
 
-Signing is being set up through SignPath Foundation; the
-[code signing policy](docs/code-signing.md) says what will be signed, by whom, and how.
-
-To remove it, uninstall *Switch Please* from Settings → Apps. The portable executable leaves
+To remove Switch Please, uninstall it from Settings → Apps. The portable executable leaves
 nothing behind but itself and `%APPDATA%\SwitchPlease`.
 
-## First run
+## Getting started
 
 Switch Please lives in the notification area, and its icon shows the current layout. The
-first time it starts, a small window shows the two hotkeys and a short demonstration;
-after that it stays quiet. If the icon is not visible, look under the ^ arrow, and drag it
-out onto the taskbar to keep it in sight.
-
-Everything else is in the icon's menu: automatic correction, the hotkeys, the sound,
-starting with Windows, the applications to stay out of, and *Settings...*.
-
-## Using it
+first time it starts, a small window shows the two hotkeys with a short demonstration; after
+that it stays quiet. If the icon is not visible, it is under the ^ arrow — drag it onto the
+taskbar to keep it in sight.
 
 | Keys | What it does |
 |---|---|
@@ -87,50 +80,75 @@ starting with Windows, the applications to stay out of, and *Settings...*.
 | Undo | Puts back the last correction, a converted selection included. Unbound by default. |
 | Automatic | Fixes each word as you finish it. Off by default. |
 
-**Shift ×2 — the last word.** Works from what was recorded as you typed, so nothing needs
-selecting. The recording is dropped whenever the caret moves somewhere it cannot follow:
-Enter, Tab, arrows, Home/End, Esc, and any mouse click. Acting on a stale recording would
-delete text you never typed.
+A double tap is two quick presses of the key on its own, with nothing pressed in between.
+Typing capitals holds Shift around a letter, so ordinary typing never sets it off.
 
-**Ctrl ×2 — the selection, or the whole line.** With text selected, it converts exactly
-that and needs no recording at all; this is the mode for "I already moved the cursor". With
-nothing selected, it takes everything typed since the caret last moved, which is usually
-the whole line. Reading a selection means borrowing the clipboard. Everything that was on
-it — text, formatting, an image, a list of files — is put back afterwards.
+Everything else is in the icon's menu: automatic correction, the hotkeys, the sound,
+starting with Windows, the applications to stay out of, and *Settings...*.
 
-**Automatic correction** is switched on with *Detect wrong layout automatically* in the tray
-menu. Each word is judged when you press Space after it, and rewritten only when another
-layout reads clearly better; how much better is *Caution when correcting automatically* in
-*Settings...*. It need not be all or nothing: *Correct automatically in …* in the tray menu turns it on or off
-for the application you are in, so it can work in the browser and leave the editor alone,
-with the hotkeys still one keypress away there.
+## What it does
 
-**Undo** puts back the last correction, as long as nothing has been typed since. For a word,
-pressing Shift ×2 again does the same; the undo hotkey also covers a converted selection,
-which Shift ×2 cannot reverse.
+### The last word: Shift ×2
 
-Undoing an **automatic** correction also teaches it: the word goes on a list that automatic
-correction leaves alone from then on — a surname, a login, a word in a language it has no
+Works from a record of what you typed, so nothing needs selecting. The record is dropped
+whenever the caret moves somewhere it cannot follow — Enter, Tab, the arrows, Home/End, Esc,
+any mouse click — because acting on a stale record would delete text you never typed. After
+that, select the text and use Ctrl ×2.
+
+### The selection or the line: Ctrl ×2
+
+With text selected, it converts exactly that and needs no record at all, so it still works
+after you have moved the cursor. With nothing selected, it takes everything typed since the
+caret last moved, which is usually the whole line.
+
+Reading a selection means borrowing the clipboard. Whatever was on it — text, formatting, an
+image, a list of files — is put back afterwards.
+
+### Automatic correction
+
+Switched on with *Detect wrong layout automatically* in the tray menu. Each word is judged
+when you press Space after it, and rewritten only when another layout reads clearly better.
+How much better is *Caution when correcting automatically* in *Settings...*.
+
+It need not be all or nothing. *Correct automatically in …* in the tray menu turns it on or
+off for the application you are in, so it can work in the browser and stay out of the
+editor, where the hotkeys are still one keypress away.
+
+### Undo, and words it learns to leave alone
+
+Undo puts back the last correction, as long as nothing has been typed since. For a word,
+Shift ×2 again does the same. The undo hotkey also reverses a converted selection, which
+Shift ×2 cannot; it is unbound by default, and *Hotkeys...* in the tray menu binds it.
+
+Undoing an **automatic** correction also teaches it. The word goes on a list that automatic
+correction leaves alone from then on: a surname, a login, a word in a language it has no
 model for. A notification names the word, and *Never correct these words automatically* in
 *Settings...* is where the list can be read and edited. The hotkeys still work on those
 words.
 
-**Caps Lock left on** is put right along with the layout: `пРИВЕТ` becomes `Привет`, and
-Caps Lock is switched off. Shift is how it tells: nobody holds Shift with Caps Lock on unless
-they did not know it was on, so capitals typed on purpose, with no Shift, are left as they
-are. Automatic correction does this too, when it is on.
+### Caps Lock left on
 
-**The layout at the text cursor.** *Show the layout at the text cursor* in the tray menu puts
-a small tag — `RU`, `EN` — under the caret for a moment whenever the layout changes, whether
-you switched it or a correction did. It goes at the first key you press or click you make,
-and after a second on its own; how long is in *Settings...*. It needs the application to say where its caret is: ordinary
-Windows applications, Office and the browsers do; applications that draw their text without
-telling Windows — some Electron editors, terminals — do not, and there it is not shown. Off by
-default.
+Put right along with the layout: `пРИВЕТ` becomes `Привет`, and Caps Lock is switched off.
+Shift is how it tells. Nobody holds Shift with Caps Lock on unless they did not know it was
+on, so capitals typed on purpose, with no Shift, stay as they are. Automatic correction does
+this too, when it is on.
 
-All three hotkeys are reassignable from *Hotkeys...* in the tray menu. The dialog captures
-whatever you actually press — a double tap of Shift, Ctrl or Alt, or an ordinary chord like
-`Ctrl+Shift+L`. Backspace clears a binding.
+### The layout at the text cursor
+
+*Show the layout at the text cursor* in the tray menu puts a small tag — `RU`, `EN` — under
+the caret for a moment whenever the layout changes, whether you switched it or a correction
+did. It disappears as soon as you press a key or click, or after a second on its own; the
+time is in *Settings...*. Off by default.
+
+It needs the application to report where its caret is. Ordinary Windows applications, Office
+and the browsers do; applications that draw their own text without telling Windows — some
+Electron editors, terminals — do not, and there the tag does not appear.
+
+### Changing the hotkeys
+
+All three are reassignable from *Hotkeys...* in the tray menu. The dialog captures whatever
+you press: a double tap of Shift or Ctrl, or an ordinary chord like `Ctrl+Shift+L`.
+Backspace clears a binding.
 
 ## Examples
 
@@ -147,9 +165,9 @@ What lands when the layout was wrong, and what the hotkey turns it into:
 | `привыт` | привіт | Ukrainian typed on the Russian layout |
 | `мысто` | місто | Ukrainian typed on the Russian layout |
 
-The last two are the hard case. Russian and Ukrainian differ by three keys, so the result is
-ordinary Cyrillic either way and letter statistics cannot tell it apart. The Windows
-dictionary is what does: no such Russian word exists.
+The last two are the hard case. The Russian and Ukrainian layouts share all but a few keys
+(ы/і, э/є, ъ/ї among them), so the result is ordinary Cyrillic either way and letter
+statistics cannot tell them apart. The Windows dictionary can: no such Russian word exists.
 
 And what automatic correction leaves alone on purpose:
 
@@ -183,9 +201,9 @@ Four guards, all on by default:
 
 ## Languages
 
-The languages it corrects between come from the **keyboard layouts installed in Windows**,
-not from a list in the source. Adding a layout is all it takes, and Switch Please notices
-within a second.
+The languages it corrects between are the **keyboard layouts installed in Windows**, not a
+list in the source. Adding a layout is all it takes, and Switch Please notices within a
+second. With three or more layouts, it picks the one the text reads best in.
 
 Russian, Ukrainian and English have built-in models. Every other language is judged with the
 **Windows spell-check dictionary**, which installs with the language: Settings → Time &
@@ -203,12 +221,13 @@ Windows light or dark setting.
 reporting, no licence check. The only code that opens a socket is the update check: it asks
 GitHub for the latest release tag, sends nothing about you, and is **off by default**.
 
-Nothing you type leaves the machine, and by default nothing at all is written to disk but
-the settings. The one piece of typed text the settings can hold is a word you have pointed
-at: undoing an automatic correction puts that word on the never-correct list, a notification
-says so, and *Settings...* shows the list and lets you remove it. The diagnostic log exists
-only while *Measure hook latency* is on, and records decisions with the text reduced to its
-length:
+Nothing you type leaves the machine, and by default nothing is written to disk but the
+settings. The one piece of typed text the settings can hold is a word you have pointed at:
+undoing an automatic correction puts that word on the never-correct list, a notification
+says so, and *Settings...* shows the list and lets you remove it.
+
+The diagnostic log exists only while *Measure hook latency* is on, and records decisions
+with the text reduced to its length:
 
 ```
 14:22:07 auto: <6 chars> -> <6 chars> [ru=0.94 en=0.11 margin=0.83 after=ru]
@@ -220,10 +239,11 @@ capped and rolled over.
 ## Detection quality
 
 How automatic correction trades caught mistakes against damaged words, measured on 427
-words deliberately absent from the model's word lists, roughly half Russian and half
-English:
+Russian and English words deliberately absent from the model's word lists. *Mistakes
+caught* is the share of words typed in the wrong layout that it fixed; *correct words
+mangled* is how many correctly typed words it rewrote.
 
-| Sensitivity | Mistakes caught | Correct words mangled |
+| Caution | Mistakes caught | Correct words mangled |
 |---|---|---|
 | 0.15 | 95.6 % | 0 |
 | 0.20 | 93.9 % | 0 |
@@ -232,18 +252,22 @@ English:
 | 0.35 | 78.2 % | 0 |
 | 0.45 | 68.9 % | 0 |
 
-Over whole sentences rather than isolated words: of 233 words of ordinary prose, judged one
-at a time as they would be while being typed, **none** would have been rewritten; of 191
-eligible words typed entirely in the wrong layout, **90.1 %** were recovered.
+Over whole sentences rather than isolated words, judged one word at a time as they would be
+while being typed: of 233 words of ordinary prose, **none** would have been rewritten; of
+191 eligible words typed entirely in the wrong layout, **90.1 %** were recovered.
 
 The asymmetry is intentional. A missed correction costs one keypress; mangling a correctly
-typed word costs far more.
+typed word costs far more. These numbers come from the test suite, which fails if a correct
+word is ever rewritten at the default caution or above.
 
 ## Settings
 
 Most of it is in the tray menu, and the numbers are in *Settings...*. Everything is also in
 `%APPDATA%\SwitchPlease\settings.json`. Close Switch Please before editing it by hand: the
 file is read at startup and rewritten whenever something changes in the menu.
+
+<details>
+<summary>Every setting in <code>settings.json</code></summary>
 
 | Setting | Default | Meaning |
 |---|---|---|
@@ -262,13 +286,15 @@ file is read at startup and rewritten whenever something changes in the menu.
 | `TypewriterMillisecondsPerCharacter` | `0` | Type corrections one character at a time. Zero is off. |
 | `RespectPasswordFields` | `true` | Stay out of password fields. |
 | `PauseInFullscreenApps` | `true` | Stand aside while a game or a presentation has the screen. |
-| `ExcludedProcesses` | see above | Applications the switcher stays out of entirely. |
+| `ExcludedProcesses` | password managers, terminals, code editors | Applications the switcher stays out of entirely. |
 | `NeverCorrectWords` | none | Words automatic correction leaves alone. Undoing an automatic correction adds one. |
 | `DiagnosticsEnabled` | `false` | Measure hook latency and keep the diagnostic log. |
 | `LogTextContent` | `false` | Whether the log may contain what was typed. |
 | `LogMaximumBytes` | `1048576` | Size at which the log rolls over. |
 | `CheckForUpdates` | `false` | Ask GitHub for a newer release at startup. |
 | `Language` | `auto` | `auto`, or `en` / `ru` / `uk` / `de` / `cs`. |
+
+</details>
 
 ## When it does not work
 
@@ -278,10 +304,11 @@ file is read at startup and rewritten whenever something changes in the menu.
   offers *Run in … again*.
 - The caret moved after the word was typed — a click, an arrow key, Enter. Select the text
   and use Ctrl ×2.
-- The window belongs to a program running as administrator. Windows will not accept input
-  from Switch Please there, and the tray says so once.
+- The window belongs to a program running as administrator. Windows does not let an
+  ordinary program type into it, and the tray says so the first time.
 - The word already reads better as it stands than in any other layout, so the hotkey
-  declines to touch it.
+  declines to touch it. This does not apply between Russian and Ukrainian, where the hotkey
+  simply toggles.
 
 **It fires by accident.** Shorten *Double tap - longest gap* in *Settings...*, or move the
 command to a chord.
@@ -294,20 +321,37 @@ Anything else is worth a [bug report](https://github.com/marrakesh/switch-please
 
 ## Limitations
 
-- Applications running as administrator do not accept input from a normal process, so
-  corrections will not work there.
-- Automatic correction relies on a short pause before rewriting. Very slow or heavily loaded
-  applications may need a longer one.
-- The hotkey leaves alone any text that already reads far better than every alternative.
-  This does not apply to the Russian/Ukrainian pair, where the hotkey simply toggles.
-- Layouts that put diacritics on the number row — Czech, Slovak, Hungarian — land a digit
-  where the accented letter was meant: `děkuji` arrives as `d2kuji`. Automatic correction
-  never touches a word with a digit in it, and the hotkey is not reliable on such words
-  either. The `y`/`z` half of such a layout is corrected normally.
+- Layouts that put accented letters on the number row — Czech, Slovak, Hungarian — land a
+  digit where the letter was meant: `děkuji` arrives as `d2kuji`. Automatic correction never
+  touches a word with a digit in it, and the hotkey is not reliable on such words either.
+  The `y`/`z` half of such a layout is corrected normally.
 - Password-field detection is best-effort. Applications that draw their own controls and
   expose no accessibility information cannot be asked.
-- Layout names come from the input language as Windows reports it, which does not always
-  match what the layout types. Colliding names get their digit row appended.
+- Automatic correction waits a moment before rewriting, so the key that ended the word lands
+  first. A very slow or heavily loaded application may need a longer pause, which is
+  *Pause before rewriting* in *Settings...*.
+- Layouts are named after their input language as Windows reports it, which does not always
+  match what the layout types. When two layouts would share a name, each gets its digit row
+  appended.
+
+## Building from source
+
+Windows and the .NET 10 SDK; the exact version is pinned in `global.json`.
+
+```bash
+dotnet build
+dotnet test
+dotnet run --project src/SwitchPlease.App
+```
+
+[CONTRIBUTING.md](CONTRIBUTING.md) covers the test projects and the probe that drives the
+real hooks. [docs/internals.md](docs/internals.md) explains how the program is put
+together, and why.
+
+## Contributing
+
+Bug reports and pull requests are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md). Adding
+an interface language is one file and no code.
 
 ## Support
 
@@ -317,12 +361,6 @@ Free, and staying that way. If it saves you enough retyping to be worth somethin
 <a href="https://www.buymeacoffee.com/marrakesh"><img src="https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&amp;emoji=&amp;slug=marrakesh&amp;button_colour=FFDD00&amp;font_colour=000000&amp;font_family=Cookie&amp;outline_colour=000000&amp;coffee_colour=ffffff" alt="Buy Me a Coffee" height="40"></a>
 
 Ko-fi takes no cut of a one-off donation; Buy Me a Coffee takes five percent.
-
-## Contributing
-
-Bug reports and pull requests are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md). Adding
-an interface language is one file and no code. How it is built, and why, is in
-[docs/internals.md](docs/internals.md).
 
 ## License
 
