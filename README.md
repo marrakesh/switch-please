@@ -325,8 +325,11 @@ Anything else is worth a [bug report](https://github.com/marrakesh/switch-please
 
 - Layouts that put accented letters on the number row — Czech, Slovak, Hungarian — land a
   digit where the letter was meant: `děkuji` arrives as `d2kuji`. Automatic correction never
-  touches a word with a digit in it, and the hotkey is not reliable on such words either.
-  The `y`/`z` half of such a layout is corrected normally.
+  touches a word with a digit in it. Shift ×2 puts it right: no language writes a digit
+  inside a word, so the layout with a letter on that key wins. Ctrl ×2 does the same for a
+  selection only when such digits make up half of it. Accents on other keys — Czech `ů` and
+  `ú`, nearly all of Hungarian's — arrive as punctuation, and the hotkey is not reliable on a
+  word that has only those. The `y`/`z` half of such a layout is corrected normally.
 - Password-field detection is best-effort. Applications that draw their own controls and
   expose no accessibility information cannot be asked.
 - Automatic correction waits a moment before rewriting, so the key that ended the word lands

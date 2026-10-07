@@ -144,7 +144,7 @@ public sealed class ConversionPlanner(
             return plan;
         }
 
-        double typedScore = Plausibility(intended);
+        double typedScore = Plausibility(intended, plan.Converted);
 
         if (typedScore - targetScore >= RefuseConversionMargin)
         {
@@ -248,6 +248,7 @@ public sealed class ConversionPlanner(
     {
         LayoutInfo? best = null;
         double bestScore = double.NegativeInfinity;
+        int bestTurned = -1;
 
         foreach (var candidate in layouts.InstalledLayouts)
         {
@@ -267,16 +268,88 @@ public sealed class ConversionPlanner(
                 continue;
             }
 
-            double score = Plausibility(rendered);
+            double score = Plausibility(rendered, asTyped);
+            int turned = WordDigits(asTyped, rendered).Count(static d => d);
 
-            if (score > bestScore)
+            if (IsBetter(turned, score, bestTurned, bestScore))
             {
                 bestScore = score;
+                bestTurned = turned;
                 best = candidate;
             }
         }
 
         return (best, bestScore);
+    }
+
+    /// <summary>
+    /// Ranks one reading against the best so far: first by how many of the digits typed
+    /// inside the word it turns into letters, then by how plausible it reads.
+    ///
+    /// Evidence before statistics. No language writes a digit inside a word, so when one
+    /// layout has a letter on the key that typed it and another leaves the digit where it
+    /// was, the first accounts for what was typed and the second does not, however well the
+    /// letters around the digit read. Measured on the real layouts, Russian "в2лгош" beat
+    /// Czech "děkuji" for "d2kuji", 0.64 to 0.30: nothing installed could judge Czech, and
+    /// English marks down every háček. Layouts that keep their digits, as Russian and
+    /// Ukrainian do, tie here and are ranked exactly as before.
+    ///
+    /// The price is a number glued to a word typed in the wrong layout, "5км" on the US
+    /// keyboard, which goes to Czech when a Czech layout is installed. With a Czech
+    /// dictionary it already did, the unknown word outscoring the digit.
+    /// </summary>
+    private static bool IsBetter(int turned, double score, int bestTurned, double bestScore) =>
+        turned > bestTurned || (turned == bestTurned && score > bestScore);
+
+    /// <summary>
+    /// Marks the digits in <paramref name="text"/> that belong to a word: those stuck to
+    /// letters, on keys where <paramref name="other"/> -- the same keys read in another
+    /// layout -- has a letter. A letter there is one that layout types, so it is in that
+    /// layout's own alphabet by definition.
+    ///
+    /// Czech, Slovak and Hungarian put accented letters on the number row, so "město" typed
+    /// on the US layout arrives as "m2sto", and that 2 is a letter that came out wrong. Passed
+    /// over like a space, as the scorer passes over every other digit, it flattered the word
+    /// around it: "m2sto" was judged on m, s, t and o, with "st" and "to" the only pairs
+    /// considered, and scored 0.90 as English -- better than most English words, and enough
+    /// for the hotkey to refuse to make it "město".
+    ///
+    /// Only where the other reading has a letter. A digit both readings share says nothing
+    /// about which of them is right, and counting it anyway marked both down alike: with
+    /// Russian installed, that narrowed the gap protecting "mp3" from a stray double tap until
+    /// it was gone. A number standing on its own is not part of any word either way.
+    /// </summary>
+    private static bool[] WordDigits(string text, string other)
+    {
+        var marked = new bool[text.Length];
+        int start = 0;
+
+        while (start < text.Length)
+        {
+            if (!char.IsLetterOrDigit(text[start]))
+            {
+                start++;
+                continue;
+            }
+
+            int end = start;
+            bool hasLetter = false;
+
+            while (end < text.Length && char.IsLetterOrDigit(text[end]))
+            {
+                hasLetter |= char.IsLetter(text[end]);
+                end++;
+            }
+
+            for (int i = start; hasLetter && i < end && i < other.Length; i++)
+            {
+                marked[i] = char.IsDigit(text[i]) && char.IsLetter(other[i]);
+            }
+
+            start = end;
+        }
+
+        return marked;
     }
 
     /// <summary>
@@ -293,6 +366,7 @@ public sealed class ConversionPlanner(
         var installed = layouts.InstalledLayouts;
         LayoutMap? best = null;
         double bestScore = double.NegativeInfinity;
+        int bestTurned = -1;
 
         foreach (var source in installed)
         {
@@ -317,11 +391,13 @@ public sealed class ConversionPlanner(
                     continue;
                 }
 
-                double score = Plausibility(rendered);
+                double score = Plausibility(rendered, text);
+                int turned = WordDigits(text, rendered).Count(static d => d);
 
-                if (score > bestScore)
+                if (IsBetter(turned, score, bestTurned, bestScore))
                 {
                     bestScore = score;
+                    bestTurned = turned;
                     best = map;
                 }
             }
@@ -350,7 +426,7 @@ public sealed class ConversionPlanner(
         string converted = map.Convert(intended);
 
         if (languages.IsFamiliar(intended, validator)
-            && Plausibility(intended) - Plausibility(converted) >= RefuseConversionMargin)
+            && Plausibility(intended, converted) - Plausibility(converted, intended) >= RefuseConversionMargin)
         {
             return (intended, null);
         }
@@ -358,5 +434,12 @@ public sealed class ConversionPlanner(
         return (converted, map.Target);
     }
 
-    private double Plausibility(string text) => languages.Evaluate(text, validator).Score;
+    /// <summary>
+    /// How plausible <paramref name="text"/> reads, judged against <paramref name="other"/>,
+    /// the same keys read in another layout: a digit counts as part of the word where the
+    /// other reading has a letter. Both sides of a comparison are scored this way round, so
+    /// neither gets its digits for free.
+    /// </summary>
+    private double Plausibility(string text, string other) =>
+        languages.Evaluate(text, validator, WordDigits(text, other)).Score;
 }

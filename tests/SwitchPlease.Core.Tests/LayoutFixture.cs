@@ -1,3 +1,4 @@
+using SwitchPlease.Core.Detection;
 using SwitchPlease.Core.Layouts;
 
 namespace SwitchPlease.Core.Tests;
@@ -8,8 +9,20 @@ namespace SwitchPlease.Core.Tests;
 /// </summary>
 internal static class LayoutFixture
 {
-    private const string LatinRow = "qwertyuiop[]asdfghjkl;'zxcvbnm,./`";
-    private const string CyrillicRow = "йцукенгшщзхъфывапролджэячсмитьбю.ё";
+    // The number row last, so the scan codes of every other key stay what they were.
+    private const string LatinRow = "qwertyuiop[]asdfghjkl;'zxcvbnm,./`1234567890";
+    private const string CyrillicRow = "йцукенгшщзхъфывапролджэячсмитьбю.ё1234567890";
+
+    /// <summary>
+    /// Czech QWERTY: the US letters, with the accented ones where the US layout has its
+    /// digits, and "ú" and "ů" on two punctuation keys. That number row is the whole
+    /// difficulty: "město" typed on the US layout arrives as "m2sto", a word with a digit in
+    /// it, and no layout in the Latin/Cyrillic fixture ever turns a digit into a letter.
+    /// </summary>
+    private static readonly string CzechRow = LatinRow
+        .Replace("1234567890", "+ěščřžýáíé", StringComparison.Ordinal)
+        .Replace('[', 'ú')
+        .Replace(';', 'ů');
 
     /// <summary>
     /// The Ukrainian layout is the Russian one with three keys changed. That near-identity
@@ -27,9 +40,11 @@ internal static class LayoutFixture
 
     public static LayoutInfo Ukrainian { get; } = new(3, 0x0422, "uk", "Українська");
 
-    public static LayoutMap RussianToUkrainian { get; } = BuildCyrillic(Russian, Ukrainian);
+    public static LayoutInfo Czech { get; } = new(4, 0x0405, "cs", "Čeština");
 
-    public static LayoutMap UkrainianToRussian { get; } = BuildCyrillic(Ukrainian, Russian);
+    public static LayoutMap RussianToUkrainian { get; } = BuildBetween(Russian, Ukrainian);
+
+    public static LayoutMap UkrainianToRussian { get; } = BuildBetween(Ukrainian, Russian);
 
     /// <summary>Ukrainian text as it lands when the Russian layout was left active.</summary>
     public static string TypedWithRussianLayout(string ukrainian) => UkrainianToRussian.Convert(ukrainian);
@@ -55,12 +70,42 @@ internal static class LayoutFixture
             return CyrillicRow;
         }
 
+        if (ReferenceEquals(layout, Czech))
+        {
+            return CzechRow;
+        }
+
         return ReferenceEquals(layout, Ukrainian) ? UkrainianRow : LatinRow;
     }
 
-    /// <summary>The prebuilt table for any ordered pair of the three fixture layouts.</summary>
+    /// <summary>
+    /// The languages a machine with these layouts would model, built the way the real
+    /// catalog is: from the characters each layout types. Czech has no built-in model, so it
+    /// becomes a profile that knows its alphabet and nothing more.
+    /// </summary>
+    public static LanguageCatalog LanguagesOf(params LayoutInfo[] layouts) =>
+        LanguageCatalog.FromLayouts(layouts.Select(layout => new LayoutLanguage(
+            TagOf(layout),
+            layout.CultureName,
+            RowOf(layout) + RowOf(layout).ToUpperInvariant())));
+
+    private static string TagOf(LayoutInfo layout) => layout.CultureName switch
+    {
+        "en" => "en-US",
+        "ru" => "ru-RU",
+        "uk" => "uk-UA",
+        "cs" => "cs-CZ",
+        _ => layout.CultureName,
+    };
+
+    /// <summary>The table for any ordered pair of the fixture layouts.</summary>
     public static LayoutMap MapFor(LayoutInfo source, LayoutInfo target)
     {
+        if (ReferenceEquals(source, Czech) || ReferenceEquals(target, Czech))
+        {
+            return BuildBetween(source, target);
+        }
+
         if (ReferenceEquals(source, English))
         {
             return ReferenceEquals(target, Russian) ? EnglishToRussian : EnglishToUkrainian;
@@ -106,10 +151,10 @@ internal static class LayoutFixture
         return builder.Build();
     }
 
-    private static LayoutMap BuildCyrillic(LayoutInfo source, LayoutInfo target)
+    private static LayoutMap BuildBetween(LayoutInfo source, LayoutInfo target)
     {
-        string from = ReferenceEquals(source, Russian) ? CyrillicRow : UkrainianRow;
-        string to = ReferenceEquals(target, Russian) ? CyrillicRow : UkrainianRow;
+        string from = RowOf(source);
+        string to = RowOf(target);
 
         var builder = new LayoutMap.Builder(source, target);
 

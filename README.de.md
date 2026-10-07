@@ -366,9 +366,13 @@ Alles andere ist einen [Fehlerbericht](https://github.com/marrakesh/switch-pleas
 
 - Layouts, die Buchstaben mit Akzenten auf die Zahlenreihe legen — Tschechisch,
   Slowakisch, Ungarisch —, liefern eine Ziffer, wo der Buchstabe gemeint war: `děkuji` kommt
-  als `d2kuji` an. Die automatische Korrektur fasst nie ein Wort mit einer Ziffer darin an,
-  und auch das Tastenkürzel ist bei solchen Wörtern nicht zuverlässig. Die `y`/`z`-Hälfte
-  eines solchen Layouts wird normal korrigiert.
+  als `d2kuji` an. Die automatische Korrektur fasst nie ein Wort mit einer Ziffer darin an.
+  Shift ×2 bringt es in Ordnung: Keine Sprache schreibt eine Ziffer mitten in ein Wort, also
+  gewinnt das Layout, das auf dieser Taste einen Buchstaben hat. Bei einer Auswahl schafft
+  Strg ×2 das nur, wenn solche Ziffern mindestens die Hälfte davon ausmachen. Akzente auf
+  anderen Tasten — tschechisches `ů` und `ú`, fast alle ungarischen — kommen als Satzzeichen
+  an, und bei einem Wort, das nur diese hat, ist das Tastenkürzel nicht zuverlässig. Die
+  `y`/`z`-Hälfte eines solchen Layouts wird normal korrigiert.
 - Die Erkennung von Passwortfeldern geschieht nach bestem Bemühen, ohne Gewähr. Anwendungen,
   die ihre Bedienelemente selbst zeichnen und keine Informationen zur Barrierefreiheit
   bereitstellen, lassen sich nicht befragen.

@@ -220,6 +220,28 @@ where it is. Either way Caps Lock is then switched off, by pressing it, because 
 next word would need the same correction. A selection has no recorded keys, so there the
 characters have to do, and only while Caps Lock is actually on.
 
+### Accents on the number row
+
+Czech and Slovak put accented letters where the US layout has its digits, so `město` typed
+on the US layout arrives as `m2sto`. Automatic correction never sees such a word — a digit is
+one of the guards — but the hotkey has to read that digit as the letter it was meant to be,
+and it used to read it as a space. `m2sto` was judged on m, s, t and o, scored 0.90 as
+English and was refused. With Russian installed as well, `d2kuji` went to `в2лгош` (0.64)
+rather than `děkuji` (0.30): nothing could judge Czech, and English marks down every háček.
+
+Two changes, both in the planner, because only it sees two readings of the same keys. A
+digit counts as part of the word, a letter no alphabet has, wherever the other reading has a
+letter on that key. Where both readings keep the digit it is passed over as before, so `mp3`
+with only Russian beside English is judged exactly as it was. And a layout that turns the
+word's digits into letters outranks one that leaves them, however well the letters around
+them read.
+
+The cost falls on text with digits in it once a Czech layout is installed: `mp3` reads no
+better than `mpš` with its digit counted, so a stray double tap converts it, and a number
+glued to a word typed in the wrong layout — `5км` as `5rv` — goes to Czech. Correct Czech
+gained in exchange. With a Czech dictionary, `město` typed on the Czech layout used to sit
+within the refusal margin of `m2sto`, and a stray double tap rewrote it.
+
 ### What the models are
 
 Hand-built lists rather than a corpus: alphabet, vowels, frequent bigrams, impossible

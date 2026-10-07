@@ -40,7 +40,12 @@ kontroly pravopisu.
 `3`, `č` na `4` a tak dál. Slovo s diakritikou tedy dopadne s číslicí uvnitř — a slova
 obsahující číslice automatická oprava **zásadně nechává být**, protože jinak by přepisovala
 hesla, verze a cesty k souborům. Toto pravidlo běží dřív než jakékoli vyhodnocování.
-Klávesová zkratka jím vázaná není, ale ani na ni se u takových slov spolehnout nedá.
+
+Klávesová zkratka jím vázaná není a takové slovo opraví. Číslici uprostřed slova nepíše
+žádný jazyk, takže vyhraje rozložení, které má na té klávese písmeno — i vedle ruštiny nebo
+ukrajinštiny a i bez českého slovníku ve Windows. Výjimkou jsou `ů` a `ú`, které sedí tam,
+kde má americké rozložení `;` a `[`: slovo, které má jen je, jako `dům` nebo `úkol`, zkratka
+spolehlivě neopraví.
 
 Prakticky to znamená:
 
@@ -49,13 +54,14 @@ Prakticky to znamená:
 | `yima` | zima | **opraví** — jen prohozené y/z |
 | `jayzk` | jazyk | **opraví** |
 | `ynovu` | znovu | **opraví** |
-| `d2kuji` | děkuji | automaticky neopraví — obsahuje číslici |
-| `m2sto` | město | automaticky neopraví — obsahuje číslici |
-| `p59li3` | příliš | automaticky neopraví — obsahuje číslici |
+| `d2kuji` | děkuji | **opraví Shift ×2**; automaticky ne — obsahuje číslici |
+| `m2sto` | město | **opraví Shift ×2**; automaticky ne — obsahuje číslici |
+| `p59li3` | příliš | **opraví Shift ×2**; automaticky ne — obsahuje číslici |
 
-Čeština má z toho tedy užitek jen zčásti: pomůže tam, kde jde o prohození `y` a `z` mezi
-QWERTZ a americkým rozložením, ale ne u slov s diakritikou. Totéž platí pro slovenštinu a
-maďarštinu, které mají diakritiku na číselné řadě také.
+Automatická oprava tedy pomůže tam, kde jde o prohození `y` a `z` mezi QWERTZ a americkým
+rozložením; slova s diakritikou opraví Shift ×2. Totéž platí pro slovenštinu, která má
+diakritiku na číselné řadě také. Maďarština tam má jen `ö`, ostatní její diakritika sedí na
+interpunkci.
 
 Opačný směr funguje bez výhrad:
 
@@ -358,8 +364,12 @@ Cokoli dalšího stojí za [hlášení chyby](https://github.com/marrakesh/switc
 
 - Rozložení, která umisťují písmena s diakritikou na číselnou řadu — čeština, slovenština,
   maďarština — vyprodukují číslici tam, kde mělo být písmeno: `děkuji` dorazí jako `d2kuji`.
-  Automatická oprava se slova s číslicí nikdy nedotkne a ani klávesová zkratka u takových
-  slov není spolehlivá. Polovina `y`/`z` takového rozložení se opravuje normálně.
+  Automatická oprava se slova s číslicí nikdy nedotkne. Shift ×2 takové slovo opraví:
+  číslici uprostřed slova nepíše žádný jazyk, takže vyhraje rozložení, které má na té
+  klávese písmeno. Výběr převede Ctrl ×2 stejně jen tehdy, když takové číslice tvoří aspoň
+  jeho polovinu. Diakritika na jiných klávesách — české `ů` a `ú`, skoro celá maďarská —
+  dorazí jako interpunkce a u slova, které má jen ji, není klávesová zkratka spolehlivá.
+  Polovina `y`/`z` takového rozložení se opravuje normálně.
 - Rozpoznání polí pro hesla se děje podle možností, bez záruky. Aplikace, které si své
   ovládací prvky kreslí samy a neposkytují informace o přístupnosti, se zeptat nedají.
 - Automatická oprava před přepsáním chvíli počká, aby nejdřív dorazila klávesa, která slovo

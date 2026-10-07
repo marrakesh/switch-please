@@ -112,7 +112,13 @@ public sealed class LanguageProfile
     /// Plausibility of <paramref name="text"/> as this language, judged on letter structure
     /// alone. Zero when the profile carries no frequency data.
     /// </summary>
-    public double Score(string text)
+    /// <param name="wordDigits">
+    /// Digits to judge as part of the word, as letters this language does not have; one flag
+    /// per character of <paramref name="text"/>. Otherwise a digit is passed over like a
+    /// space, which is right for a number and wrong for a letter that came out as one -- see
+    /// ConversionPlanner, the only caller that can tell the two apart.
+    /// </param>
+    public double Score(string text, bool[]? wordDigits = null)
     {
         if (_statistical is null)
         {
@@ -123,16 +129,16 @@ public sealed class LanguageProfile
         int letters = 0;
         int inAlphabet = 0;
 
-        foreach (char c in lower)
+        for (int i = 0; i < lower.Length; i++)
         {
-            if (!char.IsLetter(c))
+            if (!IsWordCharacter(lower, i, wordDigits))
             {
                 continue;
             }
 
             letters++;
 
-            if (_alphabet.Contains(c))
+            if (_alphabet.Contains(lower[i]))
             {
                 inAlphabet++;
             }
@@ -151,7 +157,7 @@ public sealed class LanguageProfile
             return validity * 0.1;
         }
 
-        return _statistical.Score(lower, validity, _alphabet);
+        return _statistical.Score(lower, wordDigits, validity, _alphabet);
     }
 
     /// <summary>
@@ -162,9 +168,10 @@ public sealed class LanguageProfile
     /// contain every name, abbreviation or piece of slang, and text the user typed
     /// deliberately must not be treated as noise merely for being uncommon.
     /// </summary>
-    public double Score(string text, IWordValidator validator)
+    /// <param name="wordDigits">As for <see cref="Score(string, bool[])"/>.</param>
+    public double Score(string text, IWordValidator validator, bool[]? wordDigits = null)
     {
-        double statistical = Score(text);
+        double statistical = Score(text, wordDigits);
 
         if (!validator.HasDictionary(LanguageTag))
         {
@@ -224,7 +231,8 @@ public sealed class LanguageProfile
         {
             string word = token.Trim(Trimmable);
 
-            // Anything with a digit in it is an identifier or a code, not a word.
+            // Anything with a digit in it is an identifier or a code, not a word. Nor could
+            // asking help: Windows passes every such token, "m2sto" included.
             if (word.Length < 2 || word.Any(char.IsDigit))
             {
                 continue;
@@ -240,6 +248,9 @@ public sealed class LanguageProfile
 
         return (known, checkable);
     }
+
+    private static bool IsWordCharacter(string lower, int index, bool[]? wordDigits) =>
+        char.IsLetter(lower[index]) || (wordDigits is not null && wordDigits[index]);
 
     public static LanguageProfile Russian { get; } = new(
         name: "ru",
@@ -470,7 +481,7 @@ public sealed class LanguageProfile
             _expectedVowelRatio = expectedVowelRatio;
         }
 
-        internal double Score(string lower, double validity, SearchValues<char> alphabet)
+        internal double Score(string lower, bool[]? wordDigits, double validity, SearchValues<char> alphabet)
         {
             if (_commonWords.Contains(lower))
             {
@@ -480,22 +491,22 @@ public sealed class LanguageProfile
             int letters = 0;
             int vowels = 0;
 
-            foreach (char c in lower)
+            for (int i = 0; i < lower.Length; i++)
             {
-                if (!char.IsLetter(c))
+                if (!IsWordCharacter(lower, i, wordDigits))
                 {
                     continue;
                 }
 
                 letters++;
 
-                if (alphabet.Contains(c) && _vowels.Contains(c))
+                if (alphabet.Contains(lower[i]) && _vowels.Contains(lower[i]))
                 {
                     vowels++;
                 }
             }
 
-            AnalyseBigrams(lower, out double coverage, out int impossible);
+            AnalyseBigrams(lower, wordDigits, out double coverage, out int impossible);
 
             double vowelScore = ScoreVowels(vowels, letters);
             double suffixBonus = HasCommonSuffix(lower) ? 0.10 : 0.0;
@@ -521,7 +532,7 @@ public sealed class LanguageProfile
             return Math.Clamp(1.0 - deviation, 0.0, 1.0);
         }
 
-        private void AnalyseBigrams(string lower, out double coverage, out int impossible)
+        private void AnalyseBigrams(string lower, bool[]? wordDigits, out double coverage, out int impossible)
         {
             impossible = 0;
 
@@ -536,7 +547,9 @@ public sealed class LanguageProfile
 
             for (int i = 0; i < lower.Length - 1; i++)
             {
-                if (!char.IsLetter(lower[i]) || !char.IsLetter(lower[i + 1]))
+                // A pair with a word digit in it is considered and is never a common one:
+                // "m2" and "2s" are not pairs any language uses.
+                if (!IsWordCharacter(lower, i, wordDigits) || !IsWordCharacter(lower, i + 1, wordDigits))
                 {
                     continue;
                 }

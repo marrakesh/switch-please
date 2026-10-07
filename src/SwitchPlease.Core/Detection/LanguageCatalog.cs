@@ -117,14 +117,20 @@ public sealed class LanguageCatalog
     public (LanguageProfile? Profile, double Score) Evaluate(string text) =>
         Evaluate(text, NoWordValidator.Instance);
 
-    public (LanguageProfile? Profile, double Score) Evaluate(string text, IWordValidator validator)
+    /// <param name="wordDigits">
+    /// Digits to judge as part of the word; see <see cref="LanguageProfile.Score(string, bool[])"/>.
+    /// </param>
+    public (LanguageProfile? Profile, double Score) Evaluate(
+        string text,
+        IWordValidator validator,
+        bool[]? wordDigits = null)
     {
         LanguageProfile? best = null;
         double bestScore = 0;
 
         foreach (var profile in ForScript(TextGuards.DominantScript(text)))
         {
-            double score = profile.Score(text, validator);
+            double score = profile.Score(text, validator, wordDigits);
 
             if (best is null || score > bestScore)
             {
