@@ -124,6 +124,9 @@ selben Lauf, der auch die Dateien gebaut hat:
 Get-FileHash .\SwitchPlease-Setup.exe -Algorithm SHA256
 ```
 
+Die Signierung über die SignPath Foundation wird gerade eingerichtet; was, von wem und wie
+signiert wird, steht in der [Code-Signing-Richtlinie](docs/code-signing.md) (auf Englisch).
+
 Nach dem Start sitzt das Programm im Infobereich, und sein Symbol zeigt das aktuelle Layout.
 Ist es nicht zu sehen, liegt es unter dem Pfeil ^ und lässt sich von dort auf die Taskleiste
 ziehen.

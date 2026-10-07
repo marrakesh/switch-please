@@ -62,6 +62,9 @@ by the same GitHub Actions run that built the files, so you can check what you d
 Get-FileHash .\SwitchPlease-Setup.exe -Algorithm SHA256
 ```
 
+Signing is being set up through SignPath Foundation; the
+[code signing policy](docs/code-signing.md) says what will be signed, by whom, and how.
+
 To remove it, uninstall *Switch Please* from Settings → Apps. The portable executable leaves
 nothing behind but itself and `%APPDATA%\SwitchPlease`.
 

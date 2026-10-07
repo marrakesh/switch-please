@@ -132,6 +132,9 @@ který sestavil i samotné soubory:
 Get-FileHash .\SwitchPlease-Setup.exe -Algorithm SHA256
 ```
 
+Podepisování se zavádí přes SignPath Foundation; co, kdo a jak bude podepisovat, popisují
+[zásady podepisování kódu](docs/code-signing.md) (anglicky).
+
 Po spuštění program sedí v oznamovací oblasti a jeho ikona ukazuje aktuální rozložení. Pokud
 ji nevidíte, je pod šipkou ^ a odtud ji lze přetáhnout na hlavní panel.
 

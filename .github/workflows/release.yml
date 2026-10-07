@@ -7,9 +7,20 @@ on:
 permissions:
   contents: write
 
+  # SignPath reads the job's details to confirm that what it is asked to sign was built by
+  # this workflow and not merely uploaded by someone holding the API token.
+  actions: read
+
 jobs:
   release:
     runs-on: windows-latest
+
+    # Signing happens only once SignPath has been set up for the repository, which is
+    # recorded as a repository variable. Until then every step below that mentions it is
+    # skipped and the release is built exactly as before, unsigned. docs/code-signing.md
+    # says what has to exist on the SignPath side.
+    env:
+      SIGN: ${{ vars.SIGNPATH_ORGANIZATION_ID != '' }}
 
     steps:
       - uses: actions/checkout@v4
@@ -47,6 +58,48 @@ jobs:
               --output "publish/framework-dependent-$architecture"
           }
 
+      # x64 keeps the plain names it has always had, so existing links and any script that
+      # downloads the latest release do not break.
+      - name: Name the executables
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path artifacts | Out-Null
+
+          Copy-Item publish/standalone-x64/SwitchPlease.exe artifacts/SwitchPlease.exe
+          Copy-Item publish/framework-dependent-x64/SwitchPlease.exe artifacts/SwitchPlease-runtime-required.exe
+          Copy-Item publish/standalone-arm64/SwitchPlease.exe artifacts/SwitchPlease-arm64.exe
+          Copy-Item publish/framework-dependent-arm64/SwitchPlease.exe artifacts/SwitchPlease-arm64-runtime-required.exe
+
+      # Signed in two rounds, because the installer has to carry the signed executable inside
+      # it: a signed installer that unpacks an unsigned program would leave SmartScreen and
+      # every antivirus scanner looking at exactly the file that installs a keyboard hook.
+      # Each round is one signing request, which SignPath Foundation approves by hand.
+      - name: Upload the executables for signing
+        if: env.SIGN == 'true'
+        id: unsigned-executables
+        uses: actions/upload-artifact@v4
+        with:
+          name: unsigned-executables
+          path: artifacts/*.exe
+
+      - name: Sign the executables
+        if: env.SIGN == 'true'
+        uses: signpath/github-action-submit-signing-request@v3
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: switch-please
+          signing-policy-slug: release-signing
+          artifact-configuration-slug: executables
+          github-artifact-id: ${{ steps.unsigned-executables.outputs.artifact-id }}
+          wait-for-completion: true
+          output-artifact-directory: signed-executables
+
+      - name: Use the signed executables
+        if: env.SIGN == 'true'
+        shell: pwsh
+        run: Copy-Item signed-executables/*.exe artifacts/ -Force
+
       # Not guaranteed to be on the runner image, and reinstalling it when it is already
       # there costs half a minute on every release for nothing.
       - name: Install Inno Setup
@@ -60,41 +113,67 @@ jobs:
       # installs per user and asks for no elevation, which is not only politeness: Switch
       # Please must not run elevated, because SendInput from a higher integrity level cannot
       # reach an ordinary window.
+      #
+      # Built from artifacts/, which holds the signed executables when signing is set up.
       - name: Build installers
         shell: pwsh
         run: |
           $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
           $version = "${{ github.ref_name }}" -replace '^v', ''
+          $sources = @{ 'x64' = 'SwitchPlease.exe'; 'arm64' = 'SwitchPlease-arm64.exe' }
 
           foreach ($architecture in 'x64', 'arm64') {
             & $iscc /Qp `
               "/DAppVersion=$version" `
               "/DArch=$architecture" `
-              "/DSourceExe=..\publish\standalone-$architecture\SwitchPlease.exe" `
+              "/DSourceExe=..\artifacts\$($sources[$architecture])" `
               installer\SwitchPlease.iss
 
             if ($LASTEXITCODE -ne 0) { throw "ISCC failed for $architecture" }
           }
 
-      - name: Name the artefacts
+      - name: Name the installers
         shell: pwsh
         run: |
-          New-Item -ItemType Directory -Force -Path artifacts | Out-Null
+          New-Item -ItemType Directory -Force -Path installers | Out-Null
 
-          Copy-Item installer-output/SwitchPlease-Setup-x64.exe artifacts/SwitchPlease-Setup.exe
-          Copy-Item installer-output/SwitchPlease-Setup-arm64.exe artifacts/SwitchPlease-Setup-arm64.exe
+          Copy-Item installer-output/SwitchPlease-Setup-x64.exe installers/SwitchPlease-Setup.exe
+          Copy-Item installer-output/SwitchPlease-Setup-arm64.exe installers/SwitchPlease-Setup-arm64.exe
 
-          # x64 keeps the plain names it has always had, so existing links and any script
-          # that downloads the latest release do not break.
-          Copy-Item publish/standalone-x64/SwitchPlease.exe artifacts/SwitchPlease.exe
-          Copy-Item publish/framework-dependent-x64/SwitchPlease.exe artifacts/SwitchPlease-runtime-required.exe
-          Copy-Item publish/standalone-arm64/SwitchPlease.exe artifacts/SwitchPlease-arm64.exe
-          Copy-Item publish/framework-dependent-arm64/SwitchPlease.exe artifacts/SwitchPlease-arm64-runtime-required.exe
+      - name: Upload the installers for signing
+        if: env.SIGN == 'true'
+        id: unsigned-installers
+        uses: actions/upload-artifact@v4
+        with:
+          name: unsigned-installers
+          path: installers/*.exe
 
-      # The binaries are not code-signed, so Windows SmartScreen will warn about them. There
-      # is nothing to be done about that without a certificate, but a checksum published by
-      # the same run that built the file at least lets anyone verify they downloaded what was
-      # built rather than what someone reuploaded.
+      - name: Sign the installers
+        if: env.SIGN == 'true'
+        uses: signpath/github-action-submit-signing-request@v3
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: switch-please
+          signing-policy-slug: release-signing
+          artifact-configuration-slug: installers
+          github-artifact-id: ${{ steps.unsigned-installers.outputs.artifact-id }}
+          wait-for-completion: true
+          output-artifact-directory: signed-installers
+
+      - name: Use the signed installers
+        if: env.SIGN == 'true'
+        shell: pwsh
+        run: Copy-Item signed-installers/*.exe installers/ -Force
+
+      - name: Collect the installers
+        shell: pwsh
+        run: Copy-Item installers/*.exe artifacts/
+
+      # Published whether or not the files are signed. A signature says who built the file;
+      # a checksum published by the same run that built it lets anyone verify they downloaded
+      # what was built rather than what someone reuploaded, and covers the releases from
+      # before signing was set up.
       - name: Checksums
         shell: pwsh
         run: |
