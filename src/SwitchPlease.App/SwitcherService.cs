@@ -252,13 +252,15 @@ public sealed class SwitcherService : IDisposable
             _hook.ResetLatency();
         }
 
-        _detector = settings.AutoDetectEnabled
-            ? new HeuristicWrongLayoutDetector(
-                settings.AutoDetectSensitivity,
-                _dictionary,
-                _languages,
-                settings.MinimumAutoWordLength)
-            : DisabledDetector.Instance;
+        // Built whether or not automatic correction is on globally: it can be switched on
+        // for a single application, and whether it applies is decided per keystroke by
+        // AutoDetectIn. A detector built only for the global switch left those applications
+        // with one that never fires.
+        _detector = new HeuristicWrongLayoutDetector(
+            settings.AutoDetectSensitivity,
+            _dictionary,
+            _languages,
+            settings.MinimumAutoWordLength);
     }
 
     /// <summary>
