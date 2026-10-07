@@ -170,6 +170,9 @@ public sealed class SwitcherService : IDisposable
 
     public bool IsRunning => _hook.IsRunning;
 
+    /// <summary>Moves whenever the user presses a key that is not a modifier, or clicks.</summary>
+    public int Interactions => _hook.Interactions;
+
     /// <summary>Whether the thread that turns keystrokes into corrections is still alive.</summary>
     public bool WorkerRunning => _worker is { IsAlive: true };
 

@@ -35,6 +35,9 @@ internal static class NativeMethods
 
     internal const uint OBJID_CLIENT = 0xFFFFFFFC;
 
+    /// <summary>MSAA: the text caret, which applications that draw their own expose here.</summary>
+    internal const uint OBJID_CARET = 0xFFFFFFF8;
+
     internal const int CHILDID_SELF = 0;
 
     internal const uint INPUTLANGCHANGE_FORWARD = 0x0002;
@@ -321,7 +324,50 @@ internal static class NativeMethods
     [DllImport("shell32.dll")]
     internal static extern int SHQueryUserNotificationState(out int state);
 
+    internal const uint MONITOR_DEFAULTTONULL = 0x00000000;
     internal const uint MONITOR_DEFAULTTONEAREST = 0x00000002;
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct POINT
+    {
+        internal int X;
+        internal int Y;
+    }
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static extern bool ClientToScreen(nint hWnd, ref POINT lpPoint);
+
+    [DllImport("user32.dll")]
+    internal static extern nint MonitorFromPoint(POINT pt, uint dwFlags);
+
+    /// <summary>MDT_EFFECTIVE_DPI: the scale the user chose in Display settings.</summary>
+    internal const int MDT_EFFECTIVE_DPI = 0;
+
+    [DllImport("shcore.dll")]
+    internal static extern int GetDpiForMonitor(nint hmonitor, int dpiType, out uint dpiX, out uint dpiY);
+
+    [DllImport("user32.dll")]
+    internal static extern nint GetWindowDpiAwarenessContext(nint hwnd);
+
+    [DllImport("user32.dll")]
+    internal static extern nint SetThreadDpiAwarenessContext(nint dpiContext);
+
+    /// <summary>
+    /// Turns a point in a window's own coordinates into screen pixels, for a window that
+    /// Windows is scaling because it does not handle DPI itself. A no-op for one that does.
+    /// </summary>
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static extern bool LogicalToPhysicalPointForPerMonitorDPI(nint hWnd, ref POINT lpPoint);
+
+    /// <summary>
+    /// Whether Windows considers the window hung. Asked before anything that would wait on
+    /// the window's thread, so a frozen application cannot freeze this one along with it.
+    /// </summary>
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static extern bool IsHungAppWindow(nint hwnd);
 
     internal const int QUNS_BUSY = 2;
     internal const int QUNS_RUNNING_D3D_FULL_SCREEN = 3;

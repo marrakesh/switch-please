@@ -120,6 +120,14 @@ Caps Lock is switched off. Shift is how it tells: nobody holds Shift with Caps L
 they did not know it was on, so capitals typed on purpose, with no Shift, are left as they
 are. Automatic correction does this too, when it is on.
 
+**The layout at the text cursor.** *Show the layout at the text cursor* in the tray menu puts
+a small tag — `RU`, `EN` — under the caret for a moment whenever the layout changes, whether
+you switched it or a correction did. It goes at the first key you press or click you make,
+and after a second on its own; how long is in *Settings...*. It needs the application to say where its caret is: ordinary
+Windows applications, Office and the browsers do; applications that draw their text without
+telling Windows — some Electron editors, terminals — do not, and there it is not shown. Off by
+default.
+
 All three hotkeys are reassignable from *Hotkeys...* in the tray menu. The dialog captures
 whatever you actually press — a double tap of Shift, Ctrl or Alt, or an ordinary chord like
 `Ctrl+Shift+L`. Backspace clears a binding.
@@ -249,6 +257,8 @@ file is read at startup and rewritten whenever something changes in the menu.
 | `DoubleTapWindowMilliseconds` | `500` | Longest gap between the two presses of a double tap. |
 | `DoubleTapHoldMilliseconds` | `400` | Longest either press may last. |
 | `PlaySoundOnConvert` | `true` | A sound on every correction. |
+| `ShowLayoutAtCaret` | `false` | Show the new layout under the text cursor for a moment after it changes. |
+| `LayoutIndicatorMilliseconds` | `1000` | How long it stays before fading, 200 to 5000. |
 | `TypewriterMillisecondsPerCharacter` | `0` | Type corrections one character at a time. Zero is off. |
 | `RespectPasswordFields` | `true` | Stay out of password fields. |
 | `PauseInFullscreenApps` | `true` | Stand aside while a game or a presentation has the screen. |

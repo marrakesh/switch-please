@@ -70,6 +70,10 @@ public sealed class KeyboardHook : IDisposable
     private nint _hookHandle;
     private nint _mouseHookHandle;
     private volatile int _clicked;
+
+    // Written only on the hook thread, which runs both callbacks, so a plain increment is
+    // safe; volatile so the interface thread reading it sees each one.
+    private volatile int _interactions;
     private volatile bool _disposed;
     private Exception? _installError;
 
@@ -114,6 +118,16 @@ public sealed class KeyboardHook : IDisposable
     /// would delete whatever the user had clicked into instead -- worse than doing nothing.
     /// </summary>
     public bool TakeClick() => Interlocked.Exchange(ref _clicked, 0) != 0;
+
+    /// <summary>
+    /// A count of keys pressed that are not modifiers, and of mouse buttons clicked, by the
+    /// user rather than by this program. Only its movement means anything.
+    ///
+    /// Kept apart from <see cref="TakeClick"/>, which the worker consumes: this is read by the
+    /// layout indicator, which goes away the moment the user does anything, and a flag that
+    /// either reader could clear would leave the other one blind.
+    /// </summary>
+    public int Interactions => _interactions;
 
     public bool IsRunning => _thread is { IsAlive: true } && _hookHandle != 0;
 
@@ -547,6 +561,7 @@ public sealed class KeyboardHook : IDisposable
                 or NativeMethods.WM_MBUTTONDOWN)
             {
                 _clicked = 1;
+                _interactions++;
             }
         }
 
@@ -597,6 +612,11 @@ public sealed class KeyboardHook : IDisposable
         // Modifier state is tracked even while disabled so it is correct the moment we
         // are switched back on.
         TrackModifier(virtualKey, isKeyDown);
+
+        if (isKeyDown && data.ExtraInfo != InjectionTag && !VirtualKeys.IsModifier(virtualKey))
+        {
+            _interactions++;
+        }
 
         bool suppress = false;
 

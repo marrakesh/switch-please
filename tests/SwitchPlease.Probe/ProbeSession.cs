@@ -65,6 +65,7 @@ internal sealed class ProbeSession(string? outputDirectory) : IDisposable
         CorrectTextIsLeftAlone();
         CapsLockSlipIsCorrected();
         SelectionIsConverted();
+        IndicatorShowsTheNewLayout();
     }
 
     /// <summary>The whole point of the application: type Russian on a Latin layout, fix it.</summary>
@@ -254,6 +255,52 @@ internal sealed class ProbeSession(string? outputDirectory) : IDisposable
         });
 
         Clipboard.Clear();
+    }
+
+    /// <summary>
+    /// The layout indicator: it comes up by the caret when a correction switches the layout,
+    /// and goes as soon as the next key is pressed.
+    ///
+    /// Only when it is switched on, which it is not by default, so this is skipped rather
+    /// than faked when it is off.
+    /// </summary>
+    private void IndicatorShowsTheNewLayout()
+    {
+        if (!Settings.IsOn("ShowLayoutAtCaret"))
+        {
+            Note("skipped the layout indicator checks: it is switched off");
+            return;
+        }
+
+        if (!Input.UseLatinLayout(_window.Handle))
+        {
+            Note("skipped the layout indicator checks: could not return to a Latin layout");
+            return;
+        }
+
+        _window.Settle();
+
+        // Anything still showing from earlier goes here: clearing presses Escape.
+        _window.Clear();
+        _window.Type("ghbdtn");
+
+        Check("the layout indicator appears by the caret when a correction switches the layout", () =>
+        {
+            _window.DoubleTap(Input.Shift);
+
+            var shown = Indicator.WaitForIt(800);
+            var caret = Indicator.Caret;
+
+            Note($"  indicator at {shown?.ToString() ?? "nowhere"}, caret at {caret?.ToString() ?? "unknown"}");
+
+            return shown is { } badge && caret is { } at && Indicator.IsBeside(badge, at);
+        });
+
+        Check("the layout indicator goes as soon as a key is pressed", () =>
+        {
+            _window.Type("f");
+            return Indicator.Bounds is null;
+        });
     }
 
     private void Check(string what, Func<bool> body)

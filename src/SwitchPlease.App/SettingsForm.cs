@@ -38,6 +38,8 @@ public sealed class SettingsForm : Form
     private readonly NumericUpDown _tapWindow;
     private readonly NumericUpDown _tapHold;
     private readonly NumericUpDown _minimumWord;
+    private readonly NumericUpDown _indicatorDuration;
+    private readonly CheckBox _indicator;
     private readonly CheckBox _passwordFields;
     private readonly CheckBox _fullscreen;
     private readonly CheckBox _typewriter;
@@ -133,6 +135,15 @@ public sealed class SettingsForm : Form
         _tapWindow = Number(stack, strings.SettingsTapWindow, settings.DoubleTapWindowMilliseconds, 120, 2000);
         _tapHold = Number(stack, strings.SettingsTapHold, settings.DoubleTapHoldMilliseconds, 80, 2000);
 
+        // ---- Layout at the text cursor --------------------------------------------------
+        Section(stack, strings.SettingsGroupIndicator);
+
+        _indicator = Check(stack, strings.MenuLayoutAtCaret, settings.ShowLayoutAtCaret);
+        _indicatorDuration = Number(
+            stack, strings.SettingsIndicatorDuration, settings.LayoutIndicatorMilliseconds, 200, 5000);
+        _indicatorDuration.Increment = 100;
+        Hint(stack, strings.SettingsIndicatorHint);
+
         // ---- Privacy and safety ---------------------------------------------------------
         Section(stack, strings.SettingsGroupPrivacy);
 
@@ -187,6 +198,8 @@ public sealed class SettingsForm : Form
         settings.CorrectionDelayMilliseconds = (int)_delay.Value;
         settings.DoubleTapWindowMilliseconds = (int)_tapWindow.Value;
         settings.DoubleTapHoldMilliseconds = (int)_tapHold.Value;
+        settings.ShowLayoutAtCaret = _indicator.Checked;
+        settings.LayoutIndicatorMilliseconds = (int)_indicatorDuration.Value;
         settings.MinimumAutoWordLength = (int)_minimumWord.Value;
         settings.RespectPasswordFields = _passwordFields.Checked;
         settings.PauseInFullscreenApps = _fullscreen.Checked;

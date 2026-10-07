@@ -27,6 +27,8 @@ public class SettingsFormTests
         MinimumAutoWordLength = 5,
         RespectPasswordFields = false,
         PauseInFullscreenApps = false,
+        ShowLayoutAtCaret = true,
+        LayoutIndicatorMilliseconds = 1700,
         LogTextContent = true,
         CheckForUpdates = true,
         TypewriterMillisecondsPerCharacter = 20,
@@ -54,6 +56,8 @@ public class SettingsFormTests
             Assert.Equal(original.MinimumAutoWordLength, applied.MinimumAutoWordLength);
             Assert.Equal(original.RespectPasswordFields, applied.RespectPasswordFields);
             Assert.Equal(original.PauseInFullscreenApps, applied.PauseInFullscreenApps);
+            Assert.Equal(original.ShowLayoutAtCaret, applied.ShowLayoutAtCaret);
+            Assert.Equal(original.LayoutIndicatorMilliseconds, applied.LayoutIndicatorMilliseconds);
             Assert.Equal(original.LogTextContent, applied.LogTextContent);
             Assert.Equal(original.CheckForUpdates, applied.CheckForUpdates);
             Assert.Equal(original.ExcludedProcesses, applied.ExcludedProcesses);
@@ -102,6 +106,7 @@ public class SettingsFormTests
                 DoubleTapWindowMilliseconds = 1,
                 DoubleTapHoldMilliseconds = 0,
                 MinimumAutoWordLength = -3,
+                LayoutIndicatorMilliseconds = 0,
             };
 
             using var form = new SettingsForm(wild);
@@ -114,6 +119,7 @@ public class SettingsFormTests
             Assert.InRange(applied.DoubleTapWindowMilliseconds, 120, 2000);
             Assert.InRange(applied.DoubleTapHoldMilliseconds, 80, 2000);
             Assert.InRange(applied.MinimumAutoWordLength, 2, 10);
+            Assert.InRange(applied.LayoutIndicatorMilliseconds, 200, 5000);
         });
     }
 

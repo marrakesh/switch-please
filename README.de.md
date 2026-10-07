@@ -47,6 +47,14 @@ wird ausgeschaltet. Erkannt wird das an Shift: Bei eingeschaltetem Caps Lock hä
 wer nicht weiß, dass es an ist — absichtlich ohne Shift getippte Großbuchstaben bleiben also
 stehen. Die automatische Korrektur tut das ebenfalls, wenn sie eingeschaltet ist.
 
+*Layout am Textcursor anzeigen* im Tray-Menü blendet bei jedem Layoutwechsel — ob von Ihnen
+oder durch eine Korrektur — für eine Sekunde ein Kürzel wie `DE` oder `EN` unter dem Cursor
+ein. Es verschwindet beim ersten Tastendruck oder Klick; wie lange es sonst bleibt, steht unter
+*Einstellungen...*. Dafür muss die Anwendung verraten, wo
+ihr Cursor steht: gewöhnliche Windows-Programme, Office und die Browser tun das; Anwendungen,
+die ihren Text selbst zeichnen — manche Electron-Editoren, Terminals —, nicht, und dort
+erscheint nichts. Standardmäßig aus.
+
 Eine **automatische** Korrektur rückgängig zu machen, lehrt sie außerdem etwas: Das Wort
 kommt auf eine Liste, die die automatische Korrektur fortan in Ruhe lässt — ein Nachname, ein
 Login, ein Wort in einer Sprache ohne Modell. Eine Benachrichtigung nennt das Wort, und unter

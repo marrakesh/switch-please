@@ -30,6 +30,9 @@ public sealed class UiStrings
 
     public required string MenuSound { get; init; }
 
+    /// <summary>Shows the new layout beside the text cursor for a moment after it changes.</summary>
+    public required string MenuLayoutAtCaret { get; init; }
+
     public required string MenuStartup { get; init; }
 
     public required string MenuDiagnostics { get; init; }
@@ -297,6 +300,12 @@ public sealed class UiStrings
     public required string SettingsGroupCorrection { get; init; }
 
     public required string SettingsGroupHotkeys { get; init; }
+
+    public required string SettingsGroupIndicator { get; init; }
+
+    public required string SettingsIndicatorDuration { get; init; }
+
+    public required string SettingsIndicatorHint { get; init; }
 
     public required string SettingsGroupPrivacy { get; init; }
 

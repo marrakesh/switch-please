@@ -111,6 +111,22 @@ public sealed class AppSettings
     public bool PlaySoundOnConvert { get; set; } = true;
 
     /// <summary>
+    /// Show the new layout beside the text cursor for a moment whenever it changes, whether
+    /// the user switched it or a correction did.
+    ///
+    /// Off by default, like everything else that puts something on screen the user did not
+    /// ask for: a window appearing next to what you are typing is welcome only to someone
+    /// who went looking for it.
+    /// </summary>
+    public bool ShowLayoutAtCaret { get; set; }
+
+    /// <summary>
+    /// How long the layout indicator stays before it fades, in milliseconds. It goes sooner
+    /// whenever the user presses a key or clicks, so this is the most it can be in the way.
+    /// </summary>
+    public int LayoutIndicatorMilliseconds { get; set; } = 1000;
+
+    /// <summary>
     /// Type the correction one character at a time, this many milliseconds apart.
     ///
     /// Zero, the default, sends it in a single call. The effect is deliberately opt-in: it

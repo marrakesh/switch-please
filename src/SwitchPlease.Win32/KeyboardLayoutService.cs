@@ -51,19 +51,31 @@ public sealed class KeyboardLayoutService : ILayoutResolver
         }
     }
 
-    public LayoutInfo? GetActiveLayout()
-    {
-        nint window = NativeMethods.GetForegroundWindow();
+    public LayoutInfo? GetActiveLayout() => GetLayoutOf(NativeMethods.GetForegroundWindow());
 
+    /// <summary>The layout <paramref name="window"/> is typing in, or null when there is none.</summary>
+    public LayoutInfo? GetLayoutOf(nint window)
+    {
+        nint hkl = LayoutHandleOf(window);
+
+        return hkl == 0 ? null : FindOrDescribe(hkl);
+    }
+
+    /// <summary>
+    /// The handle of the layout <paramref name="window"/> is typing in, or zero. Just the
+    /// handle, without describing it, because the layout indicator asks this several times a
+    /// second and only wants to know whether it has changed.
+    /// </summary>
+    public static nint LayoutHandleOf(nint window)
+    {
         if (window == 0)
         {
-            return null;
+            return 0;
         }
 
         uint threadId = NativeMethods.GetWindowThreadProcessId(window, out _);
-        nint hkl = NativeMethods.GetKeyboardLayout(threadId);
 
-        return FindOrDescribe(hkl);
+        return threadId == 0 ? 0 : NativeMethods.GetKeyboardLayout(threadId);
     }
 
     /// <summary>

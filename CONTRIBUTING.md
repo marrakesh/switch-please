@@ -86,8 +86,9 @@ the keyboard layout and the clipboard it borrowed.
 
 What it covers is the half the unit tests cannot: that a real keystroke reaches the real hook,
 that the correction comes back out, that the layout switches, that pressing the hotkey again
-undoes it, that correctly typed text survives a stray double tap, and that the clipboard is
-handed back untouched. It has already caught two things nothing else did.
+undoes it, that correctly typed text survives a stray double tap, that the clipboard is
+handed back untouched, and — when it is switched on — that the layout indicator comes up by
+the caret and goes at the next key. It has already caught two things nothing else did.
 
 Its own window rather than Notepad's, for two reasons: nothing it types can land in anything
 of yours, and the result can be read straight back. Every burst of input is preceded by a

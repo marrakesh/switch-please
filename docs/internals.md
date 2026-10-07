@@ -117,6 +117,36 @@ A guard that cannot answer must answer "carry on". Every probe here returns "no"
 fails, because the alternative is the switcher silently disabling itself on machines nobody
 tested.
 
+## The layout indicator
+
+Optional, and off by default: a tag under the caret for a moment after the layout changes.
+
+**Noticing the change.** Windows tells a background process nothing when another
+application's layout changes — `WM_INPUTLANGCHANGE` goes only to the thread concerned — so the
+interface thread looks ten times a second at the foreground thread's `GetKeyboardLayout`.
+That is three calls that never leave the process, and the timer runs only while the option
+is on. The awkward case is Windows' own language flyout: Win+Space hands it the foreground,
+and the window being typed in is often first seen on its new layout only once it has focus
+back. So a change also counts when focus returns, within a few seconds, to the window it
+left and that window's layout is not the one it was left with. Moving between windows that
+simply have different layouts — Windows can keep one per window — shows nothing.
+
+**Where the caret is.** `GetGUIThreadInfo` first: the system caret, which native edit
+controls, Office, WinForms and WPF all maintain. Its rectangle is in the client coordinates
+of the caret's window *as that window sees them*, so for an application Windows is scaling
+the corners are mapped under its DPI awareness and then put through
+`LogicalToPhysicalPointForPerMonitorDPI`. Then MSAA's `OBJID_CARET`, which browsers expose
+for magnifiers. Then nothing: guessing from the mouse pointer would put the tag somewhere
+unrelated to the text.
+
+**The window.** Layered, per-pixel alpha, `WS_EX_NOACTIVATE | WS_EX_TRANSPARENT`: it never
+takes focus or a click, and fades by changing only its constant alpha. Grey and part
+see-through, dark or light by the brightness of the pixels it is about to cover — the
+background itself rather than the Windows theme, which says nothing about a white page in a
+dark browser. It goes at the first
+non-modifier key or mouse button the hook sees — a counter the hook keeps for nothing else —
+and is never shown in excluded applications or while a game has the screen.
+
 ## Detection
 
 Isolated words are the easy case. What automatic correction actually does is fire at the end

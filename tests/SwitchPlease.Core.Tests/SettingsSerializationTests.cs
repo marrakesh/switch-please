@@ -27,6 +27,8 @@ public class SettingsSerializationTests
             AutoDetectSensitivity = 0.42,
             CorrectionDelayMilliseconds = 33,
             PlaySoundOnConvert = false,
+            ShowLayoutAtCaret = true,
+            LayoutIndicatorMilliseconds = 2500,
             Language = "uk",
             DoubleTapWindowMilliseconds = 321,
             DoubleTapHoldMilliseconds = 222,
@@ -49,6 +51,8 @@ public class SettingsSerializationTests
         Assert.Equal(original.AutoDetectSensitivity, restored.AutoDetectSensitivity);
         Assert.Equal(original.CorrectionDelayMilliseconds, restored.CorrectionDelayMilliseconds);
         Assert.Equal(original.PlaySoundOnConvert, restored.PlaySoundOnConvert);
+        Assert.Equal(original.ShowLayoutAtCaret, restored.ShowLayoutAtCaret);
+        Assert.Equal(original.LayoutIndicatorMilliseconds, restored.LayoutIndicatorMilliseconds);
         Assert.Equal(original.Language, restored.Language);
         Assert.Equal(original.DoubleTapWindowMilliseconds, restored.DoubleTapWindowMilliseconds);
         Assert.Equal(original.DoubleTapHoldMilliseconds, restored.DoubleTapHoldMilliseconds);
@@ -90,6 +94,8 @@ public class SettingsSerializationTests
         Assert.Equal(400, restored.DoubleTapHoldMilliseconds);
         Assert.False(restored.LogTextContent);
         Assert.False(restored.CheckForUpdates);
+        Assert.False(restored.ShowLayoutAtCaret);
+        Assert.Equal(1000, restored.LayoutIndicatorMilliseconds);
         Assert.Equal(Hotkey.None, restored.UndoHotkey);
     }
 

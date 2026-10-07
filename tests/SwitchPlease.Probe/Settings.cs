@@ -27,6 +27,27 @@ internal static class Settings
     /// </summary>
     public static Binding? Undo() => Read("UndoHotkey");
 
+    /// <summary>Whether a switch in the settings file is on. Off when the file says nothing.</summary>
+    public static bool IsOn(string name)
+    {
+        try
+        {
+            if (!File.Exists(Path))
+            {
+                return false;
+            }
+
+            using var document = JsonDocument.Parse(File.ReadAllText(Path));
+
+            return document.RootElement.TryGetProperty(name, out var value)
+                && value.ValueKind == JsonValueKind.True;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
+
     private static Binding? Read(string name)
     {
         try

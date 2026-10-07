@@ -74,6 +74,14 @@ vypne. Pozná se to podle Shiftu: se zapnutým Caps Lockem ho drží jen ten, kd
 zapnutý — velká písmena napsaná záměrně, bez Shiftu, proto zůstanou. Automatická oprava to
 dělá také, pokud je zapnutá.
 
+*Zobrazovat rozložení u textového kurzoru* v nabídce v oznamovací oblasti při každé změně
+rozložení — vaší nebo opravou — na vteřinu ukáže pod kurzorem značku jako `CS` nebo `EN`.
+Zmizí při prvním stisku klávesy nebo kliknutí; jak dlouho jinak zůstane, se nastaví v
+*Nastavení...*. Aplikace k tomu musí prozradit, kde má kurzor:
+běžné programy Windows, Office a prohlížeče to dělají; aplikace, které si text kreslí samy —
+některé editory na Electronu, terminály —, ne, a tam se nic neukáže. Ve výchozím stavu
+vypnuto.
+
 Vrácení **automatické** opravy ji navíc něco naučí: slovo se dostane na seznam, kterého si
 automatická oprava od té chvíle nevšímá — příjmení, přihlašovací jméno, slovo v jazyce bez
 modelu. Oznámení slovo jmenuje a v *Nastavení...* → *Tato slova nikdy neopravovat

@@ -23,6 +23,7 @@ public sealed class TrayContext : ApplicationContext
     // waking the UI thread thirty times a second for the other 99% of the time to catch the
     // occasional correction is a poor trade in a program that sits in the tray all day.
     private readonly System.Windows.Forms.Timer _animationTimer;
+    private readonly LayoutIndicator _indicator;
     private readonly List<string> _recentLog = [];
 
     private int _animationFrame = -1;
@@ -31,6 +32,7 @@ public sealed class TrayContext : ApplicationContext
     private ToolStripMenuItem _autoDetectItem = null!;
     private ToolStripMenuItem _startupItem = null!;
     private ToolStripMenuItem _soundItem = null!;
+    private ToolStripMenuItem _indicatorItem = null!;
     private ToolStripMenuItem _diagnosticsItem = null!;
     private ToolStripMenuItem _convertWordItem = null!;
     private ToolStripMenuItem _convertLineItem = null!;
@@ -83,6 +85,8 @@ public sealed class TrayContext : ApplicationContext
 
         _animationTimer = new System.Windows.Forms.Timer { Interval = 45 };
         _animationTimer.Tick += (_, _) => AdvanceAnimation();
+
+        _indicator = new LayoutIndicator(_service, settings, OnLogged);
 
         StartService();
 
@@ -167,6 +171,11 @@ public sealed class TrayContext : ApplicationContext
             Checked = _settings.PlaySoundOnConvert,
         };
 
+        _indicatorItem = new ToolStripMenuItem(Text.MenuLayoutAtCaret, null, (_, _) => ToggleIndicator())
+        {
+            Checked = _settings.ShowLayoutAtCaret,
+        };
+
         _startupItem = new ToolStripMenuItem(Text.MenuStartup, null, (_, _) => ToggleStartup())
         {
             Checked = StartupRegistration.IsEnabled(),
@@ -205,6 +214,7 @@ public sealed class TrayContext : ApplicationContext
         menu.Items.Add(new ToolStripMenuItem(Text.MenuHotkeys, null, (_, _) => EditHotkeys()));
         menu.Items.Add(new ToolStripSeparator());
         menu.Items.Add(_soundItem);
+        menu.Items.Add(_indicatorItem);
         menu.Items.Add(_startupItem);
         menu.Items.Add(_diagnosticsItem);
         menu.Items.Add(_autoDetectHereItem);
@@ -375,6 +385,9 @@ public sealed class TrayContext : ApplicationContext
         }
 
         form.ApplyTo(_settings);
+
+        // The one switch that lives in both places.
+        _indicatorItem.Checked = _settings.ShowLayoutAtCaret;
         ApplyAndSave();
     }
 
@@ -524,6 +537,13 @@ public sealed class TrayContext : ApplicationContext
         ApplyAndSave();
     }
 
+    private void ToggleIndicator()
+    {
+        _settings.ShowLayoutAtCaret = !_settings.ShowLayoutAtCaret;
+        _indicatorItem.Checked = _settings.ShowLayoutAtCaret;
+        ApplyAndSave();
+    }
+
     private void ToggleDiagnostics()
     {
         _settings.DiagnosticsEnabled = !_settings.DiagnosticsEnabled;
@@ -555,6 +575,7 @@ public sealed class TrayContext : ApplicationContext
     private void ApplyAndSave()
     {
         _service.ApplySettings(_settings);
+        _indicator.Apply(_settings);
         UpdateIcon();
 
         try
@@ -866,6 +887,7 @@ public sealed class TrayContext : ApplicationContext
             _iconTimer.Dispose();
             _animationTimer.Stop();
             _animationTimer.Dispose();
+            _indicator.Dispose();
             _service.Dispose();
             _icon.Visible = false;
             _icon.Dispose();
