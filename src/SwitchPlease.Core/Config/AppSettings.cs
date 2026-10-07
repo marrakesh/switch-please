@@ -82,10 +82,10 @@ public sealed class AppSettings
     /// <summary>
     /// Puts back what the last correction changed.
     ///
-    /// Unbound by default. Pressing the word hotkey again already reverses a word, because
-    /// the record keeps the original scan codes; this is for the two cases where that does
-    /// not help -- a correction made automatically, and a converted selection, which leaves
-    /// nothing behind to convert back.
+    /// Unbound by default. Pressing the word hotkey again straight after a correction already
+    /// reverses the word, whether the user or automatic correction made it, because the record
+    /// keeps the original scan codes. This is for a converted selection, which leaves nothing
+    /// behind to convert back, and for anyone who wants undo on a key of its own.
     /// </summary>
     public Hotkey UndoHotkey { get; set; } = Hotkey.None;
 

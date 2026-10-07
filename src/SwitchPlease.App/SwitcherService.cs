@@ -836,11 +836,10 @@ public sealed class SwitcherService : IDisposable
     /// <summary>
     /// Puts back what the last correction changed.
     ///
-    /// Pressing the hotkey again already reverses a word, because the buffer keeps the
-    /// original scan codes. This exists for the two cases where that does not work: a
-    /// correction the switcher made on its own, which the user never asked for and has no
-    /// obvious way to reverse, and a converted selection, which leaves nothing in the buffer
-    /// to convert back.
+    /// Pressing the word hotkey again already reverses a word, automatic corrections
+    /// included, because the buffer keeps the original scan codes. This exists for a
+    /// converted selection, which leaves nothing in the buffer to convert back, and so that
+    /// undo can live on a key of its own and in the tray menu.
     /// </summary>
     public void UndoLastNow()
     {

@@ -53,6 +53,17 @@ public class CorrectionUndoTests
     }
 
     [Fact]
+    public void AnAutomaticCorrectionIsReversedByTheWordHotkeyToo()
+    {
+        // Automatic correction fires on the space that ends the word, so that space is still
+        // in the record when Shift x2 comes. The hotkey looks past it to the same word, and
+        // the press puts the word back exactly as it would after a correction it made itself.
+        var (buffer, undo) = AfterCorrecting(LayoutFixture.TypedInEnglish("привет"), " ");
+
+        Assert.True(undo.Reverses(buffer, buffer.GetLastWord()));
+    }
+
+    [Fact]
     public void UndoingRestoresBothTheScreenTextAndTheRecord()
     {
         string typed = LayoutFixture.TypedInEnglish("привет");
