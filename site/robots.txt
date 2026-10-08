@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://marrakesh.github.io/switch-please/sitemap.xml

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://marrakesh.github.io/switch-please/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://marrakesh.github.io/switch-please/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://marrakesh.github.io/switch-please/ru/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://marrakesh.github.io/switch-please/uk/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://marrakesh.github.io/switch-please/de/"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://marrakesh.github.io/switch-please/cs/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://marrakesh.github.io/switch-please/"/>
+  </url>
+  <url>
+    <loc>https://marrakesh.github.io/switch-please/ru/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://marrakesh.github.io/switch-please/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://marrakesh.github.io/switch-please/ru/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://marrakesh.github.io/switch-please/uk/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://marrakesh.github.io/switch-please/de/"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://marrakesh.github.io/switch-please/cs/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://marrakesh.github.io/switch-please/"/>
+  </url>
+  <url>
+    <loc>https://marrakesh.github.io/switch-please/uk/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://marrakesh.github.io/switch-please/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://marrakesh.github.io/switch-please/ru/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://marrakesh.github.io/switch-please/uk/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://marrakesh.github.io/switch-please/de/"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://marrakesh.github.io/switch-please/cs/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://marrakesh.github.io/switch-please/"/>
+  </url>
+  <url>
+    <loc>https://marrakesh.github.io/switch-please/de/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://marrakesh.github.io/switch-please/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://marrakesh.github.io/switch-please/ru/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://marrakesh.github.io/switch-please/uk/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://marrakesh.github.io/switch-please/de/"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://marrakesh.github.io/switch-please/cs/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://marrakesh.github.io/switch-please/"/>
+  </url>
+  <url>
+    <loc>https://marrakesh.github.io/switch-please/cs/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://marrakesh.github.io/switch-please/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://marrakesh.github.io/switch-please/ru/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://marrakesh.github.io/switch-please/uk/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://marrakesh.github.io/switch-please/de/"/>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://marrakesh.github.io/switch-please/cs/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://marrakesh.github.io/switch-please/"/>
+  </url>
+</urlset>

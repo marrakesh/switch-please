@@ -13,7 +13,7 @@ und das Layout wird umgeschaltet, sodass Sie gleich weitertippen können.
 
 Kostenlos und quelloffen, für Windows 10 und 11. Russisch, Ukrainisch und Englisch
 funktionieren ohne Einrichtung, ebenso Deutsch und jede andere Sprache, für die Windows ein
-Rechtschreibwörterbuch hat.
+Rechtschreibwörterbuch hat. Kurz vorgestellt auf der [Website](https://marrakesh.github.io/switch-please/de/).
 
 **[English](README.md)** · **[Русская](README.ru.md)** · **[Українська](README.uk.md)** · **[Čeština](README.cs.md)**
 

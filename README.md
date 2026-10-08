@@ -13,7 +13,7 @@ word is retyped the way you meant it and the layout is switched, so you can carr
 Free and open source, for Windows 10 and 11. Russian, Ukrainian and English work out of the
 box, and so does any other language Windows has a spell-check dictionary for.
 
-**[Русская](README.ru.md)** · **[Українська](README.uk.md)** · **[Deutsch](README.de.md)** · **[Čeština](README.cs.md)**
+**[Русская](README.ru.md)** · **[Українська](README.uk.md)** · **[Deutsch](README.de.md)** · **[Čeština](README.cs.md)** · **[Website](https://marrakesh.github.io/switch-please/)**
 
 ![Typing "ghbdsn zr cghfdb", pressing Ctrl twice, and getting "привіт як справи"](docs/demo.uk.svg)
 

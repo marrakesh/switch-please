@@ -13,7 +13,7 @@ můžete psát dál.
 
 Zdarma a s otevřeným kódem, pro Windows 10 a 11. Ruština, ukrajinština a angličtina
 fungují hned, stejně jako čeština a každý další jazyk, pro který má Windows slovník
-kontroly pravopisu.
+kontroly pravopisu. Stručně o programu na [webu](https://marrakesh.github.io/switch-please/cs/).
 
 **[English](README.md)** · **[Русская](README.ru.md)** · **[Українська](README.uk.md)** · **[Deutsch](README.de.md)**
 
