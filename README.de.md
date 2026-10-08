@@ -27,8 +27,7 @@ Rechtschreibwörterbuch hat. Kurz vorgestellt auf der [Website](https://marrakes
   den Anwendungen, die Sie auswählen.
 - **Lässt korrekten Text in Ruhe.** Switch Please schreibt ein Wort nur dann automatisch um,
   wenn kein Zweifel besteht, dass Sie es im falschen Layout getippt haben. In einem Test mit
-  gewöhnlichem Text blieben alle 233 richtig getippten Wörter unangetastet. Steht ein Wort
-  dann doch noch im falschen Layout, drücken Sie Shift ×2.
+  gewöhnlichem Text blieben alle 233 richtig getippten Wörter unangetastet. Steht ein Wort dann doch noch im falschen Layout, korrigieren Sie es selbst: Shift ×2, solange es das letzte Wort ist, oder markieren Sie es und drücken Sie Strg ×2.
 - **Unterscheidet Russisch von Ukrainisch.** `ghbdsn` ergibt im russischen Layout `привыт`,
   im ukrainischen `привіт`. Beides sieht nach kyrillischen Wörtern aus, also schlägt
   Switch Please im Wörterbuch nach und nimmt das Wort, das es wirklich gibt.

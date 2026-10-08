@@ -26,8 +26,7 @@ kontroly pravopisu. Stručně o programu na [webu](https://marrakesh.github.io/s
   které si vyberete.
 - **Správný text nechává být.** Switch Please přepíše slovo automaticky jen tehdy, když není
   pochyb, že jste ho napsali ve špatném rozložení. V testu na běžném textu zůstalo všech 233
-  správně napsaných slov beze změny. Pokud nějaké slovo přece jen zůstane ve špatném
-  rozložení, stiskněte Shift ×2.
+  správně napsaných slov beze změny. Pokud nějaké slovo přece jen zůstane ve špatném rozložení, opravte ho sami: Shift ×2, dokud je poslední, nebo ho označte a stiskněte Ctrl ×2.
 - **Rozliší ruštinu od ukrajinštiny.** `ghbdsn` je v ruském rozložení `привыт` a v
   ukrajinském `привіт`. Obě vypadají jako slova v cyrilici, takže Switch Please
   zkontroluje slovník a vybere to, které existuje.
