@@ -20,18 +20,20 @@ Rechtschreibwörterbuch hat. Kurz vorgestellt auf der [Website](https://marrakes
 ![Getippt wird „kurye Yeit“, zweimal Strg, und es wird „kurze Zeit“](docs/demo.de.svg)
 
 - **Zwei Tastenkürzel.** Shift ×2 korrigiert das letzte Wort, Strg ×2 die Auswahl oder die
-  ganze Zeile. Gleich danach noch einmal Shift ×2, und das Wort ist zurück.
+  ganze Zeile. Doch nicht gewollt? Gleich danach noch einmal Shift ×2, und das Wort ist
+  wieder so wie vorher.
 - **Automatische Korrektur, wenn Sie sie wollen.** Standardmäßig aus. Eingeschaltet
-  korrigiert sie jedes Wort, sobald es fertig getippt ist — überall oder nur in den
-  Anwendungen, die Sie auswählen.
+  korrigiert Switch Please jedes Wort, sobald es fertig getippt ist — überall oder nur in
+  den Anwendungen, die Sie auswählen.
 - **Lässt korrekten Text in Ruhe.** Switch Please schreibt ein Wort nur dann automatisch um,
   wenn kein Zweifel besteht, dass Sie es im falschen Layout getippt haben. In einem Test mit
   gewöhnlichem Text blieben alle 233 richtig getippten Wörter unangetastet. Steht ein Wort
   dann doch noch im falschen Layout, drücken Sie Shift ×2.
 - **Unterscheidet Russisch von Ukrainisch.** `ghbdsn` ergibt im russischen Layout `привыт`,
-  im ukrainischen `привіт`. Beides sieht nach kyrillischen Wörtern aus, also entscheidet
-  das Wörterbuch, welches davon es wirklich gibt.
-- **Hält sich heraus** aus Passwortfeldern, Spielen, Terminals und Code-Editoren.
+  im ukrainischen `привіт`. Beides sieht nach kyrillischen Wörtern aus, also schlägt
+  Switch Please im Wörterbuch nach und nimmt das Wort, das es wirklich gibt.
+- **Hält sich heraus.** Standardmäßig tut Switch Please in Passwortfeldern, Vollbildspielen,
+  Terminals, Code-Editoren und Passwortmanagern nichts.
 - **Privat.** Keine Telemetrie, keine Netzwerkanfragen, solange Sie die Update-Prüfung nicht
   einschalten, und nichts von dem, was Sie tippen, landet auf der Festplatte.
 - **Keine Administratorrechte.** Installiert sich nur für Sie oder läuft als einzelne
@@ -77,9 +79,9 @@ portable Datei hinterlässt nichts außer sich selbst und `%APPDATA%\SwitchPleas
 ## Erste Schritte
 
 Switch Please sitzt im Infobereich, und sein Symbol zeigt das aktuelle Layout. Beim ersten
-Start zeigt ein kleines Fenster die beiden Tastenkürzel mit einer kurzen Vorführung;
-danach bleibt es ruhig. Ist das Symbol nicht zu sehen, liegt es unter dem Pfeil ^ — ziehen
-Sie es auf die Taskleiste, damit es im Blick bleibt.
+Start zeigt ein kleines Fenster die beiden Tastenkürzel mit einer kurzen Vorführung; danach
+bleibt alles ruhig. Ist das Symbol nicht zu sehen, liegt es unter dem Pfeil ^ — ziehen Sie
+es auf die Taskleiste, damit es im Blick bleibt.
 
 | Tasten | Was passiert |
 |---|---|
@@ -93,14 +95,14 @@ anderes gedrückt wird. Beim Tippen von Großbuchstaben liegt Shift nur um einen
 herum gedrückt, daher löst gewöhnliches Tippen es nie aus.
 
 Alles Übrige steht im Menü des Symbols: die automatische Korrektur, die Tastenkürzel, der
-Ton, der Start mit Windows, die Anwendungen, aus denen es sich heraushält, und
+Ton, der Start mit Windows, die Anwendungen, aus denen sich Switch Please heraushält, und
 *Einstellungen...*.
 
 ## Was es tut
 
 ### Das letzte Wort: Shift ×2
 
-Arbeitet mit einer Aufzeichnung dessen, was Sie getippt haben, sodass nichts markiert werden
+Switch Please zeichnet auf, was Sie getippt haben, sodass nichts markiert werden
 muss. Die Aufzeichnung wird verworfen, sobald der Cursor dorthin springt, wohin sie ihm
 nicht folgen kann — Enter, Tab, die Pfeiltasten, Pos1/Ende, Esc, jeder Mausklick —, denn auf
 einer veralteten Aufzeichnung zu handeln, würde Text löschen, den Sie nie getippt haben.
@@ -108,10 +110,10 @@ Danach markieren Sie den Text und verwenden Strg ×2.
 
 ### Die Auswahl oder die Zeile: Strg ×2
 
-Ist Text markiert, wandelt es genau diesen um und braucht überhaupt keine Aufzeichnung; es
-funktioniert also auch dann noch, wenn Sie den Cursor bewegt haben. Ist nichts markiert,
-nimmt es alles, was seit der letzten Cursorbewegung getippt wurde, und das ist meistens die
-ganze Zeile.
+Ist Text markiert, wandelt Switch Please genau diesen um und braucht überhaupt keine
+Aufzeichnung; das funktioniert also auch dann noch, wenn Sie den Cursor bewegt haben. Ist
+nichts markiert, nimmt es alles, was seit der letzten Cursorbewegung getippt wurde, und das
+ist meistens die ganze Zeile.
 
 Um eine Auswahl zu lesen, wird die Zwischenablage kurz ausgeliehen. Was darin war — Text,
 Formatierung, ein Bild, eine Dateiliste — wird anschließend zurückgelegt.
@@ -123,10 +125,10 @@ wird beurteilt, wenn Sie danach die Leertaste drücken, und nur umgeschrieben, w
 anderes Layout deutlich besser liest. Wie viel besser, bestimmt *Vorsicht beim automatischen
 Korrigieren* unter *Einstellungen...*.
 
-Es muss nicht alles oder nichts sein. *In … automatisch korrigieren* im Tray-Menü schaltet
-sie für die Anwendung ein oder aus, in der Sie gerade sind; so kann sie im Browser arbeiten
-und dem Editor fernbleiben, wo die Tastenkürzel weiterhin nur einen Tastendruck entfernt
-sind.
+Die automatische Korrektur muss nicht alles oder nichts sein. *In … automatisch
+korrigieren* im Tray-Menü schaltet sie für die Anwendung ein oder aus, in der Sie gerade
+sind; so kann sie im Browser arbeiten und dem Editor fernbleiben, wo die Tastenkürzel
+weiterhin nur einen Tastendruck entfernt sind.
 
 ### Rückgängig, und Wörter, die es in Ruhe zu lassen lernt
 
@@ -135,9 +137,10 @@ Bei einem Wort leistet erneutes Shift ×2 dasselbe. Das Rückgängig-Kürzel mac
 umgewandelte Auswahl rückgängig, was Shift ×2 nicht kann; es ist standardmäßig nicht belegt,
 und *Tastenkürzel...* im Tray-Menü belegt es.
 
-Eine **automatische** Korrektur rückgängig zu machen, lehrt sie außerdem etwas: Das Wort
-kommt auf eine Liste, die die automatische Korrektur fortan in Ruhe lässt — ein Nachname,
-ein Login, ein Wort in einer Sprache ohne Modell. Eine Benachrichtigung nennt das Wort, und
+Eine **automatische** Korrektur rückgängig zu machen, lehrt Switch Please außerdem etwas:
+Das Wort kommt auf eine Liste, die die automatische Korrektur fortan in Ruhe lässt — ein
+Nachname, ein Login, ein Wort in einer Sprache, die Switch Please nicht kennt. Eine
+Benachrichtigung nennt das Wort, und
 unter *Einstellungen...* → *Diese Wörter nie automatisch korrigieren* lässt sich die Liste
 lesen und bearbeiten. Die Tastenkürzel wirken weiterhin auf diese Wörter.
 
@@ -210,7 +213,7 @@ Und was die automatische Korrektur absichtlich in Ruhe lässt:
 | `user@example.com` | Sieht wie eine Adresse aus |
 | `camelCase`, `getUserName` | Gemischte Groß- und Kleinschreibung innerhalb eines Wortes |
 | `NASA` bei eingeschaltetem Caps Lock | Absichtliche Großbuchstaben: Shift war nicht gedrückt |
-| `příliš`, `Grüße` | Weder Modell noch Wörterbuch für diese Sprache, also enthält es sich |
+| `příliš`, `Grüße` | Diese Sprache kennt Switch Please weder eingebaut noch über ein Windows-Wörterbuch, also bleibt das Wort unangetastet |
 
 An diese Regeln sind die Tastenkürzel nicht gebunden: Ein Druck darauf ist eine Bitte, also
 wandeln sie um. Sie lassen aber Text stehen, der sich schon deutlich besser liest als jede
@@ -238,15 +241,15 @@ Vier Schutzvorkehrungen, alle standardmäßig an:
 
 Zwischen welchen Sprachen korrigiert wird, bestimmen die **in Windows installierten
 Tastaturlayouts**, nicht eine Liste im Quellcode. Es genügt, ein Layout hinzuzufügen, und
-Switch Please bemerkt es innerhalb einer Sekunde. Bei drei oder mehr Layouts wählt es
-dasjenige, in dem sich der Text am besten liest.
+Switch Please bemerkt es innerhalb einer Sekunde. Bei drei oder mehr Layouts wird
+dasjenige gewählt, in dem sich der Text am besten liest.
 
-Russisch, Ukrainisch und Englisch haben eingebaute Modelle. Jede andere Sprache — auch
-Deutsch — wird anhand des **Windows-Rechtschreibwörterbuchs** beurteilt, das mit der Sprache
-installiert wird: Einstellungen → Zeit und Sprache → Sprache und Region → Sprache
-hinzufügen, mit angehaktem „Grundlegende Eingabe“. Eine Sprache, die weder das eine noch das
-andere hat, enthält sich, statt zu raten. *Status und Latenz...* im Tray-Menü zeigt, welche
-Wörterbücher vorhanden sind.
+Russisch, Ukrainisch und Englisch sind eingebaut. Jede andere Sprache — auch Deutsch — wird
+anhand des **Windows-Rechtschreibwörterbuchs** beurteilt, das mit der Sprache installiert
+wird: Einstellungen → Zeit und Sprache → Sprache und Region → Sprache hinzufügen, mit
+angehaktem „Grundlegende Eingabe“. Bei einer Sprache, die weder das eine noch das andere
+hat, tut Switch Please nichts, statt zu raten. *Status und Latenz...* im Tray-Menü zeigt,
+welche Wörterbücher vorhanden sind.
 
 Die Oberfläche gibt es auf Deutsch, Englisch, Russisch, Ukrainisch und Tschechisch. Sie
 folgt der Windows-Anzeigesprache, sofern Sie unter *Sprache* im Tray-Menü keine andere

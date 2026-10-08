@@ -20,17 +20,19 @@ kontroly pravopisu. Stručně o programu na [webu](https://marrakesh.github.io/s
 ![Napíše se „ykusme yase“, dvakrát Ctrl, a vyjde „zkusme zase“](docs/demo.cs.svg)
 
 - **Dvě klávesové zkratky.** Shift ×2 opraví poslední slovo, Ctrl ×2 výběr nebo celý řádek.
-  Hned poté znovu Shift ×2 a slovo je zpátky.
+  Rozmysleli jste si to? Hned poté znovu Shift ×2 a slovo je zpátky, jak bylo.
 - **Automatická oprava, když ji chcete.** Ve výchozím stavu vypnutá. Když ji zapnete,
-  opraví každé slovo, jakmile ho dopíšete — všude, nebo jen v aplikacích, které si vyberete.
+  Switch Please opraví každé slovo, jakmile ho dopíšete — všude, nebo jen v aplikacích,
+  které si vyberete.
 - **Správný text nechává být.** Switch Please přepíše slovo automaticky jen tehdy, když není
   pochyb, že jste ho napsali ve špatném rozložení. V testu na běžném textu zůstalo všech 233
   správně napsaných slov beze změny. Pokud nějaké slovo přece jen zůstane ve špatném
   rozložení, stiskněte Shift ×2.
 - **Rozliší ruštinu od ukrajinštiny.** `ghbdsn` je v ruském rozložení `привыт` a v
-  ukrajinském `привіт`. Obě vypadají jako slova v cyrilici, takže o tom, které z nich
-  existuje, rozhodne slovník.
-- **Drží se stranou** od polí pro hesla, her, terminálů a editorů kódu.
+  ukrajinském `привіт`. Obě vypadají jako slova v cyrilici, takže Switch Please
+  zkontroluje slovník a vybere to, které existuje.
+- **Drží se stranou.** Ve výchozím stavu Switch Please nedělá nic v polích pro hesla, hrách
+  na celou obrazovku, terminálech, editorech kódu a správcích hesel.
 - **Soukromí.** Žádná telemetrie, žádné síťové požadavky, dokud sami nezapnete kontrolu
   aktualizací, a nic z napsaného se nezapisuje na disk.
 - **Bez práv správce.** Instaluje se jen pro vás, nebo běží jako jediný přenosný
@@ -109,10 +111,9 @@ spustitelný soubor po sobě nezanechá nic kromě sebe samého a `%APPDATA%\Swi
 
 ## Začínáme
 
-Switch Please sídlí v oznamovací oblasti a jeho ikona ukazuje aktuální rozložení. Při
-prvním spuštění malé okno ukáže obě klávesové zkratky s krátkou ukázkou; poté zůstává
-zticha. Pokud ikonu nevidíte, je pod šipkou ^ — přetáhněte ji na hlavní panel, ať je na
-očích.
+Switch Please sídlí v oznamovací oblasti a jeho ikona ukazuje aktuální rozložení. Při prvním
+spuštění malé okno ukáže obě klávesové zkratky s krátkou ukázkou; potom je ticho. Pokud
+ikonu nevidíte, je pod šipkou ^ — přetáhněte ji na hlavní panel, ať je na očích.
 
 | Klávesy | Co se stane |
 |---|---|
@@ -126,22 +127,22 @@ Při psaní velkých písmen se Shift drží jen kolem jednoho písmene, takže 
 nikdy nespustí.
 
 Všechno ostatní je v nabídce ikony: automatická oprava, klávesové zkratky, zvuk, spouštění
-s Windows, aplikace, kterým se má vyhýbat, a *Nastavení...*.
+s Windows, aplikace, kterým se Switch Please vyhýbá, a *Nastavení...*.
 
 ## Co to dělá
 
 ### Poslední slovo: Shift ×2
 
-Pracuje se záznamem toho, co jste napsali, takže není třeba nic vybírat. Záznam se zahodí,
-kdykoli se kurzor přesune tam, kam ho záznam nemůže sledovat — Enter, Tab, šipky, Home/End,
-Esc, jakékoli kliknutí myší —, protože jednat podle zastaralého záznamu by smazalo text,
-který jste nikdy nenapsali. Poté text vyberte a použijte Ctrl ×2.
+Switch Please si zaznamenává, co jste napsali, takže není třeba nic vybírat. Záznam se
+zahodí, kdykoli se kurzor přesune tam, kam ho záznam nemůže sledovat — Enter, Tab, šipky,
+Home/End, Esc, jakékoli kliknutí myší —, protože jednat podle zastaralého záznamu by smazalo
+text, který jste nikdy nenapsali. Poté text vyberte a použijte Ctrl ×2.
 
 ### Výběr nebo řádek: Ctrl ×2
 
-Když je vybrán text, převede přesně ten a žádný záznam nepotřebuje, takže funguje i poté,
-co jste kurzor přesunuli. Když není nic vybráno, vezme vše napsané od posledního pohybu
-kurzoru, což je obvykle celý řádek.
+Když je vybrán text, Switch Please převede přesně ten a žádný záznam nepotřebuje, takže to
+funguje i poté, co jste kurzor přesunuli. Když není nic vybráno, vezme vše napsané od
+posledního pohybu kurzoru, což je obvykle celý řádek.
 
 Přečtení výběru znamená půjčit si schránku. Cokoli v ní bylo — text, formátování, obrázek,
 seznam souborů — se potom vrátí zpět.
@@ -163,9 +164,10 @@ Zpět vrátí poslední opravu, pokud jste od té doby nic nenapsali. U slova to
 Shift ×2. Zkratka Zpět vrací i převedený výběr, což Shift ×2 neumí; ve výchozím stavu není
 přiřazená a přiřadí ji *Klávesové zkratky...* v nabídce v oznamovací oblasti.
 
-Vrácení **automatické** opravy ji navíc něco naučí: slovo se dostane na seznam, kterého si
-automatická oprava od té chvíle nevšímá — příjmení, přihlašovací jméno, slovo v jazyce bez
-modelu. Oznámení slovo jmenuje a v *Nastavení...* → *Tato slova nikdy neopravovat
+Vrácení **automatické** opravy navíc něco naučí Switch Please: slovo se dostane na seznam,
+kterého si automatická oprava od té chvíle nevšímá — příjmení, přihlašovací jméno, slovo
+v jazyce, který Switch Please nezná. Oznámení slovo jmenuje a v *Nastavení...* → *Tato
+slova nikdy neopravovat
 automaticky* se dá seznam číst i upravovat. Klávesové zkratky na tato slova dál fungují.
 
 ### Zapomenutý Caps Lock
@@ -221,7 +223,7 @@ A co automatická oprava záměrně nechává být:
 | `user@example.com` | Vypadá jako adresa |
 | `camelCase`, `getUserName` | Smíšená velikost písmen uvnitř slova |
 | `NASA` se zapnutým Caps Lockem | Záměrná velká písmena: Shift nebyl stisknut |
-| `příliš`, `Grüße` | Pro tento jazyk není model ani slovník, takže se zdrží |
+| `příliš`, `Grüße` | Tento jazyk Switch Please nezná (nemá ho vestavěný ani ve slovníku Windows), takže slovo nechá být |
 
 Klávesové zkratky se těmito pravidly neřídí: stisk je žádost, takže převádějí. Přesto
 odmítnou text, který se už čte zřetelně lépe než každá alternativa, a právě to brání tomu,
@@ -231,7 +233,7 @@ aby náhodný dvojí stisk pokazil správně napsané slovo.
 
 Čtyři pojistky, všechny ve výchozím stavu zapnuté:
 
-- **Pole pro hesla.** Rozpoznávají se dvěma nezávislými sondami a nikdy se nečtou.
+- **Pole pro hesla.** Rozpoznávají se dvěma nezávislými způsoby a nikdy se nečtou.
 - **Hry a prezentace.** Nic se neděje, dokud obrazovku zabírá aplikace přes celou plochu,
   takže dvojí stisk Shiftu při sprintu zůstane dvojím stiskem Shiftu při sprintu.
   Vzdálená plocha přes celou obrazovku mezi ně nepatří: je to plocha, do které se píše.
@@ -244,15 +246,15 @@ aby náhodný dvojí stisk pokazil správně napsané slovo.
 
 ## Jazyky
 
-Jazyky, mezi kterými opravuje, jsou **rozložení klávesnice nainstalovaná ve Windows**, ne
-seznam ve zdrojovém kódu. Stačí rozložení přidat a Switch Please si toho do vteřiny
-všimne. Při třech a více rozloženích vybere to, ve kterém se text čte nejlépe.
+Jazyky, mezi kterými Switch Please opravuje, jsou **rozložení klávesnice nainstalovaná ve
+Windows**, ne seznam ve zdrojovém kódu. Stačí rozložení přidat a do vteřiny se to pozná.
+Při třech a více rozloženích se vybere to, ve kterém se text čte nejlépe.
 
-Ruština, ukrajinština a angličtina mají vestavěné modely. Každý další jazyk — včetně
-češtiny — se posuzuje podle **slovníku kontroly pravopisu Windows**, který se instaluje
-spolu s jazykem: Nastavení → Čas a jazyk → Jazyk a oblast → Přidat jazyk, se zaškrtnutým
-„Základní psaní“. Jazyk, který nemá ani jedno, se zdrží místo hádání. *Stav a latence...*
-v nabídce v oznamovací oblasti ukáže, které slovníky máte.
+Ruština, ukrajinština a angličtina jsou vestavěné. Každý další jazyk — včetně češtiny — se
+posuzuje podle **slovníku kontroly pravopisu Windows**, který se instaluje spolu s jazykem:
+Nastavení → Čas a jazyk → Jazyk a oblast → Přidat jazyk, se zaškrtnutým „Základní psaní“. U
+jazyka, který nemá ani jedno, Switch Please nic nedělá místo hádání. *Stav a latence...* v
+nabídce v oznamovací oblasti ukáže, které slovníky máte.
 
 Rozhraní je česky, anglicky, rusky, ukrajinsky a německy. Řídí se jazykem zobrazení
 Windows, pokud v nabídce v oznamovací oblasti pod *Jazyk* nezvolíte jiný, a světlým či

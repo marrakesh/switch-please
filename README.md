@@ -19,15 +19,16 @@ box, and so does any other language Windows has a spell-check dictionary for.
 
 - **Two hotkeys.** Shift ×2 fixes the last word, Ctrl ×2 the selection or the whole line.
   Press Shift ×2 again straight away and the word goes back.
-- **Automatic correction, when you want it.** Off by default. Switched on, it fixes each
-  word as you finish it — everywhere, or only in the applications you choose.
+- **Automatic correction, when you want it.** Off by default. Switched on, Switch Please fixes
+  each word as you finish it — everywhere, or only in the applications you choose.
 - **Leaves correct text alone.** Switch Please rewrites a word automatically only when there
   is no doubt you typed it in the wrong layout. In a test on ordinary text, none of 233
   correctly typed words was touched. If a word is still in the wrong layout, press Shift ×2.
 - **Tells Russian from Ukrainian.** `ghbdsn` is `привыт` in the Russian layout and `привіт`
-  in the Ukrainian one. Both look like Cyrillic words, so the dictionary decides which one
-  exists.
-- **Stays out of the way** of password fields, games, terminals and code editors.
+  in the Ukrainian one. Both look like Cyrillic words, so Switch Please checks the dictionary
+  and picks the one that exists.
+- **Stays out of the way.** Out of the box, Switch Please does nothing in password fields,
+  full-screen games, terminals, code editors and password managers.
 - **Private.** No telemetry, no network requests unless you switch on the update check,
   and nothing you type is written to disk.
 - **No administrator rights.** Installs for you alone, or runs as a single portable
@@ -91,16 +92,16 @@ starting with Windows, the applications to stay out of, and *Settings...*.
 
 ### The last word: Shift ×2
 
-Works from a record of what you typed, so nothing needs selecting. The record is dropped
-whenever the caret moves somewhere it cannot follow — Enter, Tab, the arrows, Home/End, Esc,
-any mouse click — because acting on a stale record would delete text you never typed. After
-that, select the text and use Ctrl ×2.
+Switch Please keeps a record of what you typed, so nothing needs selecting. The record is
+dropped whenever the text cursor moves somewhere the record cannot follow — Enter, Tab, the
+arrows, Home/End, Esc, any mouse click — because acting on an out-of-date record would
+delete text you never typed. After that, select the text and use Ctrl ×2.
 
 ### The selection or the line: Ctrl ×2
 
-With text selected, it converts exactly that and needs no record at all, so it still works
-after you have moved the cursor. With nothing selected, it takes everything typed since the
-caret last moved, which is usually the whole line.
+With text selected, Switch Please converts exactly that and needs no record at all, so it
+still works after you have moved the cursor. With nothing selected, it takes everything
+typed since the caret last moved, which is usually the whole line.
 
 Reading a selection means borrowing the clipboard. Whatever was on it — text, formatting, an
 image, a list of files — is put back afterwards.
@@ -111,9 +112,9 @@ Switched on with *Detect wrong layout automatically* in the tray menu. Each word
 when you press Space after it, and rewritten only when another layout reads clearly better.
 How much better is *Caution when correcting automatically* in *Settings...*.
 
-It need not be all or nothing. *Correct automatically in …* in the tray menu turns it on or
-off for the application you are in, so it can work in the browser and stay out of the
-editor, where the hotkeys are still one keypress away.
+Automatic correction need not be all or nothing. *Correct automatically in …* in the tray
+menu turns it on or off for the application you are in, so it can work in the browser and
+stay out of the editor, where the hotkeys are still one keypress away.
 
 ### Undo, and words it learns to leave alone
 
@@ -121,18 +122,18 @@ Undo puts back the last correction, as long as nothing has been typed since. For
 Shift ×2 again does the same. The undo hotkey also reverses a converted selection, which
 Shift ×2 cannot; it is unbound by default, and *Hotkeys...* in the tray menu binds it.
 
-Undoing an **automatic** correction also teaches it. The word goes on a list that automatic
-correction leaves alone from then on: a surname, a login, a word in a language it has no
-model for. A notification names the word, and *Never correct these words automatically* in
-*Settings...* is where the list can be read and edited. The hotkeys still work on those
-words.
+Undoing an **automatic** correction also teaches Switch Please something. The word goes on a
+list that automatic correction leaves alone from then on: a surname, a login, a word in a
+language Switch Please does not know. A notification names the word, and *Never correct
+these words automatically* in *Settings...* is where the list can be read and edited. The
+hotkeys still work on those words.
 
 ### Caps Lock left on
 
 Put right along with the layout: `пРИВЕТ` becomes `Привет`, and Caps Lock is switched off.
-Shift is how it tells. Nobody holds Shift with Caps Lock on unless they did not know it was
-on, so capitals typed on purpose, with no Shift, stay as they are. Automatic correction does
-this too, when it is on.
+Shift is how Switch Please tells. Nobody holds Shift with Caps Lock on unless they did not
+know it was on, so capitals typed on purpose, with no Shift, stay as they are. Automatic
+correction does this too, when it is on.
 
 ### The layout at the text cursor
 
@@ -180,7 +181,7 @@ And what automatic correction leaves alone on purpose:
 | `user@example.com` | Looks like an address |
 | `camelCase`, `getUserName` | Mixed case inside a word |
 | `NASA` with Caps Lock on | Capitals on purpose: no Shift was held |
-| `příliš`, `Grüße` | No model and no dictionary for that language, so it abstains |
+| `příliš`, `Grüße` | Switch Please has neither built-in support nor a Windows dictionary for that language, so the word is left alone |
 
 The hotkeys are not bound by these rules: pressing one is a request, so they convert. They
 still decline text that already reads clearly better than every alternative, which is what
@@ -190,7 +191,7 @@ keeps a stray double tap from mangling a correctly typed word.
 
 Four guards, all on by default:
 
-- **Password fields.** Detected through two independent probes, and never read.
+- **Password fields.** Found in two independent ways, and never read.
 - **Games and presentations.** Nothing happens while a full-screen application has the
   screen, so double-tapping Shift to sprint stays double-tapping Shift to sprint. A
   Remote Desktop session shown full screen is not one of them: it is a desktop being
@@ -204,15 +205,15 @@ Four guards, all on by default:
 
 ## Languages
 
-The languages it corrects between are the **keyboard layouts installed in Windows**, not a
-list in the source. Adding a layout is all it takes, and Switch Please notices within a
-second. With three or more layouts, it picks the one the text reads best in.
+The languages Switch Please corrects between are the **keyboard layouts installed in
+Windows**, not a list in the source. Adding a layout is all it takes, and it is noticed
+within a second. With three or more layouts, the one the text reads best in is picked.
 
-Russian, Ukrainian and English have built-in models. Every other language is judged with the
+Russian, Ukrainian and English are built in. Every other language is judged with the
 **Windows spell-check dictionary**, which installs with the language: Settings → Time &
 language → Language & region → Add a language, with "Basic typing" ticked. A language with
-neither abstains rather than guessing. *Status and latency...* in the tray menu shows which
-dictionaries you have.
+neither is left alone rather than guessed at. *Status and latency...* in the tray menu shows
+which dictionaries you have.
 
 The interface is in English, Russian, Ukrainian, German and Czech. It follows the Windows
 display language unless you pick one under *Language* in the tray menu, and follows the
