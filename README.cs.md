@@ -25,8 +25,7 @@ kontroly pravopisu. Stručně o programu na [webu](https://marrakesh.github.io/s
   opraví každé slovo, jakmile ho dopíšete — všude, nebo jen v aplikacích, které si vyberete.
 - **Správný text nechává být.** Automatická oprava přepíše slovo jen tehdy, když si je
   jistá, že jste ho napsali ve špatném rozložení: v testu na běžném textu nechala všech 233
-  správně napsaných slov beze změny. Když si jistá není a slovo nechá být, stiskněte prostě
-  Shift ×2 sami.
+  správně napsaných slov beze změny. Pokud nějaké slovo přece jen zůstane ve špatném rozložení, stiskněte Shift ×2.
 - **Rozliší ruštinu od ukrajinštiny.** `ghbdsn` je v ruském rozložení `привыт` a v
   ukrajinském `привіт`. Obě vypadají jako slova v cyrilici, takže o tom, které z nich
   existuje, rozhodne slovník.

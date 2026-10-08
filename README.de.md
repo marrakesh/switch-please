@@ -26,8 +26,7 @@ Rechtschreibwörterbuch hat. Kurz vorgestellt auf der [Website](https://marrakes
   Anwendungen, die Sie auswählen.
 - **Lässt korrekten Text in Ruhe.** Die automatische Korrektur schreibt ein Wort nur dann
   um, wenn sie sicher ist, dass Sie es im falschen Layout getippt haben: In einem Test mit
-  gewöhnlichem Text blieben alle 233 richtig getippten Wörter unangetastet. Ist sie unsicher
-  und lässt ein Wort stehen, drücken Sie einfach selbst Shift ×2.
+  gewöhnlichem Text blieben alle 233 richtig getippten Wörter unangetastet. Steht ein Wort dann doch noch im falschen Layout, drücken Sie Shift ×2.
 - **Unterscheidet Russisch von Ukrainisch.** `ghbdsn` ergibt im russischen Layout `привыт`,
   im ukrainischen `привіт`. Beides sieht nach kyrillischen Wörtern aus, also entscheidet
   das Wörterbuch, welches davon es wirklich gibt.
