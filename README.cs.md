@@ -23,11 +23,13 @@ kontroly pravopisu.
   Hned poté znovu Shift ×2 a slovo je zpátky.
 - **Automatická oprava, když ji chcete.** Ve výchozím stavu vypnutá. Když ji zapnete,
   opraví každé slovo, jakmile ho dopíšete — všude, nebo jen v aplikacích, které si vyberete.
-- **Správný text nechává být.** Při průchodu běžnou prózou slovo po slovu nepřepsala ani
-  jedno z 233 správně napsaných slov. Zmeškaná oprava stojí jeden stisk klávesy, pokažené
-  slovo mnohem víc, a podle toho je vyladěná.
-- **Rozliší ruštinu od ukrajinštiny.** `привыт` i `привіт` jsou věrohodná cyrilice; jen
-  slovník ví, které z nich je slovo.
+- **Správný text nechává být.** Automatická oprava raději slovo vynechá, než aby ho
+  pokazila: v testu na běžném textu nechala všech 233 správně napsaných slov beze změny.
+  Vynechané slovo opravíte jedním Shift ×2, správné slovo omylem „opravené“ by stálo mnohem
+  víc, a podle toho je vyladěná.
+- **Rozliší ruštinu od ukrajinštiny.** `ghbdsn` je v ruském rozložení `привыт` a v
+  ukrajinském `привіт`. Obě vypadají jako slova v cyrilici, takže o tom, které z nich
+  existuje, rozhodne slovník.
 - **Drží se stranou** od polí pro hesla, her, terminálů a editorů kódu.
 - **Soukromí.** Žádná telemetrie, žádné síťové požadavky, dokud sami nezapnete kontrolu
   aktualizací, a nic z napsaného se nezapisuje na disk.

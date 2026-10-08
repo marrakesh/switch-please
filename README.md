@@ -21,11 +21,13 @@ box, and so does any other language Windows has a spell-check dictionary for.
   Press Shift ×2 again straight away and the word goes back.
 - **Automatic correction, when you want it.** Off by default. Switched on, it fixes each
   word as you finish it — everywhere, or only in the applications you choose.
-- **Leaves correct text alone.** Run word by word over ordinary prose, it rewrote none of
-  233 correctly typed words. A missed correction costs one keypress, a mangled word costs
-  far more, and the tuning follows from that.
-- **Tells Russian from Ukrainian.** `привыт` and `привіт` are both plausible Cyrillic;
-  only a dictionary knows which one is a word.
+- **Leaves correct text alone.** Automatic correction would rather miss a word than spoil
+  one: in a test on ordinary text, it left every one of 233 correctly typed words untouched.
+  A missed word costs you one Shift ×2; a correct word wrongly "fixed" would cost far more,
+  and the tuning follows from that.
+- **Tells Russian from Ukrainian.** `ghbdsn` is `привыт` in the Russian layout and `привіт`
+  in the Ukrainian one. Both look like Cyrillic words, so the dictionary decides which one
+  exists.
 - **Stays out of the way** of password fields, games, terminals and code editors.
 - **Private.** No telemetry, no network requests unless you switch on the update check,
   and nothing you type is written to disk.

@@ -24,12 +24,14 @@ Rechtschreibwörterbuch hat.
 - **Automatische Korrektur, wenn Sie sie wollen.** Standardmäßig aus. Eingeschaltet
   korrigiert sie jedes Wort, sobald es fertig getippt ist — überall oder nur in den
   Anwendungen, die Sie auswählen.
-- **Lässt korrekten Text in Ruhe.** Wort für Wort über gewöhnliche Prosa laufen gelassen,
-  hat sie kein einziges von 233 richtig getippten Wörtern umgeschrieben. Eine verpasste
-  Korrektur kostet einen Tastendruck, ein verunstaltetes Wort weit mehr, und die
-  Abstimmung folgt daraus.
-- **Unterscheidet Russisch von Ukrainisch.** `привыт` und `привіт` sind beide plausibles
-  Kyrillisch; nur ein Wörterbuch weiß, welches davon ein Wort ist.
+- **Lässt korrekten Text in Ruhe.** Die automatische Korrektur lässt lieber ein Wort aus,
+  als eines zu verderben: In einem Test mit gewöhnlichem Text blieben alle 233 richtig
+  getippten Wörter unangetastet. Ein ausgelassenes Wort kostet Sie ein Shift ×2, ein
+  richtiges Wort, das fälschlich „korrigiert“ wurde, weit mehr, und die Abstimmung folgt
+  daraus.
+- **Unterscheidet Russisch von Ukrainisch.** `ghbdsn` ergibt im russischen Layout `привыт`,
+  im ukrainischen `привіт`. Beides sieht nach kyrillischen Wörtern aus, also entscheidet
+  das Wörterbuch, welches davon es wirklich gibt.
 - **Hält sich heraus** aus Passwortfeldern, Spielen, Terminals und Code-Editoren.
 - **Privat.** Keine Telemetrie, keine Netzwerkanfragen, solange Sie die Update-Prüfung nicht
   einschalten, und nichts von dem, was Sie tippen, landet auf der Festplatte.
