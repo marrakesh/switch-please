@@ -26,9 +26,9 @@ Rechtschreibwörterbuch hat. Kurz vorgestellt auf der [Website](https://marrakes
   Anwendungen, die Sie auswählen.
 - **Lässt korrekten Text in Ruhe.** Die automatische Korrektur lässt lieber ein Wort aus,
   als eines zu verderben: In einem Test mit gewöhnlichem Text blieben alle 233 richtig
-  getippten Wörter unangetastet. Ein ausgelassenes Wort kostet Sie ein Shift ×2, ein
-  richtiges Wort, das fälschlich „korrigiert“ wurde, weit mehr, und die Abstimmung folgt
-  daraus.
+  getippten Wörter unangetastet. Ein Wort ausgelassen? Shift ×2, fertig. Ein vom Programm
+  verdorbenes richtiges Wort dagegen müssten Sie erst bemerken und dann von Hand
+  reparieren.
 - **Unterscheidet Russisch von Ukrainisch.** `ghbdsn` ergibt im russischen Layout `привыт`,
   im ukrainischen `привіт`. Beides sieht nach kyrillischen Wörtern aus, also entscheidet
   das Wörterbuch, welches davon es wirklich gibt.

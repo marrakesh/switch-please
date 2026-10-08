@@ -23,8 +23,8 @@ box, and so does any other language Windows has a spell-check dictionary for.
   word as you finish it — everywhere, or only in the applications you choose.
 - **Leaves correct text alone.** Automatic correction would rather miss a word than spoil
   one: in a test on ordinary text, it left every one of 233 correctly typed words untouched.
-  A missed word costs you one Shift ×2; a correct word wrongly "fixed" would cost far more,
-  and the tuning follows from that.
+  Missed a word? Press Shift ×2 and move on. A correct word spoiled by the program, on the
+  other hand, you would first have to notice and then fix by hand.
 - **Tells Russian from Ukrainian.** `ghbdsn` is `привыт` in the Russian layout and `привіт`
   in the Ukrainian one. Both look like Cyrillic words, so the dictionary decides which one
   exists.
