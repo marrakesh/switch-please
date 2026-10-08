@@ -22,8 +22,7 @@ box, and so does any other language Windows has a spell-check dictionary for.
 - **Automatic correction, when you want it.** Off by default. Switched on, Switch Please fixes
   each word as you finish it — everywhere, or only in the applications you choose.
 - **Leaves correct text alone.** Switch Please rewrites a word automatically only when there
-  is no doubt you typed it in the wrong layout. In a test on ordinary text, none of 233
-  correctly typed words was touched. If a word is still in the wrong layout, fix it yourself: Shift ×2 while it is the last word, or select it and press Ctrl ×2.
+  is no doubt you typed it in the wrong layout. In a test on ordinary text, none of 233 correctly typed words was corrected. If a word is still in the wrong layout, fix it yourself: Shift ×2 while it is the last word, or select it and press Ctrl ×2.
 - **Tells Russian from Ukrainian.** `ghbdsn` is `привыт` in the Russian layout and `привіт`
   in the Ukrainian one. Both look like Cyrillic words, so Switch Please checks the dictionary
   and picks the one that exists.
