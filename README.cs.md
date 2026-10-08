@@ -23,10 +23,10 @@ kontroly pravopisu. Stručně o programu na [webu](https://marrakesh.github.io/s
   Hned poté znovu Shift ×2 a slovo je zpátky.
 - **Automatická oprava, když ji chcete.** Ve výchozím stavu vypnutá. Když ji zapnete,
   opraví každé slovo, jakmile ho dopíšete — všude, nebo jen v aplikacích, které si vyberete.
-- **Správný text nechává být.** Automatická oprava raději slovo vynechá, než aby ho
-  pokazila: v testu na běžném textu nechala všech 233 správně napsaných slov beze změny.
-  Vynechala slovo? Stiskněte Shift ×2 a hotovo. Správného slova pokaženého programem byste
-  si naopak museli nejdřív všimnout a pak ho opravit ručně.
+- **Správný text nechává být.** Automatická oprava přepíše slovo jen tehdy, když si je
+  jistá, že jste ho napsali ve špatném rozložení: v testu na běžném textu nechala všech 233
+  správně napsaných slov beze změny. Když si jistá není a slovo nechá být, stiskněte prostě
+  Shift ×2 sami.
 - **Rozliší ruštinu od ukrajinštiny.** `ghbdsn` je v ruském rozložení `привыт` a v
   ukrajinském `привіт`. Obě vypadají jako slova v cyrilici, takže o tom, které z nich
   existuje, rozhodne slovník.

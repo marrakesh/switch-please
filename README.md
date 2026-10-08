@@ -21,10 +21,10 @@ box, and so does any other language Windows has a spell-check dictionary for.
   Press Shift ×2 again straight away and the word goes back.
 - **Automatic correction, when you want it.** Off by default. Switched on, it fixes each
   word as you finish it — everywhere, or only in the applications you choose.
-- **Leaves correct text alone.** Automatic correction would rather miss a word than spoil
-  one: in a test on ordinary text, it left every one of 233 correctly typed words untouched.
-  Missed a word? Press Shift ×2 and move on. A correct word spoiled by the program, on the
-  other hand, you would first have to notice and then fix by hand.
+- **Leaves correct text alone.** Automatic correction rewrites a word only when it is sure
+  you typed it in the wrong layout: in a test on ordinary text, it left every one of 233
+  correctly typed words untouched. When it is unsure and leaves a word as it is, just press
+  Shift ×2 yourself.
 - **Tells Russian from Ukrainian.** `ghbdsn` is `привыт` in the Russian layout and `привіт`
   in the Ukrainian one. Both look like Cyrillic words, so the dictionary decides which one
   exists.

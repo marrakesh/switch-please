@@ -24,11 +24,10 @@ Rechtschreibwörterbuch hat. Kurz vorgestellt auf der [Website](https://marrakes
 - **Automatische Korrektur, wenn Sie sie wollen.** Standardmäßig aus. Eingeschaltet
   korrigiert sie jedes Wort, sobald es fertig getippt ist — überall oder nur in den
   Anwendungen, die Sie auswählen.
-- **Lässt korrekten Text in Ruhe.** Die automatische Korrektur lässt lieber ein Wort aus,
-  als eines zu verderben: In einem Test mit gewöhnlichem Text blieben alle 233 richtig
-  getippten Wörter unangetastet. Ein Wort ausgelassen? Shift ×2, fertig. Ein vom Programm
-  verdorbenes richtiges Wort dagegen müssten Sie erst bemerken und dann von Hand
-  reparieren.
+- **Lässt korrekten Text in Ruhe.** Die automatische Korrektur schreibt ein Wort nur dann
+  um, wenn sie sicher ist, dass Sie es im falschen Layout getippt haben: In einem Test mit
+  gewöhnlichem Text blieben alle 233 richtig getippten Wörter unangetastet. Ist sie unsicher
+  und lässt ein Wort stehen, drücken Sie einfach selbst Shift ×2.
 - **Unterscheidet Russisch von Ukrainisch.** `ghbdsn` ergibt im russischen Layout `привыт`,
   im ukrainischen `привіт`. Beides sieht nach kyrillischen Wörtern aus, also entscheidet
   das Wörterbuch, welches davon es wirklich gibt.
