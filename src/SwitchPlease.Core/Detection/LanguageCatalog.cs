@@ -110,6 +110,17 @@ public sealed class LanguageCatalog
         [.. _profiles.Where(p => p.Script == script)];
 
     /// <summary>
+    /// Whether some language of <paramref name="word"/>'s alphabet certainly has it; see
+    /// <see cref="LanguageProfile.Knows"/>.
+    /// </summary>
+    public bool Knows(string word, IWordValidator validator)
+    {
+        var script = TextGuards.DominantScript(word);
+
+        return _profiles.Any(p => p.Script == script && p.Knows(word, validator));
+    }
+
+    /// <summary>
     /// Scores <paramref name="text"/> against every language of its script and returns the
     /// best fit. Taking the maximum is what stops a Ukrainian word being marked implausible
     /// merely because it is not Russian.

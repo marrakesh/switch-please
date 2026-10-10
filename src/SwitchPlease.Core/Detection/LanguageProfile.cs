@@ -198,6 +198,15 @@ public sealed class LanguageProfile
         return floor + (recognised * (1.0 - floor));
     }
 
+    /// <summary>
+    /// Whether <paramref name="word"/> is certainly a word of this language: the dictionary
+    /// knows it, or it is one of the commonest words. Letter statistics are no help here:
+    /// they rate "ns" as about as English as "next".
+    /// </summary>
+    public bool Knows(string word, IWordValidator validator) =>
+        _statistical?.IsCommonWord(word.ToLowerInvariant()) == true
+        || validator.Check(word, LanguageTag) == WordStatus.Known;
+
     /// <summary>Fraction of the letters in <paramref name="text"/> that this alphabet contains.</summary>
     public double AlphabetCoverage(string text)
     {
@@ -480,6 +489,8 @@ public sealed class LanguageProfile
             _commonSuffixes = commonSuffixes;
             _expectedVowelRatio = expectedVowelRatio;
         }
+
+        internal bool IsCommonWord(string lower) => _commonWords.Contains(lower);
 
         internal double Score(string lower, bool[]? wordDigits, double validity, SearchValues<char> alphabet)
         {

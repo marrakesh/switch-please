@@ -181,7 +181,7 @@ public sealed class ConversionPlanner(
             return capsLockOnly;
         }
 
-        return plan;
+        return plan with { Converted = KeepWordsAlreadyRight(intended, plan.Converted) };
     }
 
     /// <summary>
@@ -444,8 +444,8 @@ public sealed class ConversionPlanner(
 
     /// <summary>
     /// What a selection should become: converted with the pair it reads best in, its links
-    /// kept as they are. A plain selection is simply toggled, because converting it is all
-    /// the user can have meant.
+    /// and the words in it that were already right kept as they are. Otherwise a plain
+    /// selection is simply toggled, because converting it is all the user can have meant.
     /// </summary>
     /// <returns>
     /// The replacement and the layout to switch to; the selection itself and no layout when
@@ -460,9 +460,14 @@ public sealed class ConversionPlanner(
             return (selected, null);
         }
 
-        return ChooseMapFor(selected) is { } map
-            ? (Links.Restore(map.Convert(selected), selected, links), map.Target)
-            : null;
+        if (ChooseMapFor(selected) is not { } map)
+        {
+            return null;
+        }
+
+        string converted = Links.Restore(map.Convert(selected), selected, links);
+
+        return (KeepWordsAlreadyRight(selected, converted), map.Target);
     }
 
     /// <summary>
@@ -492,7 +497,103 @@ public sealed class ConversionPlanner(
             return (intended, null);
         }
 
-        return (converted, map.Target);
+        return (KeepWordsAlreadyRight(intended, converted), map.Target);
+    }
+
+    /// <summary>
+    /// <paramref name="converted"/> with the words that were already right put back as
+    /// typed.
+    ///
+    /// The layout is chosen for the text as a whole, and every word in it used to go the
+    /// same way. "рудщщ рщц фку ты" is "heloo how are" typed on the Russian keyboard and
+    /// then a Russian word typed right, and it came out as "heloo how are ns".
+    ///
+    /// Only while something else in the text is converted. A word that is right and is
+    /// converted on its own was selected on purpose, and is converted as asked.
+    /// </summary>
+    /// <param name="typed">The text as meant in the layout it was typed in.</param>
+    /// <param name="converted">The same text in the target layout, its links already kept.</param>
+    private string KeepWordsAlreadyRight(string typed, string converted)
+    {
+        char[]? kept = null;
+        bool convertsAWord = false;
+        int start = 0;
+
+        while (start < typed.Length)
+        {
+            if (char.IsWhiteSpace(typed[start]))
+            {
+                start++;
+                continue;
+            }
+
+            int end = start;
+
+            while (end < typed.Length && !char.IsWhiteSpace(typed[end]))
+            {
+                end++;
+            }
+
+            string word = typed[start..end];
+            string other = converted[start..end];
+
+            // A number or a stray mark has nothing to judge it by, and goes with the text.
+            if (!string.Equals(word, other, StringComparison.Ordinal) && word.Any(char.IsLetter))
+            {
+                if (WasTypedRight(word, other))
+                {
+                    kept ??= converted.ToCharArray();
+                    word.CopyTo(0, kept, start, word.Length);
+                }
+                else
+                {
+                    convertsAWord = true;
+                }
+            }
+
+            start = end;
+        }
+
+        return kept is not null && convertsAWord ? new string(kept) : converted;
+    }
+
+    /// <summary>
+    /// Whether one word of a converted text was right as typed: a word as it stands, and not
+    /// one once converted.
+    ///
+    /// Words, not scores. Judged on letter statistics, the hotkey's margin cannot tell "ты",
+    /// right as typed, from "туче", which is "next" typed on the Russian keyboard: "туче" is
+    /// a perfectly good Russian word too, and both come out about 0.25 ahead of "ns" and
+    /// "next". What sets them apart is that "next" is a word and "ns" is not.
+    ///
+    /// Only across alphabets. Russian and Ukrainian share most of their words and letters,
+    /// and which of the two a word belongs to is the very thing the hotkey was asked to put
+    /// right.
+    /// </summary>
+    /// <param name="word">The word as typed.</param>
+    /// <param name="other">The same keys in the target layout.</param>
+    private bool WasTypedRight(string word, string other)
+    {
+        // Punctuation on both readings is not part of the word: "ты," is "ns?" converted.
+        int start = 0;
+        int end = word.Length;
+
+        while (start < end && !char.IsLetter(word[start]) && !char.IsLetter(other[start]))
+        {
+            start++;
+        }
+
+        while (end > start && !char.IsLetter(word[end - 1]) && !char.IsLetter(other[end - 1]))
+        {
+            end--;
+        }
+
+        word = word[start..end];
+        other = other[start..end];
+
+        return TextGuards.DominantScript(word) != TextGuards.DominantScript(other)
+            && languages.Knows(word, validator)
+            && !languages.Knows(other, validator);
     }
 
     /// <summary>

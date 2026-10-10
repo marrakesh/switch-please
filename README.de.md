@@ -114,8 +114,8 @@ Aufzeichnung; das funktioniert also auch dann noch, wenn Sie den Cursor bewegt h
 nichts markiert, nimmt es alles, was seit der letzten Cursorbewegung getippt wurde, und das
 ist meistens die ganze Zeile.
 
-Links und E-Mail-Adressen bleiben dabei, wie sie sind; umgewandelt werden nur die Wörter um
-sie herum.
+Links, E-Mail-Adressen und Wörter, die schon im richtigen Layout getippt wurden, bleiben
+dabei, wie sie sind; umgewandelt wird nur der Rest.
 
 Um eine Auswahl zu lesen, wird die Zwischenablage kurz ausgeliehen. Was darin war — Text,
 Formatierung, ein Bild, eine Dateiliste — wird anschließend zurückgelegt.
