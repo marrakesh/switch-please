@@ -142,6 +142,8 @@ Když je vybrán text, Switch Please převede přesně ten a žádný záznam ne
 funguje i poté, co jste kurzor přesunuli. Když není nic vybráno, vezme vše napsané od
 posledního pohybu kurzoru, což je obvykle celý řádek.
 
+Odkazy a e-mailové adresy přitom zůstanou, jak jsou; převedou se jen slova kolem nich.
+
 Přečtení výběru znamená půjčit si schránku. Cokoli v ní bylo — text, formátování, obrázek,
 seznam souborů — se potom vrátí zpět.
 

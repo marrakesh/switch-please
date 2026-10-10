@@ -953,9 +953,9 @@ public sealed class SwitcherService : IDisposable
         {
             (converted, target) = _planner.FixCapsLockSelection(selected);
         }
-        else if (_planner.ChooseMapFor(selected) is { } map)
+        else if (_planner.ConvertSelection(selected) is { } plain)
         {
-            (converted, target) = (map.Convert(selected), map.Target);
+            (converted, target) = plain;
         }
         else
         {

@@ -102,6 +102,8 @@ With text selected, Switch Please converts exactly that and needs no record at a
 still works after you have moved the cursor. With nothing selected, it takes everything
 typed since the caret last moved, which is usually the whole line.
 
+Links and email addresses stay exactly as they are; only the words around them are converted.
+
 Reading a selection means borrowing the clipboard. Whatever was on it — text, formatting, an
 image, a list of files — is put back afterwards.
 

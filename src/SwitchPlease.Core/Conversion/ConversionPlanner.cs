@@ -111,6 +111,10 @@ public sealed class ConversionPlanner(
         string intended = slipped is null ? original : Render(buffer, range, activeLayout, slipped);
         var capsLockOnly = CapsLockFix(buffer, range, original, intended, activeLayout);
 
+        // A link or an email address is kept as typed, and the rest is judged without it.
+        var links = Links.Find(intended);
+        string judged = Links.Remove(intended, links);
+
         // A number is left alone. It has no letters, so no language can judge it, and it
         // used to fall through to the plain toggle below, which is meant for letters in an
         // alphabet nothing here models. With a Czech layout installed the number row is
@@ -126,11 +130,10 @@ public sealed class ConversionPlanner(
         // A selection is converted regardless (see ChooseMapFor). Selecting a number and
         // asking for it to be converted is deliberate, never a stray tap, and it is how such
         // a word can still be had.
-        if (!intended.Any(char.IsLetter))
+        if (!judged.Any(char.IsLetter))
         {
-            explain?.Invoke(capsLockOnly is null
-                ? "left alone: no letters in it"
-                : "only Caps Lock to undo: no letters in it");
+            string why = links is null ? "no letters in it" : "no letters outside its links";
+            explain?.Invoke(capsLockOnly is null ? $"left alone: {why}" : $"only Caps Lock to undo: {why}");
             return capsLockOnly;
         }
 
@@ -146,8 +149,9 @@ public sealed class ConversionPlanner(
 
         var tail = TailAfter(buffer, range);
 
-        var plan = new ConversionPlan(
-            range, tail, original, Render(buffer, range, targetLayout, slipped), buffer.GetText(tail), targetLayout)
+        string converted = Links.Restore(Render(buffer, range, targetLayout, slipped), intended, links);
+
+        var plan = new ConversionPlan(range, tail, original, converted, buffer.GetText(tail), targetLayout)
         {
             Intended = intended,
         };
@@ -161,13 +165,13 @@ public sealed class ConversionPlanner(
         // this way at all, and pretending otherwise would refuse or mangle it at random.
         // There the hotkey behaves as a plain toggle, which is what the user asked for by
         // pressing it.
-        if (!languages.IsFamiliar(intended, validator))
+        if (!languages.IsFamiliar(judged, validator))
         {
             explain?.Invoke("converting without judging it: unfamiliar alphabet");
             return plan;
         }
 
-        double typedScore = Plausibility(intended, plan.Converted);
+        double typedScore = Plausibility(intended, plan.Converted, links);
 
         if (typedScore - targetScore >= RefuseConversionMargin)
         {
@@ -272,6 +276,7 @@ public sealed class ConversionPlanner(
         LayoutInfo? best = null;
         double bestScore = double.NegativeInfinity;
         int bestTurned = -1;
+        var links = Links.Find(asTyped);
 
         foreach (var candidate in layouts.InstalledLayouts)
         {
@@ -280,7 +285,7 @@ public sealed class ConversionPlanner(
                 continue;
             }
 
-            string rendered = Render(buffer, range, candidate, slipped);
+            string rendered = Links.Restore(Render(buffer, range, candidate, slipped), asTyped, links);
 
             // A layout that produces the very same text is not a candidate. Russian and
             // Ukrainian share almost every key, so most words look identical in both;
@@ -291,7 +296,7 @@ public sealed class ConversionPlanner(
                 continue;
             }
 
-            double score = Plausibility(rendered, asTyped);
+            double score = Plausibility(rendered, asTyped, links);
             int turned = WordDigits(asTyped, rendered).Count(static d => d);
 
             if (IsBetter(turned, score, bestTurned, bestScore))
@@ -386,9 +391,14 @@ public sealed class ConversionPlanner(
     ///
     /// Text with no letters in it is converted too, unlike the word hotkey's; why is in
     /// <see cref="Build"/>.
+    ///
+    /// Links are left out of the judgement: they are kept as typed whichever pair wins, and
+    /// a long address would otherwise outweigh the words around it.
     /// </summary>
     public LayoutMap? ChooseMapFor(string text)
     {
+        text = Links.Remove(text, Links.Find(text));
+
         var installed = layouts.InstalledLayouts;
         LayoutMap? best = null;
         double bestScore = double.NegativeInfinity;
@@ -417,7 +427,7 @@ public sealed class ConversionPlanner(
                     continue;
                 }
 
-                double score = Plausibility(rendered, text);
+                double score = Plausibility(rendered, text, links: null);
                 int turned = WordDigits(text, rendered).Count(static d => d);
 
                 if (IsBetter(turned, score, bestTurned, bestScore))
@@ -433,10 +443,32 @@ public sealed class ConversionPlanner(
     }
 
     /// <summary>
+    /// What a selection should become: converted with the pair it reads best in, its links
+    /// kept as they are. A plain selection is simply toggled, because converting it is all
+    /// the user can have meant.
+    /// </summary>
+    /// <returns>
+    /// The replacement and the layout to switch to; the selection itself and no layout when
+    /// it is nothing but links; null when no other layout would change it.
+    /// </returns>
+    public (string Text, LayoutInfo? Target)? ConvertSelection(string selected)
+    {
+        var links = Links.Find(selected);
+
+        if (string.IsNullOrWhiteSpace(Links.Remove(selected, links)))
+        {
+            return (selected, null);
+        }
+
+        return ChooseMapFor(selected) is { } map
+            ? (Links.Restore(map.Convert(selected), selected, links), map.Target)
+            : null;
+    }
+
+    /// <summary>
     /// What a selection typed with Caps Lock on by mistake should become: the same text with
     /// its capitals put right, and in another layout as well only when that reads clearly
-    /// better. A plain selection is simply toggled, because converting it is all the user can
-    /// have meant; here they may have meant either, and the text has to say which.
+    /// better. Here the user may have meant either, and the text has to say which.
     /// </summary>
     /// <returns>The replacement, and the layout to switch to or null to keep the current one.</returns>
     public (string Text, LayoutInfo? Target) FixCapsLockSelection(string selected)
@@ -449,10 +481,13 @@ public sealed class ConversionPlanner(
             return (intended, null);
         }
 
-        string converted = map.Convert(intended);
+        // A link typed with Caps Lock on has its capitals put right like everything else, but
+        // keeps its layout.
+        var links = Links.Find(intended);
+        string converted = Links.Restore(map.Convert(intended), intended, links);
 
-        if (languages.IsFamiliar(intended, validator)
-            && Plausibility(intended, converted) - Plausibility(converted, intended) >= RefuseConversionMargin)
+        if (languages.IsFamiliar(Links.Remove(intended, links), validator)
+            && Plausibility(intended, converted, links) - Plausibility(converted, intended, links) >= RefuseConversionMargin)
         {
             return (intended, null);
         }
@@ -466,6 +501,15 @@ public sealed class ConversionPlanner(
     /// other reading has a letter. Both sides of a comparison are scored this way round, so
     /// neither gets its digits for free.
     /// </summary>
-    private double Plausibility(string text, string other) =>
-        languages.Evaluate(text, validator, WordDigits(text, other)).Score;
+    /// <param name="links">
+    /// Characters to leave out of both, from <see cref="Links.Find"/>: they read the same
+    /// either way, and an address scored as a word would drown out the words around it.
+    /// </param>
+    private double Plausibility(string text, string other, bool[]? links)
+    {
+        text = Links.Remove(text, links);
+        other = Links.Remove(other, links);
+
+        return languages.Evaluate(text, validator, WordDigits(text, other)).Score;
+    }
 }
