@@ -110,14 +110,25 @@ public sealed class LanguageCatalog
         [.. _profiles.Where(p => p.Script == script)];
 
     /// <summary>
-    /// Whether some language of <paramref name="word"/>'s alphabet certainly has it; see
-    /// <see cref="LanguageProfile.Knows"/>.
+    /// The best standing <paramref name="word"/> has in any language of its alphabet; see
+    /// <see cref="LanguageProfile.Standing"/>.
     /// </summary>
-    public bool Knows(string word, IWordValidator validator)
+    public WordStanding Standing(string word, IWordValidator validator)
     {
         var script = TextGuards.DominantScript(word);
+        var best = WordStanding.Unknown;
 
-        return _profiles.Any(p => p.Script == script && p.Knows(word, validator));
+        foreach (var profile in _profiles.Where(p => p.Script == script))
+        {
+            var standing = profile.Standing(word, validator);
+
+            if (standing > best)
+            {
+                best = standing;
+            }
+        }
+
+        return best;
     }
 
     /// <summary>

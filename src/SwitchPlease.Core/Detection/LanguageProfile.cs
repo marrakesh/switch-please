@@ -199,13 +199,21 @@ public sealed class LanguageProfile
     }
 
     /// <summary>
-    /// Whether <paramref name="word"/> is certainly a word of this language: the dictionary
-    /// knows it, or it is one of the commonest words. Letter statistics are no help here:
-    /// they rate "ns" as about as English as "next".
+    /// How certainly <paramref name="word"/> is a word of this language, judged on evidence:
+    /// whether it is one of the commonest words, and whether the dictionary knows it. Letter
+    /// statistics are no help here: they rate "ns" as about as English as "next".
     /// </summary>
-    public bool Knows(string word, IWordValidator validator) =>
-        _statistical?.IsCommonWord(word.ToLowerInvariant()) == true
-        || validator.Check(word, LanguageTag) == WordStatus.Known;
+    public WordStanding Standing(string word, IWordValidator validator)
+    {
+        if (_statistical?.IsCommonWord(word.ToLowerInvariant()) == true)
+        {
+            return WordStanding.Common;
+        }
+
+        return validator.Check(word, LanguageTag) == WordStatus.Known
+            ? WordStanding.InDictionary
+            : WordStanding.Unknown;
+    }
 
     /// <summary>Fraction of the letters in <paramref name="text"/> that this alphabet contains.</summary>
     public double AlphabetCoverage(string text)

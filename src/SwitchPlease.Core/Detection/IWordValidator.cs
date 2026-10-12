@@ -14,6 +14,25 @@ public enum WordStatus
 }
 
 /// <summary>
+/// How certainly a string is a word, weakest first.
+///
+/// The dictionary alone is not enough to tell a word from a slip. Windows accepts "ns" and
+/// "vs" as English, abbreviations both, and they are exactly what "ты" and "мы" become on the
+/// wrong keyboard. Being one of the commonest words of a language is the stronger claim.
+/// </summary>
+public enum WordStanding
+{
+    /// <summary>Nothing says it is a word.</summary>
+    Unknown,
+
+    /// <summary>The dictionary knows it.</summary>
+    InDictionary,
+
+    /// <summary>One of the commonest words of the language.</summary>
+    Common,
+}
+
+/// <summary>
 /// A dictionary lookup, which is the one thing a statistical model cannot replace.
 ///
 /// Russian and Ukrainian keyboards differ by three keys, so "привіт" typed on the Russian

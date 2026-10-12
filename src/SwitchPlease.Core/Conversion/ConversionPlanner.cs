@@ -558,13 +558,16 @@ public sealed class ConversionPlanner(
     }
 
     /// <summary>
-    /// Whether one word of a converted text was right as typed: a word as it stands, and not
-    /// one once converted.
+    /// Whether one word of a converted text was right as typed: more certainly a word as it
+    /// stands than once converted.
     ///
     /// Words, not scores. Judged on letter statistics, the hotkey's margin cannot tell "ты",
     /// right as typed, from "туче", which is "next" typed on the Russian keyboard: "туче" is
     /// a perfectly good Russian word too, and both come out about 0.25 ahead of "ns" and
-    /// "next". What sets them apart is that "next" is a word and "ns" is not.
+    /// "next". Nor is the dictionary enough, since Windows takes "ns" for English as well.
+    /// What sets them apart is that "ты" is one of the commonest Russian words and "ns" is
+    /// only in the dictionary, while "туче" is only in the dictionary and "next" is at least
+    /// that.
     ///
     /// Only across alphabets. Russian and Ukrainian share most of their words and letters,
     /// and which of the two a word belongs to is the very thing the hotkey was asked to put
@@ -592,8 +595,7 @@ public sealed class ConversionPlanner(
         other = other[start..end];
 
         return TextGuards.DominantScript(word) != TextGuards.DominantScript(other)
-            && languages.Knows(word, validator)
-            && !languages.Knows(other, validator);
+            && languages.Standing(word, validator) > languages.Standing(other, validator);
     }
 
     /// <summary>

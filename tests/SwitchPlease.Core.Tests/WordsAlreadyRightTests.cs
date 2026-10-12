@@ -62,6 +62,21 @@ public class WordsAlreadyRightTests
     }
 
     [Fact]
+    public void AnAbbreviationInTheDictionaryDoesNotOutweighACommonWord()
+    {
+        // Windows takes "ns" for English, so on a real machine both readings of "ты" are in
+        // a dictionary. Telling them apart by dictionary alone converted the whole line.
+        var validator = new FakeWordValidator()
+            .With("ru-RU", "ты")
+            .With("en-US", "ns", "how", "are");
+
+        var result = PlannerFor(FakeLayoutResolver.EnglishAndRussian, validator).ConvertSelection("рудщщ рщц фку ты");
+
+        Assert.NotNull(result);
+        Assert.Equal("heloo how are ты", result.Value.Text);
+    }
+
+    [Fact]
     public void AWordInBothDictionariesGoesWithTheLine()
     {
         // "next" typed on the Russian keyboard is "туче", which is Russian too. Only a word
