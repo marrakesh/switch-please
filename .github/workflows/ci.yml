@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v6
         with:
           # Read from global.json, so the version CI builds with is the version the
           # repository pins and not whatever the runner image happened to ship.
